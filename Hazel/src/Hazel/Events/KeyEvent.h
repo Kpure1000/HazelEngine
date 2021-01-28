@@ -5,14 +5,15 @@
 
 #include<sstream>
 
-namespace Hazel {
+namespace hazel {
 
 	class KeyEvent : public Event
 	{
 	public:
 		KeyCode GetKeyCode() const { return m_KeyCode; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		EVENT_CLASS_CATEGORY( static_cast<int>(EventCategory::EventCategoryKeyboard)
+			| static_cast<int>(EventCategory::EventCategoryInput))
 
 	protected:
 		KeyEvent(const KeyCode keycode)

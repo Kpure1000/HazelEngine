@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-namespace Hazel
+namespace hazel
 {
 	using MouseCode = uint16_t;
 

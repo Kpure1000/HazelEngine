@@ -4,7 +4,7 @@
 #include "../Core/MouseCodes.h"
 #include <sstream>
 
-namespace Hazel {
+namespace hazel {
 
 	/// <summary>
 	/// Mouse is moving
@@ -36,7 +36,8 @@ namespace Hazel {
 
 		EVENT_CLASS_TYPE(MouseMoved)
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+			EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::EventCategoryMouse) 
+				| static_cast<int>(EventCategory::EventCategoryInput))
 
 	private:
 		float m_MouseX, m_MouseY;
@@ -63,7 +64,8 @@ namespace Hazel {
 
 		EVENT_CLASS_TYPE(MouseScrolled)
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+			EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::EventCategoryMouse)
+				| static_cast<int>(EventCategory::EventCategoryInput))
 
 	private:
 		float m_XOffset, m_YOffset;
@@ -77,7 +79,9 @@ namespace Hazel {
 	public:
 		MouseCode GetMouseButton() const { return m_Button; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput | EventCategoryMouseButton)
+		EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::EventCategoryMouse)
+			| static_cast<int>(EventCategory::EventCategoryInput)
+			| static_cast<int>(EventCategory::EventCategoryMouseButton))
 		
 	protected:
 		MouseButtonEvent(const MouseCode button)

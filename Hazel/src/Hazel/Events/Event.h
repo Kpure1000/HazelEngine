@@ -5,7 +5,7 @@
 #include <string>
 #include <functional>
 
-namespace Hazel {
+namespace hazel {
 
 	// Events in Hazel are currently blocking, meaning when an event occurs it
 	// immediately gets dispatched and must be dealt with right then an there.
@@ -27,7 +27,7 @@ namespace Hazel {
 	/// <summary>
 	/// 
 	/// </summary>
-	enum EventCategory
+	enum class EventCategory
 	{
 		None = 0,
 		EventCategoryApplication		= BIT(0),
@@ -84,7 +84,7 @@ namespace Hazel {
 		/// <returns></returns>
 		bool IsInCategory(EventCategory category)
 		{
-			return GetCategoryFlags() & category;
+			return GetCategoryFlags() & static_cast<int>(category);
 		}
 
 		/// <summary>

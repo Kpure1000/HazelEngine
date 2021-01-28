@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-namespace Hazel
+namespace hazel
 {
 	using KeyCode = uint16_t;
 
