@@ -1,10 +1,9 @@
 #pragma once
-
 #include"Core/Core.h"
 
-#include<memory>
+#include <memory>
 using std::shared_ptr;
-using std::make_shared;
+
 
 namespace hazel
 {
@@ -21,4 +20,5 @@ namespace hazel
 	};
 
 	shared_ptr<Application> CreateApplication();
+
 }

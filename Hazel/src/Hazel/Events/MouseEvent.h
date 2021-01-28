@@ -2,7 +2,6 @@
 
 #include "Event.h"
 #include "../Core/MouseCodes.h"
-#include <sstream>
 
 namespace hazel {
 
