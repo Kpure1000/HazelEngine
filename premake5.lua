@@ -1,3 +1,6 @@
+
+-- Workspace Hazel ------------------------------
+
 workspace "Hazel"
 	architecture "x64"
 
@@ -9,9 +12,21 @@ workspace "Hazel"
 		"Release",
 		"Dist" 
 	}
-	
+
+	flags
+	{
+		"MultiProcessorCompile"
+	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- GLFW -----------------------------------------
+
+IncludeDir = {}
+IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+include "Hazel/vendor/GLFW"
+
+-- Hazel ----------------------------------------
 
 project "Hazel"
 	location "Hazel"
@@ -33,7 +48,14 @@ project "Hazel"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -63,6 +85,8 @@ project "Hazel"
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		optimize "On"
+
+-- SandBox --------------------------------------
 
 project "SandBox"
 	location "SandBox"
