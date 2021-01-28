@@ -11,3 +11,7 @@
 #endif // HZ_PLATFORM_WINDOWS
 
 #define BIT(x) (1 << x)
+
+#if (defined HZ_DEBUG)
+	#define HZ_ENABLE_ASSERT
+#endif // (defined HZ_DEBUG)

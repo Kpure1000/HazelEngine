@@ -41,6 +41,14 @@ namespace hazel
 		inline static void ErrorCore(T... args) { m_CoreLogger->error(args...); }
 
 		template<typename... T>
+		static void AssertCore(int assert, T... args)
+		{
+#ifdef HZ_ENABLE_ASSERT
+			if (!assert) { ErrorCore(args...); __debugbreak(); }
+#endif // HZ_ENABLE_ASSERT
+		}
+
+		template<typename... T>
 		inline static void CriticalCore(T... args) { m_CoreLogger->critical(args...); }
 
 		template<typename... T>
@@ -59,6 +67,14 @@ namespace hazel
 
 		template<typename... T>
 		inline static void Error(T... args) { m_ClientLogger->error(args...); }
+
+		template<typename... T>
+		inline static void Assert(int assert, T... args)
+		{
+#ifdef HZ_ENABLE_ASSERT
+			if (!assert)Error(args...); __debugbreak();
+#endif // HZ_ENABLE_ASSERT
+		}
 
 		template<typename... T>
 		inline static void Critical(T... args) { m_ClientLogger->critical(args...); }

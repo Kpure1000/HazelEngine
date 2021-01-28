@@ -8,14 +8,10 @@ int main(int argc, char** argv)
 {
 	hazel::Log::Init();
 #ifdef HZ_DEBUG
-	hazel::Log::ErrorCore("Debugging:  system loading...");
+	hazel::Log::DebugCore("Debugging:  start.");
 #elif HZ_RELEASE
-	hazel::Log::ErrorCore("Releasing:  system loading...");
-#elif HZ_DIST
-	hazel::Log::ErrorCore("Distributing: system loading...");
+	hazel::Log::InfoCore("Releasing:  start.");
 #endif
-	hazel::Log::Trace("value = {0}+{0}...",0);
-
 
 	auto App = hazel::CreateApplication();
 	App->Run();
