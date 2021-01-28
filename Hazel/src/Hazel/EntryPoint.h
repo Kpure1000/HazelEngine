@@ -8,13 +8,13 @@ int main(int argc, char** argv)
 {
 	hazel::Log::Init();
 #ifdef HZ_DEBUG
-	HZ_CORE_ERROR("Debugging:  system loading...");
+	hazel::Log::ErrorCore("Debugging:  system loading...");
 #elif HZ_RELEASE
-	HZ_CORE_ERROR("Releasing:  system loading...");
+	hazel::Log::ErrorCore("Releasing:  system loading...");
 #elif HZ_DIST
-	HZ_CORE_ERROR("Distributing: system loading...");
+	hazel::Log::ErrorCore("Distributing: system loading...");
 #endif
-	HZ_CLIENT_CRITICAL("value = {0}+{0}...",0);
+	hazel::Log::Trace("value = {0}+{0}...",0);
 
 
 	auto App = hazel::CreateApplication();
