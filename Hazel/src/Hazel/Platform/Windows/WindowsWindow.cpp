@@ -1,5 +1,6 @@
 #include "hzpch.h"
 #include "WindowsWindow.h"
+
 #include "Hazel/Log.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Events/KeyEvent.h"
@@ -23,6 +24,7 @@ namespace hazel
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
+		glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -38,12 +40,6 @@ namespace hazel
 	bool WindowsWindow::IsVSync() const
 	{
 		return m_Data.VSync;
-	}
-
-	void WindowsWindow::Display()
-	{
-		if (IsVSync())
-			glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
@@ -76,8 +72,8 @@ namespace hazel
 
 		if (m_Data.isFullScreen)
 		{
-			m_Data.width = (float)m_pVideoMode.width;
-			m_Data.height = (float)m_pVideoMode.height;
+			m_Data.width = m_pVideoMode.width;
+			m_Data.height = m_pVideoMode.height;
 			//  Use the size of primary monitor
 			m_Window = glfwCreateWindow(m_pVideoMode.width, m_pVideoMode.height, m_Data.title.c_str(),
 				m_monitors[0], NULL);
@@ -96,7 +92,6 @@ namespace hazel
 		}
 		else
 		{
-			SetVSync(true);
 			glfwMakeContextCurrent(m_Window);
 
 			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -168,18 +163,18 @@ namespace hazel
 
 					switch (action)
 					{
-						case GLFW_PRESS:
-						{
-							MouseButtonPressedEvent event(button);
-							data.EventCallback(event);
-							break;
-						}
-						case GLFW_RELEASE:
-						{
-							MouseButtonReleasedEvent event(button);
-							data.EventCallback(event);
-							break;
-						}
+					case GLFW_PRESS:
+					{
+						MouseButtonPressedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						MouseButtonReleasedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
 					}
 				});
 
@@ -205,6 +200,7 @@ namespace hazel
 
 		}
 
+		SetVSync(true);
 	}
 
 	void WindowsWindow::Shutdown()
@@ -212,7 +208,6 @@ namespace hazel
 		//glfwSetWindowShouldClose(m_Window, true);
 		glfwDestroyWindow(m_Window);
 		--m_GLFWWindowCount;
-		m_Data.VSync = false;
 
 		if (m_GLFWWindowCount == 0)
 		{

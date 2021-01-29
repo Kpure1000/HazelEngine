@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma warning (disable : 4251)
-
 #include "Core/Core.h"
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>

@@ -1,18 +1,26 @@
 #include "hzpch.h"
 #include "Application.h"
-#include "Log.h"
+
 #include "Events/ApplicationEvent.h"
+#include "Events/KeyEvent.h"
+#include "Log.h"
+
 #include "Platform/Windows/WindowsWindow.h"
 
+#include <GLFW/glfw3.h>
+
 using std::shared_ptr;
-using std::make_shared;
+using std::unique_ptr;
 
 namespace hazel
 {
 
 	Application::Application()
+		: m_IsRunning(false)
 	{
-
+		m_Window = Window::Create(WindowProps());
+		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
+		m_IsRunning = true;
 	}
 
 	Application::~Application()
@@ -20,43 +28,79 @@ namespace hazel
 
 	}
 
+	void Application::OnEvent(Event& ev)
+	{
+		auto cate = ev.GetEventType();
+
+		Log::InfoCore(ev.ToString());
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+		{
+			(*--it)->OnEvent(ev);
+			if (ev.Handled)
+				break;
+		}
+
+		switch (cate)
+		{
+		case hazel::EventType::WindowClose:
+			break;
+		case hazel::EventType::WindowResize:
+			break;
+		case hazel::EventType::WindowFocus:
+			break;
+		case hazel::EventType::WindowLostFocus:
+			break;
+		case hazel::EventType::WindowMoved:
+			break;
+		case hazel::EventType::AppTick:
+			break;
+		case hazel::EventType::AppUpdate:
+			break;
+		case hazel::EventType::AppRender:
+			break;
+		case hazel::EventType::KeyPressed:
+			break;
+		case hazel::EventType::KeyReleased:
+			break;
+		case hazel::EventType::KeyTyped:
+			break;
+		case hazel::EventType::MouseButtonPressed:
+			break;
+		case hazel::EventType::MouseButtonReleased:
+			break;
+		case hazel::EventType::MouseMoved:
+			break;
+		case hazel::EventType::MouseScrolled:
+			break;
+		default:
+			break;
+		}
+	}
+
+	void Application::PushLayer(std::shared_ptr<Layer> layer)
+	{
+		m_LayerStack.PuahsLayer(layer);
+	}
+
+	void Application::PushOverLayer(std::shared_ptr<Layer> overLay)
+	{
+		m_LayerStack.PushOverLay(overLay);
+	}
+
 	void Application::Run()
 	{
-		shared_ptr<WindowsWindow> AppWindow = make_shared<WindowsWindow>(WindowProps());
-		AppWindow->SetEventCallback([](Event& ev)
-			{
-				auto cate = ev.GetCategoryFlags();
-				Log::DebugCore("log: {0}", ev.ToString());
-				switch (static_cast<EventCategory>(cate))
-				{
-				case EventCategory::EventCategoryApplication :
-
-					break;
-				case EventCategory::EventCategoryInput :
-
-					break;
-				case EventCategory::EventCategoryKeyboard :
-
-					break;
-				case EventCategory::EventCategoryMouse :
-
-					break;
-				case EventCategory::EventCategoryMouseButton:
-
-					break;
-				default:
-
-					break;
-				}
-			});
-		while (AppWindow->isOpen())
+		while (m_IsRunning)
 		{
-			if (glfwGetKey((GLFWwindow*)AppWindow->GetNativeWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-				AppWindow->Close();
+			glClearColor(0.5f, 0.8f, 0.5f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			AppWindow->OnUpdate();
+			for (auto layer : m_LayerStack)
+			{
+				layer->OnUpdate();
+			}
 
-			AppWindow->Display();
+			m_Window->OnUpdate();
 		}
 	}
 

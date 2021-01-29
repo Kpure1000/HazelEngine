@@ -2,19 +2,22 @@
 
 #ifdef HZ_PLATFORM_WINDOWS
 
-extern shared_ptr<hazel::Application> hazel::CreateApplication();
+	extern std::shared_ptr<hazel::Application> hazel::CreateApplication();
 
-int main(int argc, char** argv)
-{
-	hazel::Log::Init();
-#ifdef HZ_DEBUG
-	hazel::Log::DebugCore("Debugging:  start.");
-#elif HZ_RELEASE
-	hazel::Log::InfoCore("Releasing:  start.");
-#endif
+	int main(int argc, char** argv)
+	{
+		//  initialize log system
+		hazel::Log::Init();
 
-	auto App = hazel::CreateApplication();
-	App->Run();
-}
+	#ifdef HZ_DEBUG
+		hazel::Log::DebugCore("Debugging:  start.");
+	#endif
+
+		//  create application
+		auto App = hazel::CreateApplication();
+
+		//  app run start
+		App->Run();
+	}
 
 #endif // HZ_PLATFORM_WINDOWS

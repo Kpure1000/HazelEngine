@@ -6,7 +6,7 @@
 #include "Hazel/Events/Event.h"
 
 using std::string;
-using std::shared_ptr;
+using std::unique_ptr;
 
 namespace hazel
 {
@@ -44,7 +44,7 @@ namespace hazel
 
 		virtual void* GetNativeWindow() const = 0;
 
-		static shared_ptr<Window> Create(const WindowProps& props = WindowProps());
+		static unique_ptr<Window> Create(const WindowProps& props = WindowProps());
 
 	private:
 

@@ -27,14 +27,6 @@ namespace hazel
 
 		inline virtual void* GetNativeWindow()const { return m_Window; }
 
-		inline bool isOpen()
-		{
-			return isOpened = !glfwWindowShouldClose(m_Window);
-		}
-
-		void Display();
-
-		inline void Close() { Shutdown(); }
 	private:
 
 		virtual void Init(const WindowProps& props);
@@ -48,8 +40,6 @@ namespace hazel
 
 		vector<GLFWmonitor*> m_monitors;
 		
-		bool isOpened;
-
 		struct WindowData
 		{
 			std::string title;
