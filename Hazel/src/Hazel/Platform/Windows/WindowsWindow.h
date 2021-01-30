@@ -1,8 +1,9 @@
 #pragma once
 #include "Hazel/Window.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
+struct GLFWvidmode;
+struct GLFWmonitor;
 
 using std::vector;
 
@@ -36,7 +37,7 @@ namespace hazel
 	private:
 		GLFWwindow* m_Window;
 
-		GLFWvidmode m_pVideoMode;
+		GLFWvidmode* m_pVideoMode;
 
 		vector<GLFWmonitor*> m_monitors;
 		

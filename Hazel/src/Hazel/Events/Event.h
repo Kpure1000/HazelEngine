@@ -58,7 +58,7 @@ namespace hazel {
 		/// <returns></returns>
 		virtual int GetCategoryFlags() const = 0;
 
-#ifdef HZ_DEBUG
+
 
 		/// <summary>
 		/// Get name as char*
@@ -72,7 +72,7 @@ namespace hazel {
 		/// <returns></returns>
 		virtual std::string ToString() const { return GetName(); }
 
-#endif // HZ_DEBUG
+
 
 		/// <summary>
 		/// Is the ev catagory right 

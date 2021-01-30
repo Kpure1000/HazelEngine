@@ -15,12 +15,12 @@ public:
 
 	void OnUpdate() override
 	{
-		Log::Trace("ExampleLayer Update");
+		//Log::Trace("ExampleLayer Update");
 	}
 
 	void OnEvent(hazel::Event& ev) override
 	{
-		Log::Debug("ExampleLayer Event: {0}",ev.ToString());
+		Log::Debug("ExampleLayer Event: {0}", ev.ToString());
 	}
 
 };

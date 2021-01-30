@@ -1,4 +1,8 @@
 #include "hzpch.h"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "WindowsWindow.h"
 
 #include "Hazel/Log.h"
@@ -65,17 +69,17 @@ namespace hazel
 		auto monitor = glfwGetMonitors(&monitorCount);
 		if (monitorCount > 0)
 		{
-			m_pVideoMode = *glfwGetVideoMode(monitor[0]);
+			m_pVideoMode = (GLFWvidmode*)glfwGetVideoMode(monitor[0]);
 			m_monitors.reserve(monitorCount);
 			m_monitors.assign(monitor, monitor + monitorCount);
 		}
 
 		if (m_Data.isFullScreen)
 		{
-			m_Data.width = m_pVideoMode.width;
-			m_Data.height = m_pVideoMode.height;
+			m_Data.width = m_pVideoMode->width;
+			m_Data.height = m_pVideoMode->height;
 			//  Use the size of primary monitor
-			m_Window = glfwCreateWindow(m_pVideoMode.width, m_pVideoMode.height, m_Data.title.c_str(),
+			m_Window = glfwCreateWindow(m_pVideoMode->width, m_pVideoMode->height, m_Data.title.c_str(),
 				m_monitors[0], NULL);
 		}
 		else

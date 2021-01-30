@@ -1,6 +1,6 @@
 #include "hzpch.h"
-#include "Window.h"
 
+#include "Window.h"
 
 #ifdef HZ_PLATFORM_WINDOWS
 	#include "Platform/Windows/WindowsWindow.h"

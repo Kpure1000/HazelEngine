@@ -70,7 +70,7 @@ namespace hazel
 		inline static void Assert(int assert, T... args)
 		{
 #ifdef HZ_ENABLE_ASSERT
-			if (!assert)Error(args...); __debugbreak();
+			if (!assert) { Error(args...); __debugbreak(); }
 #endif // HZ_ENABLE_ASSERT
 		}
 
