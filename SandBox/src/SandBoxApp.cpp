@@ -32,6 +32,7 @@ public:
 	SandBox()
 	{
 		PushLayer(make_shared<ExampleLayer>());
+		PushOverLayer(make_shared<hazel::ImGuiLayer>());
 	}
 
 	~SandBox()

@@ -10,7 +10,7 @@ namespace hazel
 	{
 	public:
 
-		Application();
+		inline static std::shared_ptr<Application> GetInstance() { return m_Instance; }
 
 		~Application();
 
@@ -21,13 +21,24 @@ namespace hazel
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverLayer(std::shared_ptr<Layer> overLay);
 
+		inline Window& GetWindow() { return *m_Window; }
+
+	protected:
+		Application();
+
 	private:
+
 		std::unique_ptr<Window> m_Window;
 
 		LayerStack m_LayerStack;
 
 		bool m_IsRunning;
-		
+
+	private:
+		//  Singleton
+
+		static std::shared_ptr<Application> m_Instance;
+
 	};
 
 	std::shared_ptr<Application> CreateApplication();

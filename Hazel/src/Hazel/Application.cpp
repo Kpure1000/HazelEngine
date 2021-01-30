@@ -14,10 +14,14 @@ using std::unique_ptr;
 
 namespace hazel
 {
+	shared_ptr<Application> Application::m_Instance = nullptr;
 
 	Application::Application()
 		: m_IsRunning(false)
 	{
+		Log::AssertCore(!m_Instance, "Application already exists.");
+		m_Instance = shared_ptr<Application>(this);
+
 		m_Window = Window::Create(WindowProps());
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
 		m_IsRunning = true;
@@ -82,11 +86,13 @@ namespace hazel
 	void Application::PushLayer(std::shared_ptr<Layer> layer)
 	{
 		m_LayerStack.PuahsLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverLayer(std::shared_ptr<Layer> overLay)
 	{
 		m_LayerStack.PushOverLay(overLay);
+		overLay->OnAttach();
 	}
 
 	void Application::Run()
