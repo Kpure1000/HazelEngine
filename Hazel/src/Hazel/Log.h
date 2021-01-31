@@ -50,7 +50,12 @@ namespace hazel
 		inline static void CriticalCore(T... args) { m_CoreLogger->critical(args...); }
 
 		template<typename... T>
-		inline static void DebugCore(T... args) { m_CoreLogger->debug(args...); }
+		inline static void DebugCore(T... args) 
+		{ 
+#ifdef HZ_DEBUG
+			m_CoreLogger->debug(args...); 
+#endif // HZ_DEBUG
+		}
 
 		// --Client Log----------------------------------------
 
@@ -78,7 +83,12 @@ namespace hazel
 		inline static void Critical(T... args) { m_ClientLogger->critical(args...); }
 
 		template<typename... T>
-		inline static void Debug(T... args) { m_ClientLogger->debug(args...); }
+		inline static void Debug(T... args) 
+		{
+#ifdef HZ_DEBUG
+			m_ClientLogger->debug(args...); 
+#endif // HZ_DEBUG
+		}
 
 	private:
 
