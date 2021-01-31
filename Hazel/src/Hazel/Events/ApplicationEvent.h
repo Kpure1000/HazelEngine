@@ -26,6 +26,24 @@ namespace hazel {
 		unsigned int m_Width, m_Height;
 	};
 
+	class WindowFocusEvent : public Event
+	{
+	public:
+		WindowFocusEvent() = default;
+
+		EVENT_CLASS_TYPE(WindowFocus)
+			EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::EventCategoryApplication))
+	};
+
+	class WindowFocusLostEvent : public Event
+	{
+	public:
+		WindowFocusLostEvent() = default;
+
+		EVENT_CLASS_TYPE(WindowLostFocus)
+			EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::EventCategoryApplication))
+	};
+
 	class WindowCloseEvent : public Event
 	{
 	public:

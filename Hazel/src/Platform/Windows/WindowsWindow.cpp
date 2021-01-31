@@ -125,6 +125,22 @@ namespace hazel
 					data.EventCallback(event);
 				});
 
+			glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int isFocus) 
+				{
+					if (GLFW_TRUE == isFocus)
+					{
+						WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+						WindowFocusEvent event;
+						data.EventCallback(event);
+					}
+					else
+					{
+						WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+						WindowFocusLostEvent event;
+						data.EventCallback(event);
+					}
+				});
+
 			glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 				{
 					WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

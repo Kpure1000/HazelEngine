@@ -9,6 +9,8 @@
 #include "Log.h"
 #include "Platform/Windows/WindowsWindow.h"
 
+#include "Platform/Windows/WindowsInput.h"
+
 using std::shared_ptr;
 using std::unique_ptr;
 

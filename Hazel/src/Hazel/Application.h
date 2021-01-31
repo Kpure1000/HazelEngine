@@ -43,3 +43,8 @@ namespace hazel
 	std::shared_ptr<Application> CreateApplication();
 
 }
+
+#ifndef GetRenderWindow
+	#define GetRenderWindow(winType) static_cast<winType*>(Application::GetInstance()\
+->GetWindow().GetNativeWindow())
+#endif // !GetRenderWindow
