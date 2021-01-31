@@ -57,6 +57,10 @@ namespace hazel
 		{
 			int success = glfwInit();
 			Log::AssertCore(success, "Could not initialize GLFW!");
+			glfwSetErrorCallback([](int erCode,const char* description) 
+				{
+					Log::ErrorCore("GLFW Error ({0}): {1}", erCode, description);
+				});
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -102,11 +106,6 @@ namespace hazel
 			{
 				std::cerr << "Failed to initialize GLAD" << std::endl;
 			}
-
-			glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-				{
-					glViewport(0, 0, width, height);
-				});
 
 			// Set GLFW callbacks
 			glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -209,8 +208,8 @@ namespace hazel
 
 	void WindowsWindow::Shutdown()
 	{
-		//glfwSetWindowShouldClose(m_Window, true);
-		glfwDestroyWindow(m_Window);
+		glfwSetWindowShouldClose(m_Window, true);
+		//glfwDestroyWindow(m_Window);
 		--m_GLFWWindowCount;
 
 		if (m_GLFWWindowCount == 0)

@@ -14,7 +14,7 @@
 
 #define BIT(x) (1 << x)
 
-#if (defined HZ_DEBUG)
+#ifdef HZ_DEBUG
 	#define HZ_ENABLE_ASSERT
 #endif // (defined HZ_DEBUG)
 

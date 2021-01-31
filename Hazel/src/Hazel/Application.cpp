@@ -1,10 +1,10 @@
 #include "hzpch.h"
 
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "Application.h"
 
-#include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 #include "Log.h"
 #include "Platform/Windows/WindowsWindow.h"
@@ -14,29 +14,41 @@ using std::unique_ptr;
 
 namespace hazel
 {
-	shared_ptr<Application> Application::m_Instance = nullptr;
+	Application* Application::m_Instance = nullptr;
 
 	Application::Application()
 		: m_IsRunning(false)
 	{
 		Log::AssertCore(!m_Instance, "Application already exists.");
-		m_Instance = shared_ptr<Application>(this);
+		m_Instance = this;
 
 		m_Window = Window::Create(WindowProps());
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
 		m_IsRunning = true;
 	}
 
+	bool Application::OnWindowClose(WindowCloseEvent& ev)
+	{
+		m_IsRunning = false;
+		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& ev)
+	{
+		glViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
+		return false;
+	}
+
 	Application::~Application()
 	{
-
+		Log::DebugCore("Application discontruct.");
 	}
 
 	void Application::OnEvent(Event& ev)
 	{
-		auto cate = ev.GetEventType();
-
-		Log::InfoCore(ev.ToString());
+		EventDispatcher dispatcher(ev);
+		dispatcher.Dispatch<WindowCloseEvent>(HZ_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(Application::OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
@@ -46,41 +58,7 @@ namespace hazel
 				break;
 		}
 
-		switch (cate)
-		{
-		case hazel::EventType::WindowClose:
-			break;
-		case hazel::EventType::WindowResize:
-			break;
-		case hazel::EventType::WindowFocus:
-			break;
-		case hazel::EventType::WindowLostFocus:
-			break;
-		case hazel::EventType::WindowMoved:
-			break;
-		case hazel::EventType::AppTick:
-			break;
-		case hazel::EventType::AppUpdate:
-			break;
-		case hazel::EventType::AppRender:
-			break;
-		case hazel::EventType::KeyPressed:
-			break;
-		case hazel::EventType::KeyReleased:
-			break;
-		case hazel::EventType::KeyTyped:
-			break;
-		case hazel::EventType::MouseButtonPressed:
-			break;
-		case hazel::EventType::MouseButtonReleased:
-			break;
-		case hazel::EventType::MouseMoved:
-			break;
-		case hazel::EventType::MouseScrolled:
-			break;
-		default:
-			break;
-		}
+		Log::InfoCore("App Event: {0}", ev.ToString());
 	}
 
 	void Application::PushLayer(std::shared_ptr<Layer> layer)

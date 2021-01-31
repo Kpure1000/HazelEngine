@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 #include "Window.h"
-#include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
 
 namespace hazel
@@ -10,8 +10,9 @@ namespace hazel
 	{
 	public:
 
-		inline static std::shared_ptr<Application> GetInstance() { return m_Instance; }
+		inline static Application* GetInstance() { return m_Instance; }
 
+		Application();
 		~Application();
 
 		void Run();
@@ -23,10 +24,9 @@ namespace hazel
 
 		inline Window& GetWindow() { return *m_Window; }
 
-	protected:
-		Application();
-
 	private:
+		bool OnWindowClose(WindowCloseEvent&);
+		bool OnWindowResize(WindowResizeEvent&);
 
 		std::unique_ptr<Window> m_Window;
 
@@ -36,8 +36,7 @@ namespace hazel
 
 	private:
 		//  Singleton
-
-		static std::shared_ptr<Application> m_Instance;
+		static Application* m_Instance;
 
 	};
 
