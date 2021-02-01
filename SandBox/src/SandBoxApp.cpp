@@ -1,5 +1,8 @@
 #include <Hazel.h>
 
+#include <imgui.h>
+#include <Hazel/ImGui/ImGuiLayer.h>
+
 using std::shared_ptr;
 using std::make_shared;
 using hazel::Log;
@@ -18,6 +21,16 @@ public:
 		//Log::Trace("ExampleLayer Update");
 	}
 
+	void OnImGuiRender() override
+	{
+		//  Missing dear imgui context. Refer to examples app!
+		bool show = true;
+		ImGui::Begin("State", &show);
+		ImGui::Text("Welcome to Hazel Engine!");
+		ImGui::End();
+		//  error
+	}
+
 	void OnEvent(hazel::Event& ev) override
 	{
 		Log::Debug("ExampleLayer Event: {0}", ev.ToString());
@@ -32,7 +45,6 @@ public:
 	SandBox()
 	{
 		PushLayer(make_shared<ExampleLayer>());
-		PushOverLayer(make_shared<hazel::ImGuiLayer>());
 	}
 
 	~SandBox()

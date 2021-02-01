@@ -122,12 +122,15 @@ project "SandBox"
 	includedirs
 	{
 		"Hazel/vendor/spdlog/include",
-		"Hazel/src"
+		"Hazel/src",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}",
 	}
 
 	links
 	{
-		"Hazel"
+		"Hazel",
+		"ImGui",
 	}
 
 	filter "system:windows"

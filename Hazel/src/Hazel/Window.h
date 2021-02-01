@@ -1,8 +1,8 @@
 #pragma once
 
-#include "hzpch.h"
+#include <sstream>
+#include <functional>
 
-#include "Hazel/Core/Core.h"
 #include "Hazel/Events/Event.h"
 
 using std::string;

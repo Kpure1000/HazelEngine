@@ -1,20 +1,21 @@
 #include "hzpch.h"
-#include "LayerStack.h"
 
+#include "LayerStack.h"
+#include <stack>
 namespace hazel
 {
 	LayerStack::LayerStack()
 	{
-		m_LayerInsert = m_Layers.begin();
 	}
 
 	LayerStack::~LayerStack()
 	{
 	}
 
-	void hazel::LayerStack::PuahsLayer(std::shared_ptr<Layer> layer)
+	void hazel::LayerStack::PushLayer(std::shared_ptr<Layer> layer)
 	{
-		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+		m_Layers.emplace(m_Layers.begin() + m_LayerStackIndex, layer);
+		m_LayerStackIndex++;
 	}
 
 	void hazel::LayerStack::PushOverLay(std::shared_ptr<Layer> overLay)
@@ -28,7 +29,7 @@ namespace hazel
 		if (it != m_Layers.end())
 		{
 			m_Layers.erase(it);
-			m_LayerInsert--;
+			m_LayerStackIndex--;
 		}
 	}
 

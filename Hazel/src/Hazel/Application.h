@@ -1,8 +1,12 @@
 #pragma once
-#include "Core/Core.h"
 #include "Window.h"
-#include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+
+#include "Events/KeyEvent.h"
+#include "Events/ApplicationEvent.h"
+
+
+#include "ImGui/ImGuiLayer.h"
 
 namespace hazel
 {
@@ -29,6 +33,7 @@ namespace hazel
 		bool OnWindowResize(WindowResizeEvent&);
 
 		std::unique_ptr<Window> m_Window;
+		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
 
 		LayerStack m_LayerStack;
 

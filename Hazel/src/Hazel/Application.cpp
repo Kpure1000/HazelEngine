@@ -5,10 +5,9 @@
 
 #include "Application.h"
 
-#include "Events/KeyEvent.h"
 #include "Log.h"
-#include "Platform/Windows/WindowsWindow.h"
 
+#include "Platform/Windows/WindowsWindow.h"
 #include "Platform/Windows/WindowsInput.h"
 
 using std::shared_ptr;
@@ -21,11 +20,18 @@ namespace hazel
 	Application::Application()
 		: m_IsRunning(false)
 	{
+		//  
 		Log::AssertCore(!m_Instance, "Application already exists.");
 		m_Instance = this;
 
+		//  create window
 		m_Window = Window::Create(WindowProps());
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
+
+		//  create imgui layer
+		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
+		PushOverLayer(m_ImGuiLayer);
+
 		m_IsRunning = true;
 	}
 
@@ -65,7 +71,7 @@ namespace hazel
 
 	void Application::PushLayer(std::shared_ptr<Layer> layer)
 	{
-		m_LayerStack.PuahsLayer(layer);
+		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
@@ -82,11 +88,21 @@ namespace hazel
 			glClearColor(0.5f, 0.8f, 0.5f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			//  update all layer
 			for (auto layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
 
+			//  update ImGui
+			m_ImGuiLayer->Begin();
+			for (auto layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_ImGuiLayer->End();
+
+			//  update window
 			m_Window->OnUpdate();
 		}
 	}
