@@ -19,6 +19,8 @@ workspace "Hazel"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+dynamicdef = "HZ_DYNAMIC_LIB"
+staticdef = "HZ_STATIC_LIB"
 
 -- GLFW -----------------------------------------
 
@@ -27,7 +29,8 @@ IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Hazel/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 IncludeDir["glm"] = "Hazel/vendor/glm"
-include "Hazel/vendor/GLFW"
+-- include outher premake config
+include "Hazel/vendor/GLFW" 
 include "Hazel/vendor/GLAD"
 include "Hazel/vendor/imgui"
 
@@ -35,9 +38,10 @@ include "Hazel/vendor/imgui"
 
 project "Hazel"
 	location "Hazel"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -51,6 +55,11 @@ project "Hazel"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS",
 	}
 
 	includedirs
@@ -68,23 +77,17 @@ project "Hazel"
 		"GLFW",
 		"GLAD",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
 		{
 			"HZ_PLATFORM_WINDOWS",
-			"HZ_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
-
-		postbuildcommands 
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/SandBox")
+			"GLFW_INCLUDE_NONE",
+			staticdef
 		}
 
 	filter "configurations:Debug"
@@ -108,7 +111,8 @@ project "SandBox"
 	location "SandBox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -134,12 +138,12 @@ project "SandBox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
 		{
-			"HZ_PLATFORM_WINDOWS"
+			"HZ_PLATFORM_WINDOWS",
+			staticdef
 		}
 
 	filter "configurations:Debug"
