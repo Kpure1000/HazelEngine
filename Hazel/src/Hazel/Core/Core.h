@@ -1,13 +1,15 @@
 #pragma once
 
-#pragma warning (disable : 4251)
-
 #ifdef HZ_PLATFORM_WINDOWS
-	#ifdef HZ_BUILD_DLL
-		#define HAZEL_API __declspec(dllexport)
-	#else
-		#define HAZEL_API __declspec(dllimport)
-	#endif 
+	#ifdef HZ_DYNAMIC_LIB
+		#ifdef HZ_BUILD_DLL
+			#define HAZEL_API __declspec(dllexport)
+		#else
+			#define HAZEL_API __declspec(dllimport)
+		#endif 
+	#else  // HZ_STATIC_LIB
+		#define HAZEL_API 
+	#endif // HZ_DYNAMIC_LIB
 #else
 	#error Hazel only support Windows
 #endif // HZ_PLATFORM_WINDOWS

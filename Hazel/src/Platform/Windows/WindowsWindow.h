@@ -1,14 +1,19 @@
 #pragma once
 #include "Hazel/Window.h"
 
+// #include <GLFW/glfw3.h>
 struct GLFWwindow;
 struct GLFWvidmode;
 struct GLFWmonitor;
+
+// #include "Hazel/Renderer/RenderContext.h"
 
 using std::vector;
 
 namespace hazel
 {
+	class RenderContext;
+
 	class WindowsWindow : public Window
 	{
 	public:
@@ -52,6 +57,8 @@ namespace hazel
 		};
 
 		WindowData m_Data;
+
+		std::shared_ptr<RenderContext> m_Context = nullptr;
 
 	};
 

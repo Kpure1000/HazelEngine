@@ -66,10 +66,6 @@ namespace hazel
 	{
 		bool show = true;
 		ImGui::ShowDemoWindow(&show);
-
-		ImGui::Begin("State", &show);
-		ImGui::Text("Welcome to Hazel Engine!");
-		ImGui::End();
 	}
 
 	void ImGuiLayer::Begin()
@@ -83,8 +79,8 @@ namespace hazel
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto app = Application::GetInstance();
-		io.DisplaySize = ImVec2(app->GetWindow().GetWidth(),
-			app->GetWindow().GetHeight());
+		io.DisplaySize = ImVec2((float)(app->GetWindow().GetWidth()),
+			(float)(app->GetWindow().GetHeight()));
 
 		float time = (float)glfwGetTime();
 		io.DeltaTime = m_Time > 0.0f ? (time - m_Time) : (1.0f / 60.0f);

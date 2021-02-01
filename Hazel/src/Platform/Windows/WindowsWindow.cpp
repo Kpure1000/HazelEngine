@@ -10,6 +10,8 @@
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
+
 namespace hazel
 {
 
@@ -28,7 +30,7 @@ namespace hazel
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -92,20 +94,15 @@ namespace hazel
 				NULL, NULL);
 		}
 
-
-		if (m_Window == NULL)
+		if (nullptr == m_Window)
 		{
-			std::cerr << "Failed to create GLFW window" << std::endl;
+			Log::AssertCore(!m_Window, "Failed to create GLFW window");
 			glfwTerminate();
 		}
 		else
 		{
-			glfwMakeContextCurrent(m_Window);
-
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-			{
-				std::cerr << "Failed to initialize GLAD" << std::endl;
-			}
+			m_Context = std::make_shared<OpenGLContext>(m_Window);
+			m_Context->Init();
 
 			// Set GLFW callbacks
 			glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
