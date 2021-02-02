@@ -5,6 +5,8 @@
 
 #include "Hazel/Core/Core.h"
 
+#include <glad/glad.h>
+
 namespace hazel
 {
 	class HAZEL_API Shader
@@ -18,7 +20,9 @@ namespace hazel
 
 		int GetID()const;
 
-		void Use()const;
+		inline void Use()const { glUseProgram(m_ID); }
+
+		inline void UnUse()const { glUseProgram(0); }
 
 	public: //  set value in shader
 

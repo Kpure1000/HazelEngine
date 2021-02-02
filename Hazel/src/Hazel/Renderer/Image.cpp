@@ -7,6 +7,8 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 
+#include "Hazel/Log.h"
+
 namespace hazel
 {
 	
@@ -62,12 +64,12 @@ namespace hazel
 			}
 			else
 			{
-				std::cerr << "Texture image channel numbers error.\n";
+				Log::ErrorCore("Texture image channel numbers error.");
 			}
 		}
 		else
 		{
-			std::cerr << "Image Buffer is Empty!\n";
+			Log::ErrorCore("Image Buffer is Empty!");
 		}
 
 	}
@@ -75,7 +77,7 @@ namespace hazel
 	{
 		if (stbi_write_png(path.c_str(), width, height, channel, imageData.data(), 0) == 0)
 		{
-			std::cerr << "Save image data error: " << path << std::endl;
+			Log::ErrorCore("Save image data error, in path \'{0}\'", path);
 		}
 
 	}
@@ -86,11 +88,11 @@ namespace hazel
 		{
 			if (loadMode == LoadMode::LOAD_FILE)
 			{
-				std::cerr << "Load Image Error: from file.\n";
+				Log::ErrorCore("Load Image Error: from file.");
 			}
 			else
 			{
-				std::cerr << "Load Image Error: from other source.\n";
+				Log::ErrorCore("Load Image Error: from other source.");
 			}
 			return false;
 		}

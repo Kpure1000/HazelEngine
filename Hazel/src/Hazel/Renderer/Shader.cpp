@@ -7,8 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <glad/glad.h>
 #include "Shader.h"
+
+#include "Hazel/Log.h"
 
 namespace hazel
 {
@@ -41,7 +42,7 @@ namespace hazel
 		}
 		catch (std::ifstream::failure e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log::ErrorCore("Ifstram failed, exception:\n{0}", e.what());
 		}
 		vshaderCode = (char*)vstr.c_str();
 		fshaderCode = (char*)fstr.c_str();
@@ -49,6 +50,7 @@ namespace hazel
 #pragma endregion
 
 #pragma region vertex shader
+		int isCompileSuccessed;
 
 		//  cerate vertex shader
 		unsigned int vShader;
@@ -58,14 +60,13 @@ namespace hazel
 		glShaderSource(vShader, 1, &vshaderCode, NULL);
 		//  compile code
 		glCompileShader(vShader);
-		int success;
 		char infoLog[512];
-		glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
-		if (!success)
+		glGetShaderiv(vShader, GL_COMPILE_STATUS, &isCompileSuccessed);
+		if (!isCompileSuccessed)
 		{
 			glGetShaderInfoLog(vShader, 512, NULL, infoLog);
-			std::cerr << "\n>>>>>>>>>>>>\nSHADER::VERTEX::COMPILATION_FAILED, in File: "
-				<< vertexShaderPath << ". Error Info: \n" << infoLog << ">>>>>>>>>>>>\n";
+			Log::ErrorCore("Vertex shader compilation failed, in file:\'{0}\'. Details:\n{1}",
+				vertexShaderPath, infoLog);
 		}
 
 #pragma endregion
@@ -81,12 +82,12 @@ namespace hazel
 		//  compile 
 		glCompileShader(fShader);
 		char finfoLog[512];
-		glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
-		if (!success)
+		glGetShaderiv(fShader, GL_COMPILE_STATUS, &isCompileSuccessed);
+		if (!isCompileSuccessed)
 		{
 			glGetShaderInfoLog(fShader, 512, NULL, finfoLog);
-			std::cerr << "\n>>>>>>>>>>>>\nSHADER::FRAGMENT::COMPILATION_FAILED, in File: "
-				<< fragmentShaderPath << ". Error Info: \n" << finfoLog << ">>>>>>>>>>>>\n";
+			Log::ErrorCore("Fragment shader compilation failed, in file:\'{0}\'. Details:\n{1}",
+				fragmentShaderPath, finfoLog);
 		}
 
 #pragma endregion
@@ -101,11 +102,10 @@ namespace hazel
 		glLinkProgram(m_ID);
 
 		char pinfoLog[512];
-		glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
-		if (!success) {
+		glGetProgramiv(m_ID, GL_LINK_STATUS, &isCompileSuccessed);
+		if (!isCompileSuccessed) {
 			glGetProgramInfoLog(m_ID, 512, NULL, pinfoLog);
-			std::cerr << "\n>>>>>>>>>>>>\nSHADER::PROGRAM::LINK_FAILED, Error Info:\n"
-				<< pinfoLog << ">>>>>>>>>>>>\n";
+			Log::ErrorCore("Shader program link failed. Details:\n{0}", pinfoLog);
 		}
 
 		//  release shaders
@@ -122,10 +122,6 @@ namespace hazel
 	int Shader::GetID() const
 	{
 		return m_ID;
-	}
-	void Shader::Use() const
-	{
-		glUseProgram(m_ID);
 	}
 	void Shader::SetBool(const std::string& name,
 		const bool& value) const

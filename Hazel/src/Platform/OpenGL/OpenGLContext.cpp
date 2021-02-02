@@ -17,6 +17,9 @@ void hazel::OpenGLContext::Init()
 	glfwMakeContextCurrent(m_WindowHandle);
 	Log::AssertCore((0 != gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)), "Failed to initialize GLAD");
 
+	Log::InfoCore("\n>>>OpenGL Info>>>\n>Version:\t{0}\n\
+>Vender:\t{1}\n>Renderer:\t{2}\n>>>>>>>>>>>>>>>>>",
+		glGetString(GL_VERSION), glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 }
 
 void hazel::OpenGLContext::SwapBuffers()
