@@ -144,9 +144,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hazel\Graphics\Drawable.h" />
-    <ClInclude Include="src\Hazel\Graphics\Mesh.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Application.h" />
     <ClInclude Include="src\Hazel\Core\Core.h" />
@@ -157,14 +154,24 @@
     <ClInclude Include="src\Hazel\Events\Event.h" />
     <ClInclude Include="src\Hazel\Events\KeyEvent.h" />
     <ClInclude Include="src\Hazel\Events\MouseEvent.h" />
+    <ClInclude Include="src\Hazel\Graphics\CubeMesh.h" />
+    <ClInclude Include="src\Hazel\Graphics\Drawable.h" />
+    <ClInclude Include="src\Hazel\Graphics\Mesh.h" />
+    <ClInclude Include="src\Hazel\Graphics\SphereMesh.h" />
+    <ClInclude Include="src\Hazel\Graphics\Transform.h" />
+    <ClInclude Include="src\Hazel\Graphics\Vertex.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Input.h" />
     <ClInclude Include="src\Hazel\Layer.h" />
     <ClInclude Include="src\Hazel\LayerStack.h" />
     <ClInclude Include="src\Hazel\Log.h" />
     <ClInclude Include="src\Hazel\Renderer\RenderContext.h" />
+    <ClInclude Include="src\Hazel\Renderer\RenderLayer.h" />
+    <ClInclude Include="src\Hazel\Renderer\Shader.h" />
+    <ClInclude Include="src\Hazel\Time.h" />
     <ClInclude Include="src\Hazel\Utility\Singleton.h" />
     <ClInclude Include="src\Hazel\Window.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\hzpch.h" />
@@ -583,16 +590,22 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\Graphics\Mesh.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Hazel\Application.cpp" />
+    <ClCompile Include="src\Hazel\Graphics\CubeMesh.cpp" />
+    <ClCompile Include="src\Hazel\Graphics\Mesh.cpp" />
+    <ClCompile Include="src\Hazel\Graphics\SphereMesh.cpp" />
+    <ClCompile Include="src\Hazel\Graphics\Transform.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\Layer.cpp" />
     <ClCompile Include="src\Hazel\LayerStack.cpp" />
     <ClCompile Include="src\Hazel\Log.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\RenderLayer.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Hazel\Time.cpp" />
     <ClCompile Include="src\Hazel\Utility\Singleton.cpp" />
     <ClCompile Include="src\Hazel\Window.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\hzpch.cpp">
