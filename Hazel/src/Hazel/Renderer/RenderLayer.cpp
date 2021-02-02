@@ -21,12 +21,17 @@ namespace hazel
 	}
 	void RenderLayer::OnAttach()
 	{
-		auto cube = make_shared<SphereMesh>();
+		auto mesh = make_shared<SphereMesh>();
 
 		auto shader = make_shared<Shader>("../data/shader/example.vert", "../data/shader/example.frag");
 		shader->Use();
-		shader->SetMatrix4("_model", cube->GetTransform().GetTransMat());
-		auto rd1 = make_shared<RenderData>(cube, shader);
+		shader->SetMatrix4("_model", mesh->GetTransform().GetTransMat());
+		auto rd1 = make_shared<RenderData>(mesh, shader);
+		auto tex1 = make_shared<Texture>();
+		tex1->LoadFromFile("../data/texture/earth.jpg");
+		tex1->Bind(0);
+		shader->SetInt("_diffuse", 0);
+		rd1->textures.push_back(tex1);
 		rd1->drawCallFn = [rd1]()
 		{
 			rd1->shader->Use();
@@ -43,7 +48,7 @@ namespace hazel
 			//static bool show = true;
 			ImGui::Begin("Properties");
 			ImGui::SliderFloat3("Cube pos:", glm::value_ptr(rtAxis), -2.0f, 2.0f, "%.3f", 1);
-			ImGui::SliderFloat("Rotate speed", &rt_speed, -40.0f, 40.f, "%.3f", 1);
+			ImGui::SliderFloat("Rotate speed", &rt_speed, -100.0f, 100.f, "%.3f", 1);
 			ImGui::Text("Rotate value: %.3f", rt_val);
 			ImGui::End();
 			rd1->mesh->GetTransform().SetRotation(rtAxis, rt_val += rt_speed * Time::deltaTime());

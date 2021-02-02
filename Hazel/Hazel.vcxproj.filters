@@ -96,6 +96,9 @@
     <ClInclude Include="src\Hazel\Graphics\Mesh.h">
       <Filter>src\Hazel\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Graphics\SphereMesh.h">
+      <Filter>src\Hazel\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Transform.h">
       <Filter>src\Hazel\Graphics</Filter>
     </ClInclude>
@@ -116,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Log.h">
       <Filter>src\Hazel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Renderer\Image.h">
+      <Filter>src\Hazel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Renderer\RenderContext.h">
       <Filter>src\Hazel\Renderer</Filter>
@@ -1386,7 +1392,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Graphics\SphereMesh.h" />
+    <ClInclude Include="src\Hazel\Renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -1396,6 +1402,9 @@
       <Filter>src\Hazel\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Graphics\Mesh.cpp">
+      <Filter>src\Hazel\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Graphics\SphereMesh.cpp">
       <Filter>src\Hazel\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Graphics\Transform.cpp">
@@ -1415,6 +1424,9 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Log.cpp">
       <Filter>src\Hazel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Renderer\Image.cpp">
+      <Filter>src\Hazel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Renderer\RenderLayer.cpp">
       <Filter>src\Hazel\Renderer</Filter>
@@ -1443,6 +1455,6 @@
     <ClCompile Include="src\hzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Graphics\SphereMesh.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\Texture.cpp" />
   </ItemGroup>
 </Project>

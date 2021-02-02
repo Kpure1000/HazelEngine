@@ -8,7 +8,7 @@ namespace hazel
 	{
 	public:
 		SphereMesh() 
-			:m_lerpNum(40)
+			:m_lerpNum(100)
 		{
 			Init();
 		}

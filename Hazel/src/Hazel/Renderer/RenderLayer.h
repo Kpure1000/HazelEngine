@@ -7,6 +7,7 @@
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Graphics/CubeMesh.h"
 #include "Hazel/Graphics/SphereMesh.h"
+#include "Hazel/Renderer/Texture.h"
 
 namespace hazel
 {
@@ -14,6 +15,7 @@ namespace hazel
 	{
 		std::shared_ptr<Mesh> mesh;
 		std::shared_ptr<Shader> shader;
+		std::vector<std::shared_ptr<Texture>> textures;
 
 		std::function<void()> drawCallFn;
 		std::function<void()> imGuiDrawCallFn;

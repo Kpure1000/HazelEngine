@@ -29,10 +29,12 @@ IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Hazel/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 IncludeDir["glm"] = "Hazel/vendor/glm"
+IncludeDir["stb"] = "Hazel/vendor/stb"
 -- include outher premake config
 include "Hazel/vendor/GLFW" 
 include "Hazel/vendor/GLAD"
 include "Hazel/vendor/imgui"
+include "Hazel/vendor/stb"
 
 -- Hazel ----------------------------------------
 
@@ -53,6 +55,7 @@ project "Hazel"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
@@ -70,6 +73,7 @@ project "Hazel"
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}",
 	}
 
 	links
@@ -77,6 +81,7 @@ project "Hazel"
 		"GLFW",
 		"GLAD",
 		"ImGui",
+		"stb",
 		"opengl32.lib",
 	}
 
@@ -87,7 +92,9 @@ project "Hazel"
 		{
 			"HZ_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE",
-			staticdef
+			staticdef,
+			"STB_IMAGE_IMPLEMENTATION",
+			"STB_IMAGE_WRITE_IMPLEMENTATION",
 		}
 
 	filter "configurations:Debug"

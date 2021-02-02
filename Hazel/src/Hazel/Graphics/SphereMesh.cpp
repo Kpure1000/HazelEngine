@@ -10,9 +10,9 @@ namespace hazel
 	{
 		int latitu = m_lerpNum, longitu = m_lerpNum;
 
-		float rz1, rz2, rxy1, rxy2;
+		float rz1, rz2, rxy1, rxy2, cosX, cosY;
 		Vertex va, vb, vc, vd;
-		glm::vec3 normal;
+		glm::vec3 tmp_normal;
 		for (size_t i = 0; i < longitu; i++)
 		{
 			for (size_t j = 0; j < latitu; j++)
@@ -26,8 +26,21 @@ namespace hazel
 				vc.position = { sin(rz2) * cos(rxy2), sin(rz2) * sin(rxy2), cos(rz2) };
 				vd.position = { sin(rz1) * cos(rxy2), sin(rz1) * sin(rxy2), cos(rz1) };
 
-				normal = glm::normalize(glm::cross(vd.position - vb.position, va.position - vc.position));
-				va.normal = vb.normal = vc.normal = vd.normal = normal;
+				tmp_normal = glm::normalize(
+					glm::cross(vd.position - vb.position, va.position - vc.position));
+				va.normal = vb.normal = vc.normal = vd.normal = tmp_normal;
+
+				va.texCoords.x = (float)i / longitu;
+				va.texCoords.y = (float)j / longitu;
+
+				vb.texCoords.x = (float)i / longitu;
+				vb.texCoords.y = (float)(j + 1) / longitu;
+
+				vc.texCoords.x = (float)(i + 1) / longitu;
+				vc.texCoords.y = (float)(j + 1) / longitu;
+
+				vd.texCoords.x = (float)(i + 1) / longitu;
+				vd.texCoords.y = (float)j / longitu;
 
 				m_Vertices.push_back(va);
 				m_Vertices.push_back(vb);
