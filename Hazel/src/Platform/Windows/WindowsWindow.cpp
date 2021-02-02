@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 
 #include "WindowsWindow.h"
-
 #include "Hazel/Log.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Events/KeyEvent.h"
@@ -33,6 +32,11 @@ namespace hazel
 		m_Context->SwapBuffers();
 	}
 
+	glm::vec2 WindowsWindow::GetSize() const
+	{
+		return glm::vec2(m_Data.size);
+	}
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		if (enabled)
@@ -51,8 +55,7 @@ namespace hazel
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.title = props.title;
-		m_Data.width = props.width;
-		m_Data.height = props.height;
+		m_Data.size = props.size;
 		m_Data.isFullScreen = props.isFullScreen;
 
 		if (m_GLFWWindowCount == 0)
@@ -82,15 +85,15 @@ namespace hazel
 
 		if (m_Data.isFullScreen)
 		{
-			m_Data.width = m_pVideoMode->width;
-			m_Data.height = m_pVideoMode->height;
+			m_Data.size.x = (float)(m_pVideoMode->width);
+			m_Data.size.y = (float)(m_pVideoMode->height);
 			//  Use the size of primary monitor
 			m_Window = glfwCreateWindow(m_pVideoMode->width, m_pVideoMode->height, m_Data.title.c_str(),
 				m_monitors[0], NULL);
 		}
 		else
 		{
-			m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title.c_str(),
+			m_Window = glfwCreateWindow((int)m_Data.size.x, (int)m_Data.size.y, m_Data.title.c_str(),
 				NULL, NULL);
 		}
 
@@ -108,8 +111,8 @@ namespace hazel
 			glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 				{
 					WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-					data.width = width;
-					data.height = height;
+					data.size.x = (float)width;
+					data.size.y = (float)height;
 
 					WindowResizeEvent event(width, height);
 					data.EventCallback(event);
@@ -212,7 +215,7 @@ namespace hazel
 
 			glfwSetWindowUserPointer(m_Window, &m_Data);
 
-			glViewport(0, 0, (int)m_Data.width, (int)m_Data.height);
+			glViewport(0, 0, (int)m_Data.size.x, (int)m_Data.size.y);
 
 		}
 

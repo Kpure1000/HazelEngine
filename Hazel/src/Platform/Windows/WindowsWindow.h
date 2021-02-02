@@ -10,6 +10,7 @@ struct GLFWmonitor;
 
 using std::vector;
 
+
 namespace hazel
 {
 	class RenderContext;
@@ -23,8 +24,11 @@ namespace hazel
 
 		void OnUpdate() override;
 
-		inline unsigned int GetWidth() const override { return m_Data.width; }
-		inline unsigned int GetHeight() const override { return m_Data.height; }
+		// Í¨¹ý Window ¼Ì³Ð
+		virtual glm::vec2 GetSize() const override;
+
+		/*inline unsigned int GetWidth() const override { return m_Data.width; }
+		inline unsigned int GetHeight() const override { return m_Data.height; }*/
 
 		// Window attributes
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
@@ -49,7 +53,7 @@ namespace hazel
 		struct WindowData
 		{
 			std::string title;
-			unsigned int width, height;
+			glm::vec2 size;
 			bool VSync;
 			bool isFullScreen;
 
@@ -59,6 +63,7 @@ namespace hazel
 		WindowData m_Data;
 
 		std::shared_ptr<RenderContext> m_Context = nullptr;
+
 
 	};
 

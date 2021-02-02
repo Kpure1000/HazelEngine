@@ -10,6 +10,9 @@
 #include "Platform/Windows/WindowsWindow.h"
 #include "Platform/Windows/WindowsInput.h"
 
+
+#include "Hazel/Time.h"
+
 using std::shared_ptr;
 using std::unique_ptr;
 
@@ -25,9 +28,12 @@ namespace hazel
 		m_Instance = this;
 
 		//  create window
-		m_Window = Window::Create(WindowProps());
+		m_Window = Window::Create(WindowProps("Hazel Engine", 800, 800));
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
 
+		//  create render layer
+		m_RenderLayer = std::make_shared<RenderLayer>();
+		PushOverLayer(m_RenderLayer);
 		//  create imgui layer
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
 		PushOverLayer(m_ImGuiLayer);
@@ -43,7 +49,7 @@ namespace hazel
 
 	bool Application::OnWindowResize(WindowResizeEvent& ev)
 	{
-		glViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
+		glViewport(0, 0, (unsigned int)m_Window->GetSize().x, (unsigned int)m_Window->GetSize().y);
 		return false;
 	}
 
@@ -83,9 +89,13 @@ namespace hazel
 
 	void Application::Run()
 	{
+		Time::Begin();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glEnable(GL_DEPTH_TEST);
+
 		while (m_IsRunning)
 		{
-			glClearColor(0.5f, 0.8f, 0.5f, 1.0f);
+			glClearColor(0.5f, 0.6f, 0.5f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			//  update all layer
@@ -104,6 +114,7 @@ namespace hazel
 
 			//  update window
 			m_Window->OnUpdate();
+			Time::Update();
 		}
 	}
 

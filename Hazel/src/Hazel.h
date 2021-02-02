@@ -8,3 +8,6 @@
 //  ---Entry Point------------------------
 #include "Hazel/EntryPoint.h"
 //  --------------------------------------
+
+#include "Hazel/Renderer/Shader.h"
+#include "Hazel/Graphics/CubeMesh.h"

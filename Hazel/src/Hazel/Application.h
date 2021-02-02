@@ -5,8 +5,8 @@
 #include "Events/KeyEvent.h"
 #include "Events/ApplicationEvent.h"
 
-
 #include "ImGui/ImGuiLayer.h"
+#include "Hazel/Renderer/RenderLayer.h"
 
 namespace hazel
 {
@@ -34,6 +34,7 @@ namespace hazel
 
 		std::unique_ptr<Window> m_Window;
 		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
+		std::shared_ptr<RenderLayer> m_RenderLayer;
 
 		LayerStack m_LayerStack;
 
