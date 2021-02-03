@@ -4,6 +4,8 @@
 #include<sstream>
 #include<iostream>
 
+#include <glad/glad.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -16,9 +18,9 @@ namespace hazel
 	Shader::Shader() :m_ID(-1)
 	{
 	}
+
 	Shader::Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 	{
-
 #pragma region load shader code from file
 
 		char* vshaderCode;
@@ -115,14 +117,27 @@ namespace hazel
 #pragma endregion
 
 	}
+
 	Shader::~Shader()
 	{
 		glDeleteProgram(m_ID);
 	}
+
 	int Shader::GetID() const
 	{
 		return m_ID;
 	}
+
+	void Shader::Use()const
+	{
+		glUseProgram(m_ID);
+	}
+
+	void Shader::UnUse()const
+	{
+		glUseProgram(0);
+	}
+
 	void Shader::SetBool(const std::string& name,
 		const bool& value) const
 	{

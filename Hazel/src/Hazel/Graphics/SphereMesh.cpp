@@ -10,7 +10,7 @@ namespace hazel
 	{
 		int latitu = m_lerpNum, longitu = m_lerpNum;
 
-		float rz1, rz2, rxy1, rxy2, cosX, cosY;
+		float rz1, rz2, rxy1, rxy2;
 		Vertex va, vb, vc, vd;
 		glm::vec3 tmp_normal;
 		for (size_t i = 0; i < longitu; i++)

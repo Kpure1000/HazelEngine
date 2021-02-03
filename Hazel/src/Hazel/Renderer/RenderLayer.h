@@ -4,9 +4,9 @@
 #include <memory>
 
 #include "Hazel/Layer.h"
-#include "Hazel/Renderer/Shader.h"
 #include "Hazel/Graphics/CubeMesh.h"
 #include "Hazel/Graphics/SphereMesh.h"
+#include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Texture.h"
 
 namespace hazel

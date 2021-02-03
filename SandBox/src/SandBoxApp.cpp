@@ -1,9 +1,7 @@
+//#pragma warning (disable:4005)
 #include <Hazel.h>
 
 #include <imgui.h>
-
-#include <Hazel/ImGui/ImGuiLayer.h>
-
 using std::shared_ptr;
 using std::make_shared;
 using namespace hazel;

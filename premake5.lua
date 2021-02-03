@@ -134,6 +134,7 @@ project "SandBox"
 	{
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src",
+		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
 	}

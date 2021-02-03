@@ -18,7 +18,7 @@
     <ClInclude Include="include\KHR\khrplatform.h">
       <Filter>include\KHR</Filter>
     </ClInclude>
-    <ClInclude Include="include\glad\glfw3.h">
+    <ClInclude Include="include\glad\glad.h">
       <Filter>include\glad</Filter>
     </ClInclude>
   </ItemGroup>
