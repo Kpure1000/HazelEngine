@@ -4,28 +4,31 @@
 #include <memory>
 
 #include "Hazel/Layer.h"
-#include "Hazel/Graphics/CubeMesh.h"
-#include "Hazel/Graphics/SphereMesh.h"
+
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Texture.h"
+
+#include "Hazel/Renderer/Renderer.h"
 
 namespace hazel
 {
 	struct RenderData
 	{
-		std::shared_ptr<Mesh> mesh;
+		//std::shared_ptr<VertexArray> m_VAO;
+		std::shared_ptr<Mesh> m_Mesh;
 		std::shared_ptr<Shader> shader;
-		std::vector<std::shared_ptr<Texture>> textures;
+		std::shared_ptr<Texture> texture1;
+		std::shared_ptr<Texture> texture2;
+		std::shared_ptr<Texture> texture3;
 
 		std::function<void()> drawCallFn;
 		std::function<void()> imGuiDrawCallFn;
 
-		RenderData(std::shared_ptr<Mesh> mesh, std::shared_ptr<Shader> shader)
-			: mesh(mesh), shader(shader)
-		{}
-
 	};
 
+	/// <summary>
+	/// Layer to render 
+	/// </summary>
 	class RenderLayer : public Layer
 	{
 	public:
@@ -38,7 +41,9 @@ namespace hazel
 		virtual void OnEvent(Event& e) override;
 
 	private:
-		std::vector<std::shared_ptr<RenderData>> renderDataList;
+
+		std::vector<std::shared_ptr<RenderData>> m_RenderDatas;
+
 	};
 
 }

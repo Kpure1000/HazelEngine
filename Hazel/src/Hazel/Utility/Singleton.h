@@ -9,8 +9,8 @@ namespace hazel
 		static T* GetInstance();
 
 	private:
-
-		static std::shared_ptr<T> m_instance_;
+		Singleton() = delete;
+		static std::unique_ptr<T> m_instance_;
 	};
 
 

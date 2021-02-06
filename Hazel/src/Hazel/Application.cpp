@@ -10,8 +10,9 @@
 #include "Platform/Windows/WindowsWindow.h"
 #include "Platform/Windows/WindowsInput.h"
 
-
 #include "Hazel/Time.h"
+
+#include "Hazel/Renderer/Renderer.h"
 
 using std::shared_ptr;
 using std::unique_ptr;
@@ -41,18 +42,6 @@ namespace hazel
 		m_IsRunning = true;
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& ev)
-	{
-		m_IsRunning = false;
-		return true;
-	}
-
-	bool Application::OnWindowResize(WindowResizeEvent& ev)
-	{
-		glViewport(0, 0, (unsigned int)m_Window->GetSize().x, (unsigned int)m_Window->GetSize().y);
-		return false;
-	}
-
 	Application::~Application()
 	{
 		Log::DebugCore("Application discontruct.");
@@ -61,8 +50,11 @@ namespace hazel
 	void Application::OnEvent(Event& ev)
 	{
 		EventDispatcher dispatcher(ev);
-		dispatcher.Dispatch<WindowCloseEvent>(HZ_BIND_EVENT_FN(Application::OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(Application::OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& ev)
+			{
+				m_IsRunning = false;
+				return true;
+			});
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
@@ -95,14 +87,18 @@ namespace hazel
 
 		while (m_IsRunning)
 		{
-			glClearColor(0.5f, 0.6f, 0.5f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			RenderCommand::SetClearColor(glm::vec4(0.5f, 0.6f, 0.5f, 1.0f));
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
 
 			//  update all layer
 			for (auto layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
+
+			Renderer::EndScene();
 
 			//  update ImGui
 			m_ImGuiLayer->Begin();

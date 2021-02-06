@@ -34,7 +34,7 @@ namespace hazel
 			return m_origin;
 		}
 
-		inline glm::vec3 GetRotateion()const
+		inline glm::vec3 GetRotation()const
 		{
 			return m_rotation;
 		}

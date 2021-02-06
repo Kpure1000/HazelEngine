@@ -8,6 +8,8 @@
 #include "ImGui/ImGuiLayer.h"
 #include "Hazel/Renderer/RenderLayer.h"
 
+#include "Hazel/Utility/Singleton.h"
+
 namespace hazel
 {
 	class HAZEL_API Application
@@ -29,9 +31,6 @@ namespace hazel
 		inline Window& GetWindow() { return *m_Window; }
 
 	private:
-		bool OnWindowClose(WindowCloseEvent&);
-		bool OnWindowResize(WindowResizeEvent&);
-
 		std::unique_ptr<Window> m_Window;
 		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
 		std::shared_ptr<RenderLayer> m_RenderLayer;

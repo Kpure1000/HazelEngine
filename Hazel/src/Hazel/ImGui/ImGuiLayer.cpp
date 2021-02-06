@@ -2,15 +2,13 @@
 
 #include"ImGuiLayer.h"
 
-#include "Hazel/Log.h"
-
 #include "Hazel/Application.h"
+
+#include "Hazel/Log.h"
 
 #define IMGUI_IMPL_API
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-
-#include "Platform/Windows/WindowsWindow.h"
 
 //  temporary
 #include <glad/glad.h>
