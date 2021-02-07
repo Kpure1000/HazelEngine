@@ -9,6 +9,7 @@
 #include "Hazel/Time.h"
 #include "Hazel/Application.h"
 #include "Hazel/Graphics/Mesh/QuadMesh.h"
+#include "Hazel/Graphics/Mesh/CubeMesh.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -21,18 +22,18 @@ namespace hazel
 		auto rd1 = std::make_shared<RenderData>();
 		m_RenderDatas.push_back(rd1);
 
-		rd1->m_Mesh = std::make_shared<QuadMesh>();
+		rd1->m_Mesh = std::make_shared<CubeMesh>();
 		rd1->m_Mesh->GetTransform().SetScale(glm::vec3(1.5f));
-		rd1->m_Mesh->GetTransform().SetOrigin(glm::vec3(0.5f));
+		//rd1->m_Mesh->GetTransform().SetOrigin(glm::vec3(0.5f));
 		rd1->shader = std::make_shared<Shader>("../data/shader/example.vert",
 			"../data/shader/example.frag");
-		rd1->shader->Use();
 
 		rd1->texture1= std::make_shared<Texture>();
-		rd1->texture1->LoadFromFile("../data/texture/container.jpg");
+		rd1->texture1->LoadFromFile("../data/texture/earth.jpg");
 		rd1->texture1->Bind(0);
+		
+		rd1->shader->Use();
 		rd1->shader->SetInt("_diffuse", 0);
-
 		rd1->shader->SetMatrix4("_model", rd1->m_Mesh->GetTransform().GetTransMat());
 
 		rd1->drawCallFn = [rd1]() {
@@ -43,13 +44,13 @@ namespace hazel
 		
 		rd1->imGuiDrawCallFn = [rd1]() {
 			auto pos = rd1->m_Mesh->GetTransform().GetPosition();
-			float scale_val = 1.0f;
+			auto scale = rd1->m_Mesh->GetTransform().GetScale();
 			ImGui::Begin("Oject Properties");
 			ImGui::SliderFloat3("Position", glm::value_ptr(pos), -3.0f, 3.0f, "%.3f", 1);
-			ImGui::SliderFloat("Scale", &scale_val, 0.1f, 3.0f, "%.3f", 1);
+			ImGui::SliderFloat3("Scale", glm::value_ptr(scale), 0.01f, 3.0f, "%.3f", 1);
 			ImGui::End();
 			rd1->m_Mesh->GetTransform().SetPosition(pos);
-			rd1->m_Mesh->GetTransform().SetScale(std::move(glm::vec3(scale_val)));
+			rd1->m_Mesh->GetTransform().SetScale(scale);
 		};
 	}
 	

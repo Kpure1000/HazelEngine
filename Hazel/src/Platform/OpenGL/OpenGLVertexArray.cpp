@@ -76,6 +76,7 @@ namespace hazel
 					layout.GetStride(),
 					(const void*)item.offset
 				);
+				m_VertexBufferIndex++;
 				break;
 			}
 			case hazel::ShaderDataType::Mat3:
