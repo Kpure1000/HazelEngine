@@ -26,12 +26,12 @@ namespace hazel
 				{ShaderDataType::Float2,"aTexCoord"},
 			};
 
-			std::shared_ptr<VertexBuffer> VBO;
+			Ref<VertexBuffer> VBO;
 			VBO.reset(VertexBuffer::Create(vert.data(), sizeof(float) * vert.size()));
 			VBO->SetLayout(layout);
 			m_VertexArray->AddVertexBuffer(VBO);
 
-			std::shared_ptr<IndexBuffer>EBO;
+			Ref<IndexBuffer>EBO;
 			EBO.reset(IndexBuffer::Create(indi.data(),
 				indi.size()));
 			m_VertexArray->SetIndexBuffer(EBO);

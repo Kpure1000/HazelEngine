@@ -10,56 +10,41 @@ namespace hazel
 	class HAZEL_API Shader
 	{
 	public:
-		Shader();
+		virtual ~Shader() = default;
 
-		Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+		virtual void Use()const = 0;
 
-		~Shader();
+		virtual void UnUse()const = 0;
 
-		int GetID()const;
+	public:
+		virtual void SetBool(const std::string& name, const bool& value)const = 0;
 
-		void Use()const;
+		virtual void SetInt(const std::string& name, const int& value)const = 0;
 
-		void UnUse()const;
+		virtual void SetFloat(const std::string& name, const float& value)const = 0;
 
-	public: //  set value in shader
+		virtual void SetVector2(const std::string& name, const glm::vec2& value)const = 0;
 
-		void SetBool(const std::string& name, const bool& value)const;
+		virtual void SetVector3(const std::string& name, const glm::vec3& value)const = 0;
 
-		void SetInt(const std::string& name, const int& value)const;
+		virtual void SetVector4(const std::string& name, const glm::vec4& value)const = 0;
 
-		void SetFloat(const std::string& name, const float& value)const;
+		virtual void SetRGBA(const std::string& name, const glm::vec4& color)const = 0;
 
-		void SetVector2(const std::string& name, const glm::vec2& value)const;
+		virtual void SetRGB(const std::string& name, const glm::vec4& color)const = 0;
 
-		void SetVector3(const std::string& name, const glm::vec3& value)const;
+		virtual void SetMatrix4(const std::string& name, const glm::mat4 mat)const = 0;
 
-		void SetVector4(const std::string& name, const glm::vec4& value)const;
+		virtual void SetSampler2D(const std::string& name, const int& index)const = 0;
 
-		void SetRGBA(const std::string& name, const glm::vec4& color)const;
+		virtual void SetArray(const std::string& name, const int& size, const float* data)const = 0;
 
-		void SetRGB(const std::string& name, const glm::vec4& color)const;
-
-		void SetMatrix4(const std::string& name, const glm::mat4 mat)const;
-
-		void SetSampler2D(const std::string& name, const int& index)const;
-
-		void SetArray(const std::string& name, const int& size, const float* data)const;
-
-	private:
-
-		/// <summary>
-		/// Get property ID by shaderID and property name
-		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
-		int GetPropertyID(const std::string& name)const;
-
-		/// <summary>
-		/// id of shader program
-		/// </summary>
-		unsigned int m_ID;
+	public:
+		static Shader* Create(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
 	};
+
+
+
 }
 

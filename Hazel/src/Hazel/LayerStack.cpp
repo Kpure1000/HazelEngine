@@ -12,18 +12,18 @@ namespace hazel
 	{
 	}
 
-	void hazel::LayerStack::PushLayer(std::shared_ptr<Layer> layer)
+	void hazel::LayerStack::PushLayer(Ref<Layer> layer)
 	{
 		m_Layers.emplace(m_Layers.begin() + m_LayerStackIndex, layer);
 		m_LayerStackIndex++;
 	}
 
-	void hazel::LayerStack::PushOverLay(std::shared_ptr<Layer> overLay)
+	void hazel::LayerStack::PushOverLay(Ref<Layer> overLay)
 	{
 		m_Layers.emplace_back(overLay);
 	}
 
-	void hazel::LayerStack::PopLayer(std::shared_ptr<Layer> layer)
+	void hazel::LayerStack::PopLayer(Ref<Layer> layer)
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (it != m_Layers.end())
@@ -33,7 +33,7 @@ namespace hazel
 		}
 	}
 
-	void hazel::LayerStack::PopOverLay(std::shared_ptr<Layer> overLay)
+	void hazel::LayerStack::PopOverLay(Ref<Layer> overLay)
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), overLay);
 		if (it != m_Layers.end())

@@ -8,7 +8,7 @@
 
 namespace hazel
 {
-	std::shared_ptr<Input> Input::m_Instance = std::make_shared<WindowsInput>();
+	Ref<Input> Input::m_Instance = std::make_shared<WindowsInput>();
 
 	bool WindowsInput::IsKeyPressedImpl(KeyCode keyCode)
 	{

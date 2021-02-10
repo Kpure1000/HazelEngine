@@ -48,7 +48,7 @@ namespace hazel
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vbo)
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vbo)
 	{
 		Log::AssertCore(0 != vbo->GetLayout().GetElements().size(), "VertexBuffer Layout is empty.");
 		glBindVertexArray(m_VAO);
@@ -104,7 +104,7 @@ namespace hazel
 		m_VertexBuffers.push_back(vbo);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ebo)
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& ebo)
 	{
 		glBindVertexArray(m_VAO);
 		ebo->Bind();

@@ -8,13 +8,11 @@
 #include "Log.h"
 
 #include "Platform/Windows/WindowsWindow.h"
-#include "Platform/Windows/WindowsInput.h"
 
 #include "Hazel/Time.h"
 
 #include "Hazel/Renderer/Renderer.h"
 
-using std::shared_ptr;
 using std::unique_ptr;
 
 namespace hazel
@@ -29,12 +27,9 @@ namespace hazel
 		m_Instance = this;
 
 		//  create window
-		m_Window = Window::Create(WindowProps("Hazel Engine", 800, 800));
+		m_Window = Window::Create(WindowProps("Hazel Engine", 800, 800, true, false));
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
 
-		//  create render layer
-		m_RenderLayer = std::make_shared<RenderLayer>();
-		PushOverLayer(m_RenderLayer);
 		//  create imgui layer
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
 		PushOverLayer(m_ImGuiLayer);
@@ -44,7 +39,6 @@ namespace hazel
 
 	Application::~Application()
 	{
-		Log::DebugCore("Application discontruct.");
 	}
 
 	void Application::OnEvent(Event& ev)
@@ -55,25 +49,35 @@ namespace hazel
 				m_IsRunning = false;
 				return true;
 			});
+		dispatcher.Dispatch<WindowResizeEvent>([](WindowResizeEvent& ev)
+			{
+				auto app = Application::GetInstance();
+				glViewport(0, 0, (unsigned int)app->GetWindow().GetSize().x,
+					(unsigned int)app->GetWindow().GetSize().y);
+				return false;
+			});
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			--it;
 			(*it)->OnEvent(ev);
 			if (ev.Handled)
+			{
+				//  if event handled, throw it
 				break;
+			}
 		}
 
 		Log::InfoCore("App Event: {0}", ev.ToString());
 	}
 
-	void Application::PushLayer(std::shared_ptr<Layer> layer)
+	void Application::PushLayer(Ref<Layer> layer)
 	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverLayer(std::shared_ptr<Layer> overLay)
+	void Application::PushOverLayer(Ref<Layer> overLay)
 	{
 		m_LayerStack.PushOverLay(overLay);
 		overLay->OnAttach();
@@ -87,18 +91,11 @@ namespace hazel
 
 		while (m_IsRunning)
 		{
-			RenderCommand::SetClearColor(glm::vec4(0.5f, 0.6f, 0.5f, 1.0f));
-			RenderCommand::Clear();
-
-			Renderer::BeginScene();
-
 			//  update all layer
 			for (auto layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
-
-			Renderer::EndScene();
 
 			//  update ImGui
 			m_ImGuiLayer->Begin();

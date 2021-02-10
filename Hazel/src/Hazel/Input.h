@@ -35,7 +35,7 @@ namespace hazel
 
 	private:
 
-		static std::shared_ptr<Input> m_Instance;
+		static Ref<Input> m_Instance;
 
 	};
 

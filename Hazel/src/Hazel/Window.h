@@ -27,9 +27,11 @@ namespace hazel
 		//  Is window fullscreen
 		bool isFullScreen;
 
+		bool isVSync;
+
 		WindowProps(const string& Title = "Hazel Engine",
-			uint32_t Width = 800, uint32_t Height = 600, bool FullScreen = false)
-			: title(Title), size(Width, Height), isFullScreen(FullScreen)
+			uint32_t Width = 800, uint32_t Height = 600, bool VSync = false, bool FullScreen = false)
+			: title(Title), size(Width, Height), isVSync(VSync), isFullScreen(FullScreen)
 		{}
 
 	};

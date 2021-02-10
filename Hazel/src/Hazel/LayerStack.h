@@ -13,16 +13,16 @@ namespace hazel
 		LayerStack();
 		~LayerStack();
 
-		void PushLayer(std::shared_ptr<Layer> layer);
-		void PushOverLay(std::shared_ptr<Layer> overLay);
-		void PopLayer(std::shared_ptr<Layer> layer);
-		void PopOverLay(std::shared_ptr<Layer> overLay);
+		void PushLayer(Ref<Layer> layer);
+		void PushOverLay(Ref<Layer> overLay);
+		void PopLayer(Ref<Layer> layer);
+		void PopOverLay(Ref<Layer> overLay);
 
-		std::vector<std::shared_ptr<Layer>>::iterator begin() { return m_Layers.begin(); }
-		std::vector<std::shared_ptr<Layer>>::iterator end() { return m_Layers.end(); }
+		std::vector<Ref<Layer>>::iterator begin() { return m_Layers.begin(); }
+		std::vector<Ref<Layer>>::iterator end() { return m_Layers.end(); }
 
 	private:
-		std::vector<std::shared_ptr<Layer>> m_Layers;
+		std::vector<Ref<Layer>> m_Layers;
 		unsigned int m_LayerStackIndex = 0;
 
 

@@ -2,7 +2,7 @@
 
 #ifdef HZ_PLATFORM_WINDOWS
 
-	extern std::shared_ptr<hazel::Application> hazel::CreateApplication();
+	extern hazel::Ref<hazel::Application> hazel::CreateApplication();
 
 	int main(int argc, char** argv)
 	{

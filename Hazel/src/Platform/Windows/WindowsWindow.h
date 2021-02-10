@@ -32,6 +32,7 @@ namespace hazel
 
 		// Window attributes
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+		
 		inline void SetVSync(bool enabled) override;
 		inline bool IsVSync() const override;
 
@@ -53,16 +54,16 @@ namespace hazel
 		struct WindowData
 		{
 			std::string title;
-			glm::vec2 size;
-			bool VSync;
-			bool isFullScreen;
+			glm::vec2 size = glm::vec2(0.0f);
+			bool VSync = false;
+			bool isFullScreen = false;
 
 			EventCallbackFn EventCallback;
 		};
 
 		WindowData m_Data;
 
-		std::shared_ptr<RenderContext> m_Context = nullptr;
+		Ref<RenderContext> m_Context = nullptr;
 
 
 	};

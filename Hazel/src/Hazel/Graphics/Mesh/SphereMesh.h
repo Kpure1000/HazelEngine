@@ -10,12 +10,13 @@ namespace hazel
 		SphereMesh() 
 			:m_lerpNum(100)
 		{
-			Init();
+			std::vector<float> vert;
+			std::vector<unsigned int> indi;
+
+			
 		}
 
 	private:
-
-		virtual void Init() override;
 
 		int m_lerpNum;
 	};

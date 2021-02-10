@@ -57,6 +57,7 @@ namespace hazel
 		m_Data.title = props.title;
 		m_Data.size = props.size;
 		m_Data.isFullScreen = props.isFullScreen;
+		m_Data.VSync = props.isVSync;
 
 		if (m_GLFWWindowCount == 0)
 		{

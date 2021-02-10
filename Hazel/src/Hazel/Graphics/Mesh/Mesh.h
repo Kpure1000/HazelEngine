@@ -21,7 +21,7 @@ namespace hazel
             m_VertexArray.reset(VertexArray::Create());
         }
 
-        const std::shared_ptr<VertexArray>& GetVertexArray()const
+        const Ref<VertexArray>& GetVertexArray()const
         {
             return m_VertexArray;
         }
@@ -30,7 +30,7 @@ namespace hazel
 
         friend class Renderer;
 
-        std::shared_ptr<VertexArray> m_VertexArray;
+        Ref<VertexArray> m_VertexArray;
 
 	};
 }

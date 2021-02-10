@@ -6,9 +6,10 @@
 #include "Events/ApplicationEvent.h"
 
 #include "ImGui/ImGuiLayer.h"
-#include "Hazel/Renderer/RenderLayer.h"
 
 #include "Hazel/Utility/Singleton.h"
+
+#include "Hazel/Renderer/Camera/OrthographicCamera.h"
 
 namespace hazel
 {
@@ -25,15 +26,16 @@ namespace hazel
 
 		void OnEvent(Event& ev);
 
-		void PushLayer(std::shared_ptr<Layer> layer);
-		void PushOverLayer(std::shared_ptr<Layer> overLay);
+		void PushLayer(Ref<Layer> layer);
+		void PushOverLayer(Ref<Layer> overLay);
 
 		inline Window& GetWindow() { return *m_Window; }
 
+		inline void Close() { m_IsRunning = false; }
+
 	private:
 		std::unique_ptr<Window> m_Window;
-		std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
-		std::shared_ptr<RenderLayer> m_RenderLayer;
+		Ref<ImGuiLayer> m_ImGuiLayer;
 
 		LayerStack m_LayerStack;
 
@@ -45,7 +47,7 @@ namespace hazel
 
 	};
 
-	std::shared_ptr<Application> CreateApplication();
+	Ref<Application> CreateApplication();
 
 }
 

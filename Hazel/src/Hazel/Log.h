@@ -12,12 +12,12 @@ namespace hazel
 	public:
 		static void Init();
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger()
+		inline static Ref<spdlog::logger>& GetCoreLogger()
 		{
 			return m_CoreLogger;
 		}
 
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger()
+		inline static Ref<spdlog::logger>& GetClientLogger()
 		{
 			return m_ClientLogger;
 		}
@@ -95,12 +95,12 @@ namespace hazel
 		/// <summary>
 		/// Core Logger
 		/// </summary>
-		static std::shared_ptr<spdlog::logger> m_CoreLogger;
+		static Ref<spdlog::logger> m_CoreLogger;
 
 		/// <summary>
 		/// Client Logger
 		/// </summary>
-		static std::shared_ptr<spdlog::logger> m_ClientLogger;
+		static Ref<spdlog::logger> m_ClientLogger;
 
 	};
 

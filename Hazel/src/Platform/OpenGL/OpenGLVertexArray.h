@@ -17,13 +17,13 @@ namespace hazel
 
 		virtual void UnBind() const override;
 
-		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vbo) override;
+		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vbo) override;
 
-		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ebo) override;
+		virtual void SetIndexBuffer(const Ref<IndexBuffer>& ebo) override;
 
-		inline virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
+		inline virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
 
-		inline virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
+		inline virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 
 	private:
 
@@ -31,8 +31,8 @@ namespace hazel
 
 		unsigned int m_VertexBufferIndex;
 
-		std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
+		Ref<IndexBuffer> m_IndexBuffer;
 	};
 }
 

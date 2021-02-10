@@ -60,7 +60,6 @@ namespace hazel
 			break;
 		}
 		case hazel::RendererAPI::API::OpenGL: {
-			Log::Info("RendererAPI: OpenGL!");
 			return new OpenGLVertexBuffer(vertices, size);
 			break;
 		}
