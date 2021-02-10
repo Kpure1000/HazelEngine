@@ -32,7 +32,9 @@ namespace hazel
 
 	private:
 
-		void Init();
+		void InitBeforeLoad();
+
+		void BindAfterLoad();
 
 		/// <summary>
 		/// Texture id

@@ -12,6 +12,6 @@ void main()
 {
     fragOut = texture(_diffuse, inTexCoord);
     //  Test TexCoord: 
-    fragOut += vec4(inTexCoord.x, inTexCoord.y, 0.0, 1.0);
-    fragOut /= 2;
+    // fragOut += vec4(inTexCoord.x, inTexCoord.y, 0.0, 1.0);
+    // fragOut /= 2;
 }

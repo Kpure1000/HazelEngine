@@ -16,7 +16,53 @@ namespace hazel
 		{
 			glActiveTexture(GL_TEXTURE0 + index);
 			glBindTexture(GL_TEXTURE_2D, m_ID);
+			return;
+		}
+		Log::ErrorCore("Image Buffer is Empty!");
+	}
 
+	////////////////////////////////////////////
+	/// Load Texture Data
+	////////////////////////////////////////////
+
+	void OpenGLTexture::LoadFromFile(const std::string& path)
+	{
+		InitBeforeLoad();
+		m_Image->LoadFromFile(path.c_str());
+		BindAfterLoad();
+	}
+
+	void OpenGLTexture::LoadFromMemory(int w, int h, int ch, unsigned char* data)
+	{
+		InitBeforeLoad();
+		m_Image->LoadFromMemory(w, h, ch, data);
+		BindAfterLoad();
+	}
+
+	void OpenGLTexture::LoadFromImage(Ref<Image>image)
+	{
+		InitBeforeLoad();
+		this->m_Image = image;
+		BindAfterLoad();
+	}
+
+	void OpenGLTexture::InitBeforeLoad()
+	{
+		glGenTextures(1, &m_ID);
+		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		//  Mag filter
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		//  Anisotropic Filtering
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_LINEAR_MIPMAP_LINEAR);
+	}
+
+	void OpenGLTexture::BindAfterLoad()
+	{
+		if (m_Image->GetBufferSize() != 0)
+		{
 			switch (m_Image->GetChannelCount())
 			{
 			case 1: {
@@ -41,38 +87,4 @@ namespace hazel
 		Log::ErrorCore("Image Buffer is Empty!");
 	}
 
-	////////////////////////////////////////////
-	/// Load Texture Data
-	////////////////////////////////////////////
-
-	void OpenGLTexture::LoadFromFile(const std::string& path)
-	{
-		Init();
-		m_Image->LoadFromFile(path.c_str());
-	}
-
-	void OpenGLTexture::LoadFromMemory(int w, int h, int ch, unsigned char* data)
-	{
-		Init();
-		m_Image->LoadFromMemory(w, h, ch, data);
-	}
-
-	void OpenGLTexture::LoadFromImage(Ref<Image>image)
-	{
-		Init();
-		this->m_Image = image;
-	}
-
-	void OpenGLTexture::Init()
-	{
-		glGenTextures(1, &m_ID);
-		glBindTexture(GL_TEXTURE_2D, m_ID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//  Mag filter
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//  Anisotropic Filtering
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_LINEAR_MIPMAP_LINEAR);
-	}
 }
