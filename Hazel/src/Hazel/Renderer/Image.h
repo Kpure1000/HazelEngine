@@ -5,8 +5,7 @@
 #include<vector>
 #include<functional>
 
-using std::vector;
-using std::function;
+#include<glm/glm.hpp>
 
 namespace hazel
 {
@@ -15,10 +14,20 @@ namespace hazel
 	public:
 
 		Image()
-			:width(0), height(0), channel(0),
-			loadMode(LoadMode::NONE)
+			:m_Width(0), m_Height(0), m_Channel(0),
+			m_LoadMode(LoadMode::NONE)
 		{}
 
+		inline size_t GetBufferSize() { return m_Data.size(); }
+
+		inline int GetWidth() { return m_Width; }
+		inline int GetHeight() { return m_Height; }
+
+		inline unsigned int GetChannelCount() { return m_Channel; }
+
+		const unsigned char* GetData()const { return m_Data.data(); }
+
+	public:
 		/// <summary>
 		/// Load image from memory
 		/// </summary>
@@ -35,7 +44,7 @@ namespace hazel
 		/// <param name="h">Heigt</param>
 		/// <param name="ch">Channel</param>
 		/// <param name="data">Image data(in vector)</param>
-		void LoadFromMemory(const int& w, const int& h, const int& ch, const vector<unsigned char>& data);
+		void LoadFromMemory(const int& w, const int& h, const int& ch, const std::vector<unsigned char>& data);
 
 		/// <summary>
 		/// Load image from file and set weather flip y-axis or not
@@ -54,18 +63,12 @@ namespace hazel
 		}
 
 		/// <summary>
-		/// Bind current data to Texture Image Cache, 
-		/// and generate a 2D mipmap
-		/// </summary>
-		void Use()const;
-
-		/// <summary>
 		/// Deal image data with imageDealCallBack
 		/// </summary>
 		/// <param name="imageDealCallBack">The dealing method defined by user</param>
-		void DealImage(function<void(int, int, int, vector<unsigned char>&)>&& imageDealCallBack)
+		void DealImage(std::function<void(int, int, int, std::vector<unsigned char>&)>&& imageDealCallBack)
 		{
-			imageDealCallBack(width, height, channel, imageData);
+			imageDealCallBack(m_Width, m_Height, m_Channel, m_Data);
 		}
 
 		/// <summary>
@@ -83,9 +86,9 @@ namespace hazel
 		/// <returns>Size is not zero</returns>
 		bool CheckBuffer(size_t size)const;
 
-		int width, height, channel;
+		int m_Width, m_Height, m_Channel;
 
-		vector<unsigned char> imageData;
+		std::vector<unsigned char> m_Data;
 
 		/// <summary>
 		/// Load from where
@@ -98,6 +101,6 @@ namespace hazel
 			LOAD_IMAGE
 		};
 
-		LoadMode loadMode;
+		LoadMode m_LoadMode;
 	};
 }

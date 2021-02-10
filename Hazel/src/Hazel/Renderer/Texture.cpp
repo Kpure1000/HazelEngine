@@ -1,75 +1,31 @@
 #include "hzpch.h"
 
-#include <glad/glad.h>
-
 #include "Texture.h"
+
+#include "Platform/OpenGL/OpenGLTexture.h"
+#include "Renderer.h"
 
 namespace hazel
 {
-	const int Texture::MaxTextureIndices = GL_TEXTURE30 - GL_TEXTURE0;
-
-
-	Texture::Texture() :m_ID(-1)
+	Texture* Texture::Create()
 	{
-	}
-
-	Texture::~Texture()
-	{
-		//  TODO: need to release bind?
-	}
-
-	void Texture::LoadFromFile(const std::string& path)
-	{
-		Init();
-		image.LoadFromFile(path.c_str());
-	}
-
-	void Texture::LoadFromMemory(int w, int h, int ch, unsigned char* data)
-	{
-		Init();
-		image.LoadFromMemory(w, h, ch, data);
-	}
-
-	void Texture::LoadFromImage(const Image& image)
-	{
-		Init();
-		this->image = image;
-	}
-
-	void Texture::Bind(const int& index)const
-	{
-		if (index < MaxTextureIndices)
-		{
-			glActiveTexture(GL_TEXTURE0 + index);
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			image.Use();
+		switch (Renderer::GetAPI()) {
+		case hazel::RendererAPI::API::None: {
+			Log::AssertCore(false, "Create Texture: Renderer API: None is currently not supported.");
+			return nullptr;
+			break;
 		}
-	}
-
-	void Texture::ReBind(const int& index) const
-	{
-		if (index < MaxTextureIndices)
-		{
-			glActiveTexture(GL_TEXTURE0 + index);
-			glBindTexture(GL_TEXTURE_2D, m_ID);
+		case hazel::RendererAPI::API::OpenGL: {
+			return new OpenGLTexture();
+			break;
 		}
-	}
-
-	unsigned int Texture::GetID()const
-	{
-		return m_ID;
-	}
-
-	void Texture::Init()
-	{
-		glGenTextures(1, &m_ID);
-		glBindTexture(GL_TEXTURE_2D, m_ID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//  Mag filter
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//  Anisotropic Filtering
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_LINEAR_MIPMAP_LINEAR);
+		case hazel::RendererAPI::API::Direct3D: {
+			Log::AssertCore(false, "Create Texture: RendererAPI: Direct3D is coming soon.");
+			return nullptr;
+			break;
+		}
+		}
+		Log::AssertCore(false, "Create Texture: Unkown Renderer API!");
+		return nullptr;
 	}
 }

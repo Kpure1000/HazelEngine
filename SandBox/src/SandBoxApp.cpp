@@ -14,7 +14,7 @@ public:
 		rd1->m_Mesh->GetTransform().SetScale(glm::vec3(1.5f));
 		rd1->shader.reset(hazel::Shader::Create("../data/shader/renderLayer.vert",
 			"../data/shader/renderLayer.frag"));
-		rd1->texture1 = std::make_shared<hazel::Texture>();
+		rd1->texture1.reset(hazel::Texture::Create());
 		rd1->texture1->LoadFromFile("../data/texture/earth.jpg");
 		rd1->texture1->Bind(0);
 		rd1->shader->Use();

@@ -9,73 +9,47 @@
 
 #include "Hazel/Log.h"
 
+using std::vector;
+using std::function;
+
 namespace hazel
 {
 	
 	void Image::LoadFromMemory(const int& w, const int& h, const int& ch, unsigned char* data)
 	{
-		loadMode = LoadMode::LOAD_MEMORY;
-		this->width = w;
-		this->height = h;
-		this->channel = ch;
+		m_LoadMode = LoadMode::LOAD_MEMORY;
+		this->m_Width = w;
+		this->m_Height = h;
+		this->m_Channel = ch;
 
-		imageData.reserve((size_t)w * (size_t)h * (size_t)ch);
-		imageData.assign(data, data + (size_t)w * (size_t)h * (size_t)ch);
-		CheckBuffer(imageData.size());
+		m_Data.reserve((size_t)w * (size_t)h * (size_t)ch);
+		m_Data.assign(data, data + (size_t)w * (size_t)h * (size_t)ch);
+		CheckBuffer(m_Data.size());
 	}
 	void Image::LoadFromMemory(const int& w, const int& h, const int& ch, const vector<unsigned char>& data)
 	{
-		loadMode = LoadMode::LOAD_MEMORY;
-		this->width = w;
-		this->height = h;
-		this->channel = ch;
-		imageData = data;
-		CheckBuffer(imageData.size());
+		m_LoadMode = LoadMode::LOAD_MEMORY;
+		this->m_Width = w;
+		this->m_Height = h;
+		this->m_Channel = ch;
+		m_Data = data;
+		CheckBuffer(m_Data.size());
 	}
 	void Image::LoadFromFile(const std::string& path, bool isFlip)
 	{
-		loadMode = LoadMode::LOAD_FILE;
+		m_LoadMode = LoadMode::LOAD_FILE;
 		stbi_set_flip_vertically_on_load(isFlip);
 
-		auto data = stbi_load(path.c_str(), &width, &height, &channel, 0);
-		imageData.reserve((size_t)width * (size_t)height * (size_t)channel);
-		imageData.assign(data, data + (size_t)width * (size_t)height * (size_t)channel);
+		auto data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channel, 0);
+		m_Data.reserve((size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
+		m_Data.assign(data, data + (size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
 		stbi_image_free(data);
-		CheckBuffer(imageData.size());
+		CheckBuffer(m_Data.size());
 	}
-	void Image::Use() const
-	{
-		if (imageData.size() != 0 && loadMode != LoadMode::NONE)
-		{
-			if (channel == 1)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, imageData.data());
-				glGenerateMipmap(GL_TEXTURE_2D);
-			}
-			if (channel == 3)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData.data());
-				glGenerateMipmap(GL_TEXTURE_2D);
-			}
-			else if (channel == 4)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData.data());
-				glGenerateMipmap(GL_TEXTURE_2D);
-			}
-			else
-			{
-				Log::ErrorCore("Texture image channel numbers error.");
-			}
-		}
-		else
-		{
-			Log::ErrorCore("Image Buffer is Empty!");
-		}
 
-	}
 	void Image::SaveData(const std::string& path)
 	{
-		if (stbi_write_png(path.c_str(), width, height, channel, imageData.data(), 0) == 0)
+		if (stbi_write_png(path.c_str(), m_Width, m_Height, m_Channel, m_Data.data(), 0) == 0)
 		{
 			Log::ErrorCore("Save image data error, in path \'{0}\'", path);
 		}
@@ -86,7 +60,7 @@ namespace hazel
 
 		if (size == 0)
 		{
-			if (loadMode == LoadMode::LOAD_FILE)
+			if (m_LoadMode == LoadMode::LOAD_FILE)
 			{
 				Log::ErrorCore("Load Image Error: from file.");
 			}

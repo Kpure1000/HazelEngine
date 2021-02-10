@@ -15,84 +15,49 @@ namespace hazel
 	class Texture
 	{
 	public:
+		virtual ~Texture() = default;
 
-		Texture();
+		virtual void Bind(const int& index)const = 0;
+		virtual void UnBind(const int& index)const = 0;
 
-		~Texture();
+		virtual unsigned int GetID()const = 0;
 
-		/// <summary>
-		/// Load Data From File by stbi
-		/// </summary>
-		/// <param name="path"></param>
-		void LoadFromFile(const std::string& path);
+	public:
+		virtual void LoadFromFile(const std::string& path) = 0;
 
 		/// <summary>
 		/// Load Data From Memory
 		/// </summary>
-		/// <param name="w"></param>
-		/// <param name="h"></param>
-		/// <param name="ch"></param>
-		/// <param name="data"></param>
-		void LoadFromMemory(int w, int h, int ch, unsigned char* data);
+		/// <param name="w">Width</param>
+		/// <param name="h">Height</param>
+		/// <param name="ch">Channel counts</param>
+		/// <param name="data">Data</param>
+		virtual void LoadFromMemory(int w, int h, int ch, unsigned char* data) = 0;
 
 		/// <summary>
 		/// Load data from image
 		/// </summary>
-		/// <param name="image"></param>
-		void LoadFromImage(const Image& image);
+		/// <param name="image">Image</param>
+		virtual void LoadFromImage(Ref<Image>image) = 0;
 
 		/// <summary>
-		/// Bind current texture
+		/// Deal with image data using method defined in callback
 		/// </summary>
-		void Bind(const int& index)const;
-
-		void ReBind(const int& index)const;
-
-		/// <summary>
-		/// Get id of texture
-		/// </summary>
-		/// <returns></returns>
-		unsigned int GetID()const;
-
-		[[deprecated("This constructor will be deleted")]]
-		void SetID(const unsigned int& id)
+		/// <param name="imageDealCallback">Method defined how to deal with image</param>
+		void DealImage(std::function<void(int, int, int, std::vector<unsigned char>&)>&& imageDealCallback)
 		{
-			m_ID = id;
+			m_Image->DealImage(std::move(imageDealCallback));
 		}
 
-		void DealImage(function<void(int, int, int, vector<unsigned char>&)>&& imageDealCallBack)
-		{
-			image.DealImage(std::move(imageDealCallBack));
-		}
-
-	private:
-
-		void Init();
-
-		/// <summary>
-		/// Texture id
-		/// </summary>
-		unsigned int m_ID;
+	protected:
 
 		/// <summary>
 		/// Data
 		/// </summary>
-		Image image;
+		Ref<Image> m_Image;
 
-		/// <summary>
-		/// Max texture numbers in GL
-		/// </summary>
-		const static int MaxTextureIndices;
-
+	public:
+		static Texture* Create();
 	};
 
-	/// <summary>
-	/// Mesh Texture
-	/// </summary>
-	struct MeshTex
-	{
-		Texture texture;
-
-		std::string type;
-	};
 }
