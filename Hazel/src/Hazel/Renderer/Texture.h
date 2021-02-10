@@ -18,9 +18,10 @@ namespace hazel
 		virtual ~Texture() = default;
 
 		virtual void Bind(const int& index)const = 0;
-		virtual void UnBind(const int& index)const = 0;
 
 		virtual unsigned int GetID()const = 0;
+
+		virtual bool operator==(const Texture& other)const = 0;
 
 	public:
 		virtual void LoadFromFile(const std::string& path) = 0;
@@ -56,8 +57,12 @@ namespace hazel
 		/// </summary>
 		Ref<Image> m_Image;
 
+	};
+
+	class Texture2D : public Texture
+	{
 	public:
-		static Texture* Create();
+		static Texture2D* Create();
 	};
 
 }

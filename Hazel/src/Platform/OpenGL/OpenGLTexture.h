@@ -3,7 +3,7 @@
 
 namespace hazel
 {
-	class OpenGLTexture : public Texture
+	class OpenGLTexture : public Texture2D
 	{
 	public:
 		explicit OpenGLTexture() :m_ID(0) 
@@ -15,9 +15,13 @@ namespace hazel
 
 		virtual void Bind(const int& index) const override;
 		
-		virtual void UnBind(const int& index) const override;
+		[[deprecated("Deleted method: GetID")]]
+		inline virtual unsigned int GetID() const override { return m_ID; }
 
-		virtual unsigned int GetID() const override;
+		inline virtual bool operator==(const Texture& other)const override
+		{
+			return m_ID == ((OpenGLTexture&)other).m_ID;
+		}
 
 	public:
 		virtual void LoadFromFile(const std::string& path) override;

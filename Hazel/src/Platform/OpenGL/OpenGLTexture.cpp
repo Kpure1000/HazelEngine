@@ -41,17 +41,6 @@ namespace hazel
 		Log::ErrorCore("Image Buffer is Empty!");
 	}
 
-	void OpenGLTexture::UnBind(const int& index) const
-	{
-		glActiveTexture(GL_TEXTURE0 + index);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-	unsigned int OpenGLTexture::GetID()const
-	{
-		return m_ID;
-	}
-
 	////////////////////////////////////////////
 	/// Load Texture Data
 	////////////////////////////////////////////

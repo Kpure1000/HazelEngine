@@ -7,7 +7,7 @@
 
 namespace hazel
 {
-	Texture* Texture::Create()
+	Texture2D* Texture2D::Create()
 	{
 		switch (Renderer::GetAPI()) {
 		case hazel::RendererAPI::API::None: {
@@ -28,4 +28,5 @@ namespace hazel
 		Log::AssertCore(false, "Create Texture: Unkown Renderer API!");
 		return nullptr;
 	}
+
 }
