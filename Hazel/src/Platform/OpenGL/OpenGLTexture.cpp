@@ -12,7 +12,7 @@ namespace hazel
 
 	void OpenGLTexture::Bind(const int& index)const
 	{
-		if (index < MaxTextureIndices && m_Image->GetBufferSize() != 0)
+		if (index < MaxTextureIndices)
 		{
 			glActiveTexture(GL_TEXTURE0 + index);
 			glBindTexture(GL_TEXTURE_2D, m_ID);
@@ -28,22 +28,23 @@ namespace hazel
 	void OpenGLTexture::LoadFromFile(const std::string& path)
 	{
 		InitBeforeLoad();
-		m_Image->LoadFromFile(path.c_str());
-		BindAfterLoad();
+		Ref<Image> image = std::make_shared<Image>();
+		image->LoadFromFile(path.c_str());
+		BindAfterLoad(image);
 	}
 
 	void OpenGLTexture::LoadFromMemory(int w, int h, int ch, unsigned char* data)
 	{
 		InitBeforeLoad();
-		m_Image->LoadFromMemory(w, h, ch, data);
-		BindAfterLoad();
+		Ref<Image> image = std::make_shared<Image>();
+		image->LoadFromMemory(w, h, ch, data);
+		BindAfterLoad(image);
 	}
 
 	void OpenGLTexture::LoadFromImage(Ref<Image>image)
 	{
 		InitBeforeLoad();
-		this->m_Image = image;
-		BindAfterLoad();
+		BindAfterLoad(image);
 	}
 
 	void OpenGLTexture::InitBeforeLoad()
@@ -59,22 +60,22 @@ namespace hazel
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_LINEAR_MIPMAP_LINEAR);
 	}
 
-	void OpenGLTexture::BindAfterLoad()
+	void OpenGLTexture::BindAfterLoad(Ref<Image> image)
 	{
-		if (m_Image->GetBufferSize() != 0)
+		if (image->GetBufferSize() != 0)
 		{
-			switch (m_Image->GetChannelCount())
+			switch (image->GetChannelCount())
 			{
 			case 1: {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_Image->GetWidth(), m_Image->GetHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, m_Image->GetData());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, image->GetWidth(), image->GetHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, image->GetData());
 				break;
 			}
 			case 3: {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Image->GetWidth(), m_Image->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_Image->GetData());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->GetWidth(), image->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
 				break;
 			}
 			case 4: {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Image->GetWidth(), m_Image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_Image->GetData());
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->GetData());
 				break;
 			}
 			default:

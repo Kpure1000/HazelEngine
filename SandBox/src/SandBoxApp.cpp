@@ -15,16 +15,44 @@ public:
 		rd1->m_Mesh = std::make_shared<hazel::CubeMesh>();
 		rd1->m_Mesh->GetTransform().SetScale(glm::vec3(1.5f));
 		rd1->texture1.reset(hazel::Texture2D::Create());
-		rd1->texture1->LoadFromFile("../data/texture/awesomeface.png");
+		rd1->texture1->LoadFromFile("../data/texture/blending_transparent_window.png");
+		rd1->texture2.reset(hazel::Texture2D::Create());
+		rd1->texture2->LoadFromFile("../data/texture/checkborad.png");
 		rd1->shader = _shader;
 		rd1->shader->Use();
 		rd1->texture1->Bind(0);
 		rd1->shader->SetSampler2D("_diffuse", 0);
+		rd1->texture2->Bind(1);
+		rd1->shader->SetSampler2D("_diffuse", 1);
 		rd1->drawCallFn = [rd1]() {
 			rd1->shader->Use();
+
+			rd1->texture2->Bind(1);
+			rd1->shader->SetSampler2D("_diffuse", 1);
+			rd1->m_Mesh->GetTransform().SetScale(glm::vec3(3.0f, 3.0f, 1.0f));
+
+			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+
 			rd1->texture1->Bind(0);
 			rd1->shader->SetSampler2D("_diffuse", 0);
+			rd1->m_Mesh->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+
+			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(-1.0f, -1.0f, -3.9999999f));
 			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+
+			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(-0.5f, -0.5f, -0.3f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+
+			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(0.0f, 0.0f, 0.5f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+
+			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(0.5f, 0.5f, 0.7f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+
+			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.9f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+
 		};
 		rd1->imGuiDrawCallFn = [this, rd1]() {
 			auto pos = rd1->m_Mesh->GetTransform().GetPosition();
@@ -37,35 +65,7 @@ public:
 			m_Camera.SetPosition(caPos);
 		};
 
-		auto rd2 = std::make_shared<RenderData>();
-		rd2->m_Mesh = std::make_shared<hazel::CubeMesh>();
-		rd2->m_Mesh->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.0f));
-		rd2->m_Mesh->GetTransform().SetScale(glm::vec3(1.5f));
-		rd2->texture1.reset(hazel::Texture2D::Create());
-		rd2->texture1->LoadFromFile("../data/texture/checkborad.png");
-		rd2->shader = _shader;
-		rd2->shader->Use();
-		rd2->texture1->Bind(1);
-		rd2->shader->SetSampler2D("_diffuse", 1);
-		rd2->drawCallFn = [rd2]() {
-			rd2->shader->Use();
-			rd2->texture1->Bind(1);
-			rd2->shader->SetSampler2D("_diffuse", 1);
-			hazel::Renderer::Submit(rd2->m_Mesh, rd2->shader);
-		};
-		rd2->imGuiDrawCallFn = [this, rd2]() {
-			auto pos = rd2->m_Mesh->GetTransform().GetPosition();
-			auto caPos = m_Camera.GetPosition();
-			ImGui::Begin("Properties 2");
-			ImGui::SliderFloat3("Position", glm::value_ptr(pos), -3.0f, 3.0f, "%.3f", 1);
-			ImGui::SliderFloat3("Camera Position", glm::value_ptr(caPos), -3.0f, 3.0f, "%.3f", 1);
-			ImGui::End();
-			rd2->m_Mesh->GetTransform().SetPosition(pos);
-			m_Camera.SetPosition(caPos);
-		};
-
 		m_RenderDatas.push_back(rd1);
-		m_RenderDatas.push_back(rd2);
 	}
 
 	void OnUpdate() override

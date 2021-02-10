@@ -10,7 +10,8 @@ uniform sampler2D _diffuse;
 
 void main()
 {
-    fragOut = texture(_diffuse, inTexCoord);
+    vec4 color = texture(_diffuse, inTexCoord);
+    fragOut = color;
     //  Test TexCoord: 
     // fragOut += vec4(inTexCoord.x, inTexCoord.y, 0.0, 1.0);
     // fragOut /= 2;

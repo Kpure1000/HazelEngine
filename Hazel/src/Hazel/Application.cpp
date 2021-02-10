@@ -35,6 +35,8 @@ namespace hazel
 		PushOverLayer(m_ImGuiLayer);
 
 		m_IsRunning = true;
+
+		Renderer::Init();
 	}
 
 	Application::~Application()
@@ -86,9 +88,6 @@ namespace hazel
 	void Application::Run()
 	{
 		Time::Begin();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
 
 		while (m_IsRunning)
 		{

@@ -6,10 +6,8 @@ namespace hazel
 	class OpenGLTexture : public Texture2D
 	{
 	public:
-		explicit OpenGLTexture() :m_ID(0) 
-		{
-			m_Image = std::make_shared<Image>();
-		}
+		explicit OpenGLTexture() :m_ID(0)
+		{}
 
 		~OpenGLTexture() {}
 
@@ -34,7 +32,7 @@ namespace hazel
 
 		void InitBeforeLoad();
 
-		void BindAfterLoad();
+		void BindAfterLoad(Ref<Image> image);
 
 		/// <summary>
 		/// Texture id

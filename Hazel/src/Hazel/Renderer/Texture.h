@@ -47,15 +47,12 @@ namespace hazel
 		/// <param name="imageDealCallback">Method defined how to deal with image</param>
 		void DealImage(std::function<void(int, int, int, std::vector<unsigned char>&)>&& imageDealCallback)
 		{
-			m_Image->DealImage(std::move(imageDealCallback));
+			Ref<Image> image = std::make_shared<Image>();
+			image->DealImage(std::move(imageDealCallback));
+			LoadFromImage(image);
 		}
 
 	protected:
-
-		/// <summary>
-		/// Data
-		/// </summary>
-		Ref<Image> m_Image;
 
 	};
 

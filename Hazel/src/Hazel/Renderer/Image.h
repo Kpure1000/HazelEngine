@@ -18,12 +18,12 @@ namespace hazel
 			m_LoadMode(LoadMode::NONE)
 		{}
 
-		inline size_t GetBufferSize() { return m_Data.size(); }
+		inline size_t GetBufferSize()const { return m_Data.size(); }
 
-		inline int GetWidth() { return m_Width; }
-		inline int GetHeight() { return m_Height; }
+		inline int GetWidth()const { return m_Width; }
+		inline int GetHeight()const { return m_Height; }
 
-		inline unsigned int GetChannelCount() { return m_Channel; }
+		inline unsigned int GetChannelCount()const { return m_Channel; }
 
 		const unsigned char* GetData()const { return m_Data.data(); }
 
