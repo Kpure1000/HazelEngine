@@ -16,6 +16,10 @@ namespace hazel
 
 		virtual void UnUse()const = 0;
 
+		virtual const std::string& GetName()const = 0;
+
+		virtual const void SetName(const std::string& name) = 0;
+
 	public:
 		virtual void SetBool(const std::string& name, const bool& value)const = 0;
 
@@ -40,11 +44,29 @@ namespace hazel
 		virtual void SetArray(const std::string& name, const int& size, const float* data)const = 0;
 
 	public:
-		static Shader* Create(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+		static Shader* Create(const std::string& filePath);
 
 	};
 
+	class HAZEL_API ShaderManager
+	{
+	public:
+		const Ref<Shader> Get(const std::string& name)const;
 
+		const Ref<Shader> Load(const std::string& filePath);
+
+		const Ref<Shader> Load(const std::string& filePath, const std::string& name);
+
+		void Add(const std::string& name, const Ref<Shader>& shader);
+
+		void Add(const Ref<Shader>& shader);
+
+
+	private:
+		bool IsExist(const std::string& name)const;
+
+		std::unordered_map<std::string, Ref<Shader>> m_ShaderLib;
+	};
 
 }
 

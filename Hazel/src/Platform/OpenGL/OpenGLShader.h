@@ -5,13 +5,17 @@ namespace hazel
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+		OpenGLShader(const std::string& filePath);
 
 		~OpenGLShader();
 
 		virtual void Use()const override;
 
 		virtual void UnUse()const override;
+
+		virtual const std::string& GetName()const override { return m_Name; }
+
+		virtual const void SetName(const std::string& name) override { m_Name = name; }
 
 	public:
 		virtual void SetBool(const std::string& name, const bool& value)const override;
@@ -49,6 +53,9 @@ namespace hazel
 		/// id of shader program
 		/// </summary>
 		unsigned int m_ID;
+
+		std::string m_Name;
+
 	};
 
 }

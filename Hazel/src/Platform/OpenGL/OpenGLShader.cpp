@@ -2,9 +2,9 @@
 
 #include "OpenGLShader.h"
 
-#include<fstream>
-#include<sstream>
-#include<iostream>
+#include <fstream>
+#include <regex>
+
 
 #include <glad/glad.h>
 
@@ -15,47 +15,88 @@
 
 namespace hazel
 {
-	OpenGLShader::OpenGLShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+	OpenGLShader::OpenGLShader(const std::string& filePath)
 	{
 #pragma region load shader code from file
 
-		char* vshaderCode;
-		char* fshaderCode;
-		std::ifstream vertIn;
-		std::ifstream fragIn;
-		std::string vstr, fstr;
-		vertIn.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		fragIn.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		std::ifstream shaderIn;
+		std::string shaderStr;
+		shaderIn.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 		try
 		{
-			vertIn.open(vertexShaderPath.c_str());
-			fragIn.open(fragmentShaderPath.c_str());
+			shaderIn.open(filePath.c_str());
 			std::stringstream vstream, fstream;
-			vstream << vertIn.rdbuf();
-			fstream << fragIn.rdbuf();
-			vertIn.close();
-			fragIn.close();
-			vstr = vstream.str();
-			fstr = fstream.str();
+			vstream << shaderIn.rdbuf();
+			shaderIn.close();
+			shaderStr = vstream.str();
 		}
 		catch (std::ifstream::failure e)
 		{
 			Log::ErrorCore("Ifstram failed, exception:\n{0}", e.what());
 		}
-		vshaderCode = (char*)vstr.c_str();
-		fshaderCode = (char*)fstr.c_str();
+
+#pragma endregion
+
+#pragma region preprocess
+		std::string vert_str;
+		std::string frag_str;
+		std::regex regex_vertex("(#shader [\\s]*vertex)");		//  '#shader vertex'
+		std::regex regex_fragment("(#shader [\\s]*fragment)");	//  '#shader fragment'
+		std::string pre_proc_str;
+
+		//  split by '#shader vertex'
+		auto sp_first = std::vector<std::string>(
+			std::sregex_token_iterator(shaderStr.begin(), shaderStr.end(), regex_vertex, -1),
+			std::sregex_token_iterator());
+		std::vector<std::string> sp_second;
+		if (sp_first.size() > 0) //  found '#shader vertex'
+		{
+			pre_proc_str = (*(sp_first.end() - 1)); //  get the latter
+			//  split by '#shader fragment'
+			sp_second = std::vector<std::string>(
+				std::sregex_token_iterator(pre_proc_str.begin(), pre_proc_str.end(), regex_fragment, -1),
+				std::sregex_token_iterator());
+			if (sp_second.size() > 1) //  vertex code is the former
+			{
+				vert_str = sp_second[0];
+				frag_str = sp_second[1];
+			}
+			else
+			{
+				//  split by '#shader fragment'
+				sp_first = std::vector<std::string>(
+					std::sregex_token_iterator(shaderStr.begin(), shaderStr.end(), regex_fragment, -1),
+					std::sregex_token_iterator());
+				if (sp_first.size() > 0)
+				{
+					pre_proc_str = (*(sp_first.end() - 1)); //  get the latter
+					//  split by '#shader vertex'
+					sp_second = std::vector<std::string>(
+						std::sregex_token_iterator(pre_proc_str.begin(), pre_proc_str.end(), regex_vertex, -1),
+						std::sregex_token_iterator());
+					if (sp_second.size() > 1) //  fragment code is the former
+					{
+						frag_str = sp_second[0];
+						vert_str = sp_second[1];
+					}
+				}
+			}
+		}
 
 #pragma endregion
 
 #pragma region vertex shader
+		
+		auto pos_first = shaderStr.find_first_of("#shader");
+
 		int isCompileSuccessed;
 
 		//  cerate vertex shader
 		unsigned int vShader;
 		vShader = glCreateShader(GL_VERTEX_SHADER);
 		//  load shader code
-
-		glShaderSource(vShader, 1, &vshaderCode, NULL);
+		const char* vShaderCode = vert_str.c_str();
+		glShaderSource(vShader, 1, &vShaderCode, NULL);
 		//  compile code
 		glCompileShader(vShader);
 		char infoLog[512];
@@ -64,7 +105,7 @@ namespace hazel
 		{
 			glGetShaderInfoLog(vShader, 512, NULL, infoLog);
 			Log::ErrorCore("Vertex shader compilation failed, in file:\'{0}\'. Details:\n{1}",
-				vertexShaderPath, infoLog);
+				filePath, infoLog);
 		}
 
 #pragma endregion
@@ -75,8 +116,8 @@ namespace hazel
 		unsigned int fShader;
 		fShader = glCreateShader(GL_FRAGMENT_SHADER);
 		//  load shader code
-
-		glShaderSource(fShader, 1, &fshaderCode, NULL);
+		const char* fShaderCode = frag_str.c_str();
+		glShaderSource(fShader, 1, &fShaderCode, NULL);
 		//  compile 
 		glCompileShader(fShader);
 		char finfoLog[512];
@@ -85,7 +126,7 @@ namespace hazel
 		{
 			glGetShaderInfoLog(fShader, 512, NULL, finfoLog);
 			Log::ErrorCore("Fragment shader compilation failed, in file:\'{0}\'. Details:\n{1}",
-				fragmentShaderPath, finfoLog);
+				filePath, finfoLog);
 		}
 
 #pragma endregion
@@ -109,6 +150,30 @@ namespace hazel
 		//  release shaders
 		glDeleteShader(vShader);
 		glDeleteShader(fShader);
+
+#pragma endregion
+
+#pragma region get shader name from path
+
+		std::regex regex_div_slash("\\\\|\\/");
+		std::vector<std::string> split_div_slash(
+			std::sregex_token_iterator(filePath.begin(), filePath.end(), regex_div_slash, -1),
+			std::sregex_token_iterator()
+		);
+		std::regex regex_dot("\\.");
+		if (split_div_slash.size() > 0) {
+			auto& slashed = split_div_slash[split_div_slash.size() - 1];
+			std::vector<std::string> split_dot(
+				std::sregex_token_iterator(slashed.begin(), slashed.end(), regex_dot, -1),
+				std::sregex_token_iterator()
+			);
+			if (split_dot.size() > 0) {
+				m_Name = split_dot[0];
+			}
+		}
+		else {
+			m_Name = "";
+		}
 
 #pragma endregion
 
@@ -194,4 +259,5 @@ namespace hazel
 	{
 		return glGetUniformLocation(m_ID, (name).c_str());
 	}
+
 }

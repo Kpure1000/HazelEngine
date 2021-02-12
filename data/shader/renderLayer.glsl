@@ -1,3 +1,4 @@
+#shader vertex
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
@@ -16,4 +17,24 @@ void main()
     inFragPos = gl_Position.xyz;
     inNormal = mat3(transpose(inverse(_model))) * aNormal;
     inTexCoord = aTexCooord;
+}
+
+#shader fragment
+#version 330 core
+
+in vec3 inFragPos;
+in vec3 inNormal;
+in vec2 inTexCoord;
+
+out vec4 fragOut;
+
+uniform sampler2D _diffuse;
+
+void main()
+{
+    vec4 color = texture(_diffuse, inTexCoord);
+    fragOut = color;
+    //  Test TexCoord: 
+    // fragOut += vec4(inTexCoord.x, inTexCoord.y, 0.0, 1.0);
+    // fragOut /= 2;
 }
