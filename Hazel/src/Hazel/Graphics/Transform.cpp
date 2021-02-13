@@ -1,7 +1,7 @@
 #include "hzpch.h"
 
 #include "Transform.h"
-#include "Hazel/Time.h"
+#include "Hazel/Core/Time.h"
 
 glm::mat4 hazel::Transform::GetTransMat()
 {

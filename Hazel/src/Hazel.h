@@ -1,17 +1,17 @@
 #pragma once
 
 //  ---Use by Hazel Application-----------
-#include "Hazel/Application.h"
-#include "Hazel/Log.h"
-#include "Hazel/Time.h"
+#include "Hazel/Core/Application.h"
+#include "Hazel/Core/Log.h"
+#include "Hazel/Core/Time.h"
 //  --------------------------------------
 
 //  ---Entry Point------------------------
-#include "Hazel/EntryPoint.h"
+#include "Hazel/Core/EntryPoint.h"
 //  --------------------------------------
 
 //  ---Input------------------------------
-#include "Hazel/Input.h"
+#include "Hazel/Core/Input.h"
 //  --------------------------------------
 
 //  ---Events-----------------------------
@@ -34,6 +34,6 @@
 #include "Hazel/OrthographicCameraController.h"
 
 //  ---Layer------------------------------
-#include "Hazel/Layer.h"
+#include "Hazel/Core/Layer.h"
 //  --------------------------------------
 

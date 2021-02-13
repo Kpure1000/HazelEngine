@@ -9,7 +9,7 @@
 
 #include "Platform/Windows/WindowsWindow.h"
 
-#include "Hazel/Time.h"
+#include "Time.h"
 
 #include "Hazel/Renderer/Renderer.h"
 

@@ -2,7 +2,7 @@
 
 #include "Math.h"
 
-#include "Hazel/Time.h"
+#include "Hazel/Core/Time.h"
 
 namespace hazel
 {

@@ -2,11 +2,11 @@
 
 #include "OrthographicCameraController.h"
 
-#include "Hazel/Time.h"
-#include "Hazel/Input.h"
-#include "Hazel/Log.h"
+#include "Hazel/Core/Time.h"
+#include "Hazel/Core/Input.h"
+#include "Hazel/Core/Log.h"
 
-#include "Hazel/Application.h"
+#include "Hazel/Core/Application.h"
 
 #include "Hazel/Utility/Math.h"
 

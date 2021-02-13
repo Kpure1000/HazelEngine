@@ -1,6 +1,6 @@
 #include "hzpch.h"
 
-#include "Hazel/Log.h"
+#include "Hazel/Core/Log.h"
 
 #include "Renderer.h"
 #include "VertexArray.h"

@@ -5,7 +5,7 @@
 
 #include "OpenGLContext.h"
 
-#include "Hazel/Log.h"
+#include "Hazel/Core/Log.h"
 
 hazel::OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 	:m_WindowHandle(windowHandle)

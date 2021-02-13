@@ -7,7 +7,7 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 
-#include "Hazel/Log.h"
+#include "Hazel/Core/Log.h"
 
 using std::vector;
 using std::function;
