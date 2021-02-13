@@ -1415,6 +1415,7 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Hazel\OrthographicCameraController.h" />
+    <ClInclude Include="src\Hazel\Utility\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -1490,5 +1491,6 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Hazel\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Hazel\Utility\Math.cpp" />
   </ItemGroup>
 </Project>
