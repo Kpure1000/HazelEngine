@@ -7,12 +7,13 @@ class ExampleLayer : public hazel::Layer
 
 public:
 	ExampleLayer()
-		: Layer("Eaxample"), m_CameraController(1.0f, false)
+		: Layer("Eaxample"), m_CameraController(
+			(float)hazel::Application::GetInstance()->GetWindow().GetSize().x
+			/ (float)hazel::Application::GetInstance()->GetWindow().GetSize().y, false, true)
 	{
 		m_SMGR = std::make_shared<hazel::ShaderManager>();
 
 		hazel::Ref<hazel::Shader> _shader = m_SMGR->Load("../data/shader/renderLayer.glsl");
-		hazel::Log::Info("Shdar name: {0}", _shader->GetName());
 
 		auto rd1 = std::make_shared<RenderData>();
 		rd1->m_Mesh = std::make_shared<hazel::CubeMesh>();
@@ -123,7 +124,8 @@ private:
 
 	std::vector<hazel::Ref<RenderData>> m_RenderDatas;
 
-	std::shared_ptr<hazel::ShaderManager> m_SMGR;
+	hazel::Ref<hazel::ShaderManager> m_SMGR;
+
 };
 
 class SandBox : public hazel::Application

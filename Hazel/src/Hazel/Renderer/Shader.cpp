@@ -56,7 +56,7 @@ namespace hazel
 
 	const Ref<Shader> ShaderManager::Load(const std::string& filePath)
 	{
-		std::shared_ptr<Shader>shader;
+		Ref<Shader>shader;
 		shader.reset((Shader::Create(filePath)));
 		Add(shader);
 		return shader;
@@ -64,7 +64,7 @@ namespace hazel
 
 	const Ref<Shader> ShaderManager::Load(const std::string& filePath, const std::string& name)
 	{
-		std::shared_ptr<Shader>shader;
+		Ref<Shader>shader;
 		shader.reset((Shader::Create(filePath)));
 		Add(name, shader);
 		return shader;

@@ -10,6 +10,11 @@ namespace hazel
 	{
 		RenderCommand::Init();
 	}
+	
+	void Renderer::OnWindowResize(int width, int height)
+	{
+		RenderCommand::SetViewPort(0, 0, width, height);
+	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{

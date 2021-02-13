@@ -5,7 +5,7 @@
 namespace hazel
 {
 	/// <summary>
-	/// RendererCommand, DO NOT do multiple command
+	/// RendererCommand, DO NOT execute multiple command
 	/// </summary>
 	class RenderCommand
 	{
@@ -13,6 +13,11 @@ namespace hazel
 		inline static void Init()
 		{
 			m_RendererAPI->Init();
+		}
+
+		inline static void SetViewPort(int x, int y, int width, int height)
+		{
+			m_RendererAPI->SetViewPort(0, 0, width, height);
 		}
 
 		inline static void SetClearColor(const glm::vec4& color)

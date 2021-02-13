@@ -13,12 +13,13 @@ namespace hazel
 	class HAZEL_API OrthographicCameraController
 	{
 	public:
-		OrthographicCameraController(float aspectRotiom, bool rotation = false);
+		OrthographicCameraController(float aspectRotiom, bool rotation = false, bool moveFollowZoom = false);
 
 		void OnUpdate();
 		void OnEvent(Event& ev);
 
-		inline OrthographicCamera& GetCamera()const { return *m_Camera; }
+		inline OrthographicCamera& GetCamera() { return *m_Camera; }
+		inline const OrthographicCamera& GetCamera()const { return *m_Camera; }
 
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& ev);
@@ -36,6 +37,7 @@ namespace hazel
 		float vel = 0.0f;
 
 		bool m_EnableRotate;
+		bool m_MoveFollowZoom;
 
 		Ref<OrthographicCamera> m_Camera;
 

@@ -6,14 +6,17 @@
 #include "Hazel/Input.h"
 #include "Hazel/Log.h"
 
+#include "Hazel/Application.h"
+
 #include "Hazel/Utility/Math.h"
 
 namespace hazel
 {
-	OrthographicCameraController::OrthographicCameraController(float aspectRotio, bool rotation)
+	OrthographicCameraController::OrthographicCameraController(float aspectRotio, bool rotation,
+		bool moveFollowZoom)
 		: m_AspectRatio(aspectRotio), m_ZoomLevel(1.0f), m_NewZoom(m_ZoomLevel),
-		m_MoveSpeed(5.0f), m_RotateSpeed(20.0f), m_ScaleSpeed(5.0f),
-		m_EnableRotate(rotation),
+		m_MoveSpeed(3.0f), m_RotateSpeed(20.0f), m_ScaleSpeed(5.0f),
+		m_EnableRotate(rotation), m_MoveFollowZoom(moveFollowZoom),
 		m_Camera(std::make_shared< OrthographicCamera>(
 			glm::vec2(-m_AspectRatio * m_ZoomLevel, -m_ZoomLevel),
 			glm::vec2(m_AspectRatio* m_ZoomLevel, m_ZoomLevel)
@@ -24,7 +27,7 @@ namespace hazel
 
 	void OrthographicCameraController::OnUpdate()
 	{
-		//  Logic update
+		//  Translate
 		tmpTranslation.x = tmpTranslation.y = tmpTranslation.x = 0.0f;
 		tmpRotateion = 0.0f;
 		if (Input::IsKeyPressed(Key::A))tmpTranslation.x -= m_MoveSpeed * Time::deltaTime();
@@ -33,6 +36,7 @@ namespace hazel
 		if (Input::IsKeyPressed(Key::S))tmpTranslation.y -= m_MoveSpeed * Time::deltaTime();
 		m_Camera->SetPosition(m_Camera->GetPosition() + tmpTranslation);
 
+		//  Rotate
 		if (m_EnableRotate)
 		{
 			if (Input::IsKeyPressed(Key::Q))tmpRotateion += m_RotateSpeed * Time::deltaTime();
@@ -40,8 +44,14 @@ namespace hazel
 			m_Camera->SetRotation(m_Camera->GetRotation() + tmpRotateion);
 		}
 
+		//  Smooth zoom
 		m_ZoomLevel = Math::SmoothDamp(m_ZoomLevel, m_NewZoom, vel, 0.2f, 1000.0f, Time::deltaTime() * m_ScaleSpeed);
+		
+		//  Move speed follow zoom
+		if (m_MoveFollowZoom)
+			m_MoveSpeed = 3.0f * m_ZoomLevel;
 
+		//  Update Camera projection mat
 		m_Camera->SetProjection(
 			glm::vec2(-m_AspectRatio * m_ZoomLevel, -m_ZoomLevel),
 			glm::vec2(m_AspectRatio* m_ZoomLevel, m_ZoomLevel)
@@ -57,13 +67,19 @@ namespace hazel
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& ev)
 	{
-		Log::TraceCore("zoom: {0}", m_NewZoom);
-		m_NewZoom = glm::clamp(m_NewZoom - ev.GetYOffset() * 0.1f, 0.2f, 10.0f);
+		m_NewZoom = glm::clamp(m_NewZoom - ev.GetYOffset() * Time::deltaTime(), 0.2f, 10.0f);
 		return false;
 	}
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& ev)
 	{
+		auto app = Application::GetInstance();
+		m_AspectRatio = (float)app->GetWindow().GetSize().x / (float)app->GetWindow().GetSize().y;
+		//  Update Camera projection mat
+		m_Camera->SetProjection(
+			glm::vec2(-m_AspectRatio * m_ZoomLevel, -m_ZoomLevel),
+			glm::vec2(m_AspectRatio * m_ZoomLevel, m_ZoomLevel)
+		);
 		return false;
 	}
 }

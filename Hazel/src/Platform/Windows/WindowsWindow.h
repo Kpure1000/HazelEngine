@@ -24,8 +24,7 @@ namespace hazel
 
 		void OnUpdate() override;
 
-		// Í¨¹ý Window ¼Ì³Ð
-		virtual glm::vec2 GetSize() const override;
+		virtual glm::ivec2 GetSize() const override;
 
 		/*inline unsigned int GetWidth() const override { return m_Data.width; }
 		inline unsigned int GetHeight() const override { return m_Data.height; }*/
@@ -54,7 +53,7 @@ namespace hazel
 		struct WindowData
 		{
 			std::string title;
-			glm::vec2 size = glm::vec2(0.0f);
+			glm::ivec2 size = glm::ivec2(0);
 			bool VSync = false;
 			bool isFullScreen = false;
 

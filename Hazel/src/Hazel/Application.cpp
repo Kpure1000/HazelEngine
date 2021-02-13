@@ -27,7 +27,7 @@ namespace hazel
 		m_Instance = this;
 
 		//  create window
-		m_Window = Window::Create(WindowProps("Hazel Engine", 800, 800, true, false));
+		m_Window = Window::Create(WindowProps("Hazel Engine", 800, 600, true, false));
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
 
 		//  create imgui layer
@@ -54,8 +54,7 @@ namespace hazel
 		dispatcher.Dispatch<WindowResizeEvent>([](WindowResizeEvent& ev)
 			{
 				auto app = Application::GetInstance();
-				glViewport(0, 0, (unsigned int)app->GetWindow().GetSize().x,
-					(unsigned int)app->GetWindow().GetSize().y);
+				Renderer::OnWindowResize(app->GetWindow().GetSize().x, app->GetWindow().GetSize().y);
 				return false;
 			});
 
@@ -70,7 +69,7 @@ namespace hazel
 			}
 		}
 
-		Log::InfoCore("App Event: {0}", ev.ToString());
+		Log::DebugCore("Application Event: {0}", ev.ToString());
 	}
 
 	void Application::PushLayer(Ref<Layer> layer)
