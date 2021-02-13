@@ -31,6 +31,8 @@
 #include "Hazel/Graphics/Mesh/SphereMesh.h"
 //  --------------------------------------
 
+#include "Hazel/OrthographicCameraController.h"
+
 //  ---Layer------------------------------
 #include "Hazel/Layer.h"
 //  --------------------------------------

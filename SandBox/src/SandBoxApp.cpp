@@ -7,7 +7,7 @@ class ExampleLayer : public hazel::Layer
 
 public:
 	ExampleLayer()
-		: Layer("Eaxample"), m_Camera(glm::vec2(-2.0f, -2.0f), glm::vec2(2.0f, 2.0f))
+		: Layer("Eaxample"), m_CameraController(1.0f, false)
 	{
 		m_SMGR = std::make_shared<hazel::ShaderManager>();
 
@@ -59,13 +59,10 @@ public:
 		};
 		rd1->imGuiDrawCallFn = [this, rd1]() {
 			auto pos = rd1->m_Mesh->GetTransform().GetPosition();
-			auto caPos = m_Camera.GetPosition();
 			ImGui::Begin("Properties 1");
 			ImGui::SliderFloat3("Position", glm::value_ptr(pos), -3.0f, 3.0f, "%.3f", 1);
-			ImGui::SliderFloat3("Camera Position", glm::value_ptr(caPos), -3.0f, 3.0f, "%.3f", 1);
 			ImGui::End();
 			rd1->m_Mesh->GetTransform().SetPosition(pos);
-			m_Camera.SetPosition(caPos);
 		};
 
 		m_RenderDatas.push_back(rd1);
@@ -73,26 +70,11 @@ public:
 
 	void OnUpdate() override
 	{
-		//  Logic update
-		glm::vec3 mover(0);
-		float rotate = 0.0f;
-		float moveSpeed = 5.0f;
-		float rotateSpeed = 20.0f;
-		float ts = hazel::Time::deltaTime();
-		if (hazel::Input::IsKeyPressed(hazel::Key::A))mover.x -= moveSpeed * ts;
-		if (hazel::Input::IsKeyPressed(hazel::Key::D))mover.x += moveSpeed * ts;
-		if (hazel::Input::IsKeyPressed(hazel::Key::W))mover.y += moveSpeed * ts;
-		if (hazel::Input::IsKeyPressed(hazel::Key::S))mover.y -= moveSpeed * ts;
-		if (hazel::Input::IsKeyPressed(hazel::Key::Q))rotate += rotateSpeed * ts;
-		if (hazel::Input::IsKeyPressed(hazel::Key::E))rotate -= rotateSpeed * ts;
-
-		m_Camera.SetPosition(m_Camera.GetPosition() + mover);
-		m_Camera.SetRotation(m_Camera.GetRotation() + rotate);
-
+		m_CameraController.OnUpdate();
 		//  Draw
 		hazel::RenderCommand::SetClearColor(glm::vec4(0.5f, 0.6f, 0.5f, 1.0f));
 		hazel::RenderCommand::Clear();
-		hazel::Renderer::BeginScene(m_Camera);
+		hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 		for (auto& rd : m_RenderDatas) {
 			rd->drawCallFn();
 		}
@@ -110,6 +92,7 @@ public:
 
 	void OnEvent(hazel::Event& ev) override
 	{
+		m_CameraController.OnEvent(ev);
 		auto evd = hazel::EventDispatcher(ev);
 		evd.Dispatch<hazel::KeyPressedEvent>([](hazel::KeyPressedEvent& ev)
 			{
@@ -124,7 +107,7 @@ public:
 
 private:
 
-	hazel::OrthographicCamera m_Camera;
+	hazel::OrthographicCameraController m_CameraController;
 
 	struct RenderData
 	{

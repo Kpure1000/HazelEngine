@@ -57,6 +57,14 @@ namespace hazel
 			return m_ViewProjection;
 		}
 
+		void SetProjection(const glm::vec2& left_bottom, const glm::vec2& right_top)
+		{
+			m_Projection = {
+				glm::ortho(left_bottom.x, right_top.x, left_bottom.y, right_top.y,
+				-10.0f, 100.0f)
+			};
+		}
+
 	private:
 		void RecalculateMatrix();
 

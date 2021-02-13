@@ -9,8 +9,6 @@
 
 #include "Hazel/Utility/Singleton.h"
 
-#include "Hazel/Renderer/Camera/OrthographicCamera.h"
-
 namespace hazel
 {
 	class HAZEL_API Application
