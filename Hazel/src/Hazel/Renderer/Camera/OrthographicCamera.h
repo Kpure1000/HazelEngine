@@ -63,6 +63,7 @@ namespace hazel
 				glm::ortho(left_bottom.x, right_top.x, left_bottom.y, right_top.y,
 				-10.0f, 100.0f)
 			};
+			m_IsUpdated = true;
 		}
 
 	private:

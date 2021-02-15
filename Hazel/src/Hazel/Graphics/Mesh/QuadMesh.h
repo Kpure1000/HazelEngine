@@ -10,10 +10,10 @@ namespace hazel
 		QuadMesh()
 		{
 			std::vector<float> vert = {
-			0.0f, 0.0f, 0.0f,  0, 0, 1,  0, 0,
-			0.0f, 1.0f, 0.0f,  0, 0, 1,  0, 1,
-		    1.0f, 1.0f, 0.0f,  0, 0, 1,  1, 1,
-		    1.0f, 0.0f, 0.0f,  0, 0, 1,  1, 0,
+			-0.5f, -0.5f, 0.0f,  0, 0, 1,  0, 0,
+			-0.5f, 0.5f, 0.0f,  0, 0, 1,  0, 1,
+		    0.5f, 0.5f, 0.0f,  0, 0, 1,  1, 1,
+		    0.5f, -0.5f, 0.0f,  0, 0, 1,  1, 0,
 			};
 			std::vector<unsigned int> indi = {
 				0, 1, 3,  // first Triangle

@@ -2,9 +2,6 @@
 
 #include "Hazel/Core/Core.h"
 
-#include "../Vertex.h"
-#include "Hazel/Graphics/Drawable.h"
-
 #include "Hazel/Renderer/VertexArray.h"
 
 #include <vector>
@@ -13,7 +10,7 @@ namespace hazel
 {
     class Renderer;
 
-	class Mesh : public Drawable
+	class Mesh
 	{
     public:
         Mesh()

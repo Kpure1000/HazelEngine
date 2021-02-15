@@ -6,9 +6,13 @@
 #include "Hazel/Core/Time.h"
 //  --------------------------------------
 
+#ifdef CLIENT_ENTRY
+
 //  ---Entry Point------------------------
 #include "Hazel/Core/EntryPoint.h"
 //  --------------------------------------
+
+#endif // CLIENT_ENTRY
 
 //  ---Input------------------------------
 #include "Hazel/Core/Input.h"
@@ -25,13 +29,20 @@
 #include "Hazel/Renderer/Texture.h"
 //  --------------------------------------
 
+//  ---GUI--------------------------------
+#include <imgui.h>
+//  --------------------------------------
+
 //  ---Graphics---------------------------
 #include "Hazel/Graphics/Mesh/QuadMesh.h"
 #include "Hazel/Graphics/Mesh/CubeMesh.h"
 #include "Hazel/Graphics/Mesh/SphereMesh.h"
+#include "Hazel/Graphics/Mesh/CircleMesh.h"
 //  --------------------------------------
 
+//  ---Controller-------------------------
 #include "Hazel/OrthographicCameraController.h"
+//  --------------------------------------
 
 //  ---Layer------------------------------
 #include "Hazel/Core/Layer.h"

@@ -1,15 +1,18 @@
+#ifndef CLIENT_ENTRY
+#define CLIENT_ENTRY
+#endif // !CLIENT_ENTRY
+
 #include <Hazel.h>
 
-#include <imgui.h>
+#include "Sandbox2D.h"
 
 class ExampleLayer : public hazel::Layer
 {
-
 public:
 	ExampleLayer()
 		: Layer("Eaxample"), m_CameraController(
 			(float)hazel::Application::GetInstance()->GetWindow().GetSize().x
-			/ (float)hazel::Application::GetInstance()->GetWindow().GetSize().y, false, true)
+			/ (float)hazel::Application::GetInstance()->GetWindow().GetSize().y, false, false)
 	{
 		m_SMGR = std::make_shared<hazel::ShaderManager>();
 
@@ -17,9 +20,10 @@ public:
 
 		auto rd1 = std::make_shared<RenderData>();
 		rd1->m_Mesh = std::make_shared<hazel::CubeMesh>();
-		rd1->m_Mesh->GetTransform().SetScale(glm::vec3(1.5f));
+		rd1->m_Trans = std::make_shared<hazel::Transform>();
+		rd1->m_Trans->SetScale(glm::vec3(1.5f));
 		rd1->texture1.reset(hazel::Texture2D::Create());
-		rd1->texture1->LoadFromFile("../data/texture/blending_transparent_window.png");
+		rd1->texture1->LoadFromFile("../data/texture/awesomeface.png");
 		rd1->texture2.reset(hazel::Texture2D::Create());
 		rd1->texture2->LoadFromFile("../data/texture/checkborad.png");
 		rd1->shader = _shader;
@@ -33,37 +37,37 @@ public:
 
 			rd1->texture2->Bind(1);
 			rd1->shader->SetSampler2D("_diffuse", 1);
-			rd1->m_Mesh->GetTransform().SetScale(glm::vec3(3.0f, 3.0f, 1.0f));
+			rd1->m_Trans->SetScale(glm::vec3(3.0f, 3.0f, 1.0f));
 
-			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
-			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+			rd1->m_Trans->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->m_Trans, rd1->shader);
 
 			rd1->texture1->Bind(0);
 			rd1->shader->SetSampler2D("_diffuse", 0);
-			rd1->m_Mesh->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+			rd1->m_Trans->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 
-			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(-1.0f, -1.0f, -3.9999999f));
-			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+			rd1->m_Trans->SetPosition(glm::vec3(-1.0f, -1.0f, -3.9999999f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->m_Trans, rd1->shader);
 
-			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(-0.5f, -0.5f, -0.3f));
-			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+			rd1->m_Trans->SetPosition(glm::vec3(-0.5f, -0.5f, -0.3f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->m_Trans, rd1->shader);
 
-			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(0.0f, 0.0f, 0.5f));
-			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+			rd1->m_Trans->SetPosition(glm::vec3(0.0f, 0.0f, 0.5f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->m_Trans, rd1->shader);
 
-			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(0.5f, 0.5f, 0.7f));
-			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+			rd1->m_Trans->SetPosition(glm::vec3(0.5f, 0.5f, 0.7f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->m_Trans, rd1->shader);
 
-			rd1->m_Mesh->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.9f));
-			hazel::Renderer::Submit(rd1->m_Mesh, rd1->shader);
+			rd1->m_Trans->SetPosition(glm::vec3(1.0f, 1.0f, 0.9f));
+			hazel::Renderer::Submit(rd1->m_Mesh, rd1->m_Trans, rd1->shader);
 
 		};
 		rd1->imGuiDrawCallFn = [this, rd1]() {
-			auto pos = rd1->m_Mesh->GetTransform().GetPosition();
+			auto pos = rd1->m_Trans->GetPosition();
 			ImGui::Begin("Properties 1");
 			ImGui::SliderFloat3("Position", glm::value_ptr(pos), -3.0f, 3.0f, "%.3f", 1);
 			ImGui::End();
-			rd1->m_Mesh->GetTransform().SetPosition(pos);
+			rd1->m_Trans->SetPosition(pos);
 		};
 
 		m_RenderDatas.push_back(rd1);
@@ -113,6 +117,7 @@ private:
 	struct RenderData
 	{
 		hazel::Ref<hazel::Mesh> m_Mesh;
+		hazel::Ref<hazel::Transform> m_Trans;
 		hazel::Ref<hazel::Shader> shader;
 		hazel::Ref<hazel::Texture> texture1;
 		hazel::Ref<hazel::Texture> texture2;
@@ -134,7 +139,8 @@ public:
 
 	SandBox()
 	{
-		PushLayer(std::make_shared<ExampleLayer>());
+		//PushLayer(std::make_shared<ExampleLayer>());
+		PushLayer(std::make_shared<Sandbox2D>());
 	}
 
 	~SandBox()

@@ -3,6 +3,7 @@
 #include "Hazel/Core/Core.h"
 #include "RenderCommand.h"
 
+#include "Hazel/Graphics/Transform.h"
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Graphics/Mesh/Mesh.h"
 #include "Hazel/Renderer/Camera/OrthographicCamera.h"
@@ -26,7 +27,7 @@ namespace hazel
 			const Ref<Shader>& shader);
 
 		static void Submit(const Ref<Mesh>& mesh,
-			const Ref<Shader>& shader);
+			const Ref<Transform> trans, const Ref<Shader>& shader);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 		

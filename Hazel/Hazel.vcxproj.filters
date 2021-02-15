@@ -87,9 +87,6 @@
     <ClInclude Include="src\Hazel\Events\MouseEvent.h">
       <Filter>src\Hazel\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Graphics\Drawable.h">
-      <Filter>src\Hazel\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Mesh\CubeMesh.h">
       <Filter>src\Hazel\Graphics\Mesh</Filter>
     </ClInclude>
@@ -103,9 +100,6 @@
       <Filter>src\Hazel\Graphics\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Transform.h">
-      <Filter>src\Hazel\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Graphics\Vertex.h">
       <Filter>src\Hazel\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h">
@@ -1443,6 +1437,8 @@
     <ClInclude Include="src\Hazel\Core\Window.h">
       <Filter>src\Hazel</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Hazel\Graphics\Mesh\CircleMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Graphics\Transform.cpp">
@@ -1538,5 +1534,6 @@
     <ClCompile Include="src\Hazel\Core\Window.cpp">
       <Filter>src\Hazel</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

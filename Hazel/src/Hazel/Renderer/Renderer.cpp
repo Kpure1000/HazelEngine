@@ -33,10 +33,10 @@ namespace hazel
 	}
 
 	void Renderer::Submit(const Ref<Mesh>& mesh,
-		const Ref<Shader>& shader)
+		const Ref<Transform> trans, const Ref<Shader>& shader)
 	{
 		shader->Use();
-		shader->SetMatrix4("_model", mesh->GetTransform().GetTransMat());
+		shader->SetMatrix4("_model", trans->GetTransMat());
 		shader->SetMatrix4("_view_prj", m_SceneData->ViewProjectMat);
 
 		mesh->m_VertexArray->Bind();
