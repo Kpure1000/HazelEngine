@@ -71,6 +71,8 @@ namespace hazel
 		/// <returns></returns>
 		virtual void* GetNativeWindow() const = 0;
 
+		virtual void SetResizable(bool canResize) = 0;
+
 		/// <summary>
 		/// Create an unique window
 		/// </summary>

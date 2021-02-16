@@ -37,6 +37,8 @@ namespace hazel
 
 		inline virtual void* GetNativeWindow()const { return m_Window; }
 
+		virtual void SetResizable(bool canResize) override;
+
 	private:
 
 		virtual void Init(const WindowProps& props);
@@ -63,7 +65,6 @@ namespace hazel
 		WindowData m_Data;
 
 		Ref<RenderContext> m_Context = nullptr;
-
 
 	};
 

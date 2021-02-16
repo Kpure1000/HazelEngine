@@ -107,7 +107,7 @@ namespace hazel
 		{
 			m_Context = std::make_shared<OpenGLContext>(m_Window);
 			m_Context->Init();
-
+			
 			// Set GLFW callbacks
 			glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 				{
@@ -233,6 +233,11 @@ namespace hazel
 		{
 			glfwTerminate();
 		}
+	}
+
+	void WindowsWindow::SetResizable(bool canResize)
+	{
+		glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, canResize);
 	}
 
 }
