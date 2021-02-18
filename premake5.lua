@@ -30,11 +30,13 @@ IncludeDir["GLAD"] = "Hazel/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 IncludeDir["glm"] = "Hazel/vendor/glm"
 IncludeDir["stb"] = "Hazel/vendor/stb"
+IncludeDir["freetype"] = "Hazel/vendor/freetype/include"
 -- include outher premake config
 include "Hazel/vendor/GLFW" 
 include "Hazel/vendor/GLAD"
 include "Hazel/vendor/imgui"
 include "Hazel/vendor/stb"
+--include "Hazel/vendor/freetype"
 
 -- Hazel ----------------------------------------
 
@@ -74,6 +76,7 @@ project "Hazel"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.freetype}",
 	}
 
 	links
@@ -82,6 +85,7 @@ project "Hazel"
 		"GLAD",
 		"ImGui",
 		"stb",
+		"Hazel/vendor/freetype/libs/freetype.lib",
 		"opengl32.lib",
 	}
 
@@ -134,15 +138,17 @@ project "SandBox"
 	{
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src",
-		"%{IncludeDir.GLAD}",
+		-- "%{IncludeDir.GLAD}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
+		-- "%{IncludeDir.freetype}",
 	}
 
 	links
 	{
 		"Hazel",
 		"ImGui",
+		-- "Hazel/vendor/freetype/libs/freetype.lib",
 	}
 
 	filter "system:windows"

@@ -66,13 +66,37 @@
     <ClInclude Include="src\Hazel.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Application.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\Core.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\EntryPoint.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Input.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\KeyCodes.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Layer.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\LayerStack.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Log.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\MouseCodes.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Time.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Window.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h">
@@ -87,6 +111,9 @@
     <ClInclude Include="src\Hazel\Events\MouseEvent.h">
       <Filter>src\Hazel\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Graphics\Mesh\CircleMesh.h">
+      <Filter>src\Hazel\Graphics\Mesh</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Mesh\CubeMesh.h">
       <Filter>src\Hazel\Graphics\Mesh</Filter>
     </ClInclude>
@@ -98,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Mesh\SphereMesh.h">
       <Filter>src\Hazel\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Graphics\Text.h">
+      <Filter>src\Hazel\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Transform.h">
       <Filter>src\Hazel\Graphics</Filter>
@@ -124,6 +154,9 @@
       <Filter>src\Hazel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Renderer\Renderer.h">
+      <Filter>src\Hazel\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Renderer\Renderer2D.h">
       <Filter>src\Hazel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Renderer\RendererAPI.h">
@@ -1413,34 +1446,29 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Application.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\EntryPoint.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Input.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Layer.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\LayerStack.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Log.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Time.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Window.h">
-      <Filter>src\Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Hazel\Graphics\Mesh\CircleMesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Core\Application.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Layer.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\LayerStack.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Log.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Time.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Window.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Graphics\Text.cpp">
+      <Filter>src\Hazel\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\Graphics\Transform.cpp">
       <Filter>src\Hazel\Graphics</Filter>
     </ClCompile>
@@ -1466,6 +1494,9 @@
       <Filter>src\Hazel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Renderer\Renderer.cpp">
+      <Filter>src\Hazel\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Renderer\Renderer2D.cpp">
       <Filter>src\Hazel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Renderer\RendererAPI.cpp">
@@ -1516,24 +1547,5 @@
     <ClCompile Include="src\hzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Application.cpp">
-      <Filter>src\Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Layer.cpp">
-      <Filter>src\Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Core\LayerStack.cpp">
-      <Filter>src\Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Log.cpp">
-      <Filter>src\Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Time.cpp">
-      <Filter>src\Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Window.cpp">
-      <Filter>src\Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

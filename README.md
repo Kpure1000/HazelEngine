@@ -32,4 +32,11 @@ startproject "prj_name"
 -- This will be ignore unless clear .vs/ after VS2017
 
 -- any other issue in premake config
-``` 
+```
+
+## TODO
+
+1. 2D Texture spliter
+2. Sprite Renderer (Auto scale of texture size)
+3. Animation 
+4. Particle System
