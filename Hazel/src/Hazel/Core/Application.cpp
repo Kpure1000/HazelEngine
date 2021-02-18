@@ -27,7 +27,7 @@ namespace hazel
 		m_Instance = this;
 
 		//  create window
-		m_Window = Window::Create(WindowProps("Hazel Engine", 800, 600, true, false));
+		m_Window = Window::Create(WindowProps("Hazel Engine", 568, 1024, true, false));
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
 
 		//  create imgui layer

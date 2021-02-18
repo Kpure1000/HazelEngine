@@ -14,7 +14,9 @@ namespace hazel
 {
 	OrthographicCameraController::OrthographicCameraController(float aspectRotio, bool rotation,
 		bool moveFollowZoom)
-		: m_AspectRatio(aspectRotio), m_ZoomLevel(1.0f), m_NewZoom(m_ZoomLevel),
+		: m_AspectRatio(aspectRotio),
+		m_ZoomLevel((float)Application::GetInstance()->GetWindow().GetSize().y * 0.5f), 
+		m_NewZoom(m_ZoomLevel),
 		m_MoveSpeed(3.0f), m_RotateSpeed(20.0f), m_ScaleSpeed(5.0f),
 		m_EnableInput(true), m_EnableRotate(rotation), m_MoveFollowZoom(moveFollowZoom),
 		m_Camera(std::make_shared< OrthographicCamera>(
@@ -54,18 +56,19 @@ namespace hazel
 	void OrthographicCameraController::OnEvent(Event& ev)
 	{
 		EventDispatcher dispatcher(ev);
-		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(OnMouseScrolled));
+		if (m_EnableInput)
+			dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(OnWindowResized));
 	}
 
 	void OrthographicCameraController::SetZoom(float zoom)
 	{
-		m_NewZoom = m_ZoomLevel = glm::clamp(zoom, 0.2f, 10.0f);
+		m_NewZoom = m_ZoomLevel = glm::clamp(zoom, 200.0f, 1000.0f);
 	}
 
 	void OrthographicCameraController::SetSmoothZoom(float zoom)
 	{
-		m_NewZoom = glm::clamp(zoom, 0.2f, 10.0f);
+		m_NewZoom = glm::clamp(zoom, 200.0f, 1000.0f);
 	}
 
 	void OrthographicCameraController::GetTranslateInput()
@@ -88,7 +91,8 @@ namespace hazel
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& ev)
 	{
-		m_NewZoom = glm::clamp(m_NewZoom - ev.GetYOffset() * Time::deltaTime(), 0.2f, 10.0f);
+		m_NewZoom = glm::clamp(m_NewZoom - ev.GetYOffset() * Time::deltaTime() * 100.0f,
+			200.0f, 1000.0f);
 		return false;
 	}
 

@@ -99,12 +99,16 @@ namespace hazel
 		virtual void Bind()const = 0;
 		virtual void UnBind()const = 0;
 
+		virtual size_t GetSize() = 0;
+
 		virtual void SetData(const void* data, size_t size) = 0;
 
 		virtual const BufferLayout& GetLayout()const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
 		static  VertexBuffer* Create(float* vertices, size_t size);
+
+		static  VertexBuffer* Create(size_t size);
 	};
 
 	class HAZEL_API IndexBuffer
@@ -115,8 +119,11 @@ namespace hazel
 		virtual void Bind()const = 0;
 		virtual void UnBind()const = 0;
 
+		virtual void SetData(unsigned int* indices, size_t count) = 0;
+
 		virtual size_t GetCount() = 0;
 
 		static  IndexBuffer* Create(unsigned int* indices, size_t count);
+		static  IndexBuffer* Create(size_t count);
 	};
 }

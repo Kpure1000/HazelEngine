@@ -73,6 +73,28 @@ namespace hazel
 		return nullptr;
 	}
 
+	VertexBuffer* VertexBuffer::Create(size_t size)
+	{
+		switch (Renderer::GetAPI()) {
+		case hazel::RendererAPI::API::None: {
+			Log::AssertCore(false, "Renderer API: None is currently not supported.");
+			return nullptr;
+			break;
+		}
+		case hazel::RendererAPI::API::OpenGL: {
+			return new OpenGLVertexBuffer(size);
+			break;
+		}
+		case hazel::RendererAPI::API::Direct3D: {
+			Log::AssertCore(false, "RendererAPI: Direct3D is coming soon.");
+			return nullptr;
+			break;
+		}
+		}
+		Log::AssertCore(false, "Unkown Renderer API!");
+		return nullptr;
+	}
+
 	////////////////////////
 	// IndexBuffer
 	////////////////////////
@@ -87,6 +109,28 @@ namespace hazel
 		}
 		case hazel::RendererAPI::API::OpenGL: {
 			return new OpenGLIndexBuffer(indices, count);
+			break;
+		}
+		case hazel::RendererAPI::API::Direct3D: {
+			Log::AssertCore(false, "RendererAPI: Direct3D is coming soon.");
+			return nullptr;
+			break;
+		}
+		}
+		Log::AssertCore(false, "Unkown Renderer API!");
+		return nullptr;
+	}
+
+	IndexBuffer* IndexBuffer::Create(size_t count)
+	{
+		switch (Renderer::GetAPI()) {
+		case hazel::RendererAPI::API::None: {
+			Log::AssertCore(false, "Renderer API: None is currently not supported.");
+			return nullptr;
+			break;
+		}
+		case hazel::RendererAPI::API::OpenGL: {
+			return new OpenGLIndexBuffer(count);
 			break;
 		}
 		case hazel::RendererAPI::API::Direct3D: {

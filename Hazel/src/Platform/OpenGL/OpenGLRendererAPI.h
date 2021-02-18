@@ -15,6 +15,8 @@ namespace hazel
 		
 		virtual void Clear() override;
 
+		virtual void DrawBuffered(const Ref<VertexArray>& vertexArray)override;
+
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 
 	};

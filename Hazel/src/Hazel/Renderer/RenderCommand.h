@@ -30,6 +30,11 @@ namespace hazel
 			m_RendererAPI->Clear();
 		}
 
+		inline static void DrawBuffered(const Ref<VertexArray>& vertexArray)
+		{
+			m_RendererAPI->DrawBuffered(vertexArray);
+		}
+
 		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
 		{
 			m_RendererAPI->DrawIndexed(vertexArray);

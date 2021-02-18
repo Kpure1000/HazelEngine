@@ -11,11 +11,19 @@ namespace hazel
 	//////////////////////////////////
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, size_t size)
-		:m_VBOID(0)
+		:m_VBOID(0), m_Size(size)
 	{
 		glGenBuffers(1, &m_VBOID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBOID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+	}
+
+	OpenGLVertexBuffer::OpenGLVertexBuffer(size_t size)
+		:m_Size(size)
+	{
+		glGenBuffers(1, &m_VBOID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBOID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -51,6 +59,14 @@ namespace hazel
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 	}
 
+	OpenGLIndexBuffer::OpenGLIndexBuffer(size_t count)
+		:m_EBOID(0), m_Count(count)
+	{
+		glGenBuffers(1, &m_EBOID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBOID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+	}
+
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	{
 		glDeleteBuffers(1, &m_EBOID);
@@ -64,6 +80,12 @@ namespace hazel
 	void OpenGLIndexBuffer::UnBind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	void OpenGLIndexBuffer::SetData(unsigned int* indices, size_t count)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBOID);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, count * sizeof(unsigned int), indices);
 	}
 
 }

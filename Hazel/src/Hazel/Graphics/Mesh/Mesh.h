@@ -8,26 +8,22 @@
 
 namespace hazel
 {
-    class Renderer;
+	class Renderer;
 
 	class Mesh
 	{
-    public:
-        Mesh()
-        {
-            m_VertexArray.reset(VertexArray::Create());
-        }
+	public:
+		Mesh()
+			: m_VertexArray(VertexArray::Create())
+		{}
 
-        const Ref<VertexArray>& GetVertexArray()const
-        {
-            return m_VertexArray;
-        }
+		const Ref<VertexArray>& GetVertexArray()const
+		{
+			return m_VertexArray;
+		}
 
-    protected:
-
-        friend class Renderer;
-
-        Ref<VertexArray> m_VertexArray;
+	protected:
+		Ref<VertexArray> m_VertexArray;
 
 	};
 }

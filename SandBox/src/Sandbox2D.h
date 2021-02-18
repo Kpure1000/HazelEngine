@@ -15,27 +15,66 @@ public:
 	virtual void OnEvent(hazel::Event& ev) override;
 
 private:
-	void PlayerControl();
-	void BackgroundContorl();
+	/// <summary>
+	/// Player controller
+	/// </summary>
+	void PlayerController();
+
+	/// <summary>
+	/// Background controller
+	/// </summary>
+	void BackgroundContorller();
+
+	/// <summary>
+	/// Jump plats controller
+	/// </summary>
+	void PlatsController();
 
 private:
 	hazel::Ref<hazel::ShaderManager> m_ShaderManager;
 	hazel::OrthographicCameraController m_CameraController;
 
-	std::vector<Plat> plats;
+	hazel::Ref<hazel::Text> m_Text;
+	hazel::Ref<hazel::Shader> m_TextShader;
+	hazel::Ref<hazel::Transform> m_TextTrans;
+
+	/// <summary>
+	/// Player
+	/// </summary>
 	hazel::Ref<Player> player;
 
-	std::array<Ref<Player>, 3> back;
+	/// <summary>
+	/// Background
+	/// </summary>
+	std::array<Ref<GameObject>, 3> back;
+
+	/// <summary>
+	/// Jump plats
+	/// </summary>
+	std::vector<Ref<Plat>> plats;
 
 	glm::vec3 p_pos;
 	glm::vec3 p_size;
-	float vy = 0.0f;
 
-	const float maxHeight = 0.0f;
-	const float gravity = 0.015f;
-	float jump_vy = 0.5f;
+	float vy = 0.0f;
+	const float gravity = 0.98f;
+	float jump_vy = 19.0f;
+	bool isJump = false;
+
+	float vx = 0.0f;
+	float moveSpeed = 35.0f;
+	const float maxVX = 30.0f;
+	const float dragRatio = 0.85f;
+
+	const float maxWidth = 284.0f;
+	const float maxHeight = 100.0f;
+	const float deadLine = -525.0f;
+
+	const int maxPlatNum = 28;
+	int curPlatNum = maxPlatNum;
+
 
 private:
-	glm::vec3 m_QuadColor = { 1.0f,1.0f,1.0f };
+	glm::vec3 m_QuadColor = { 0.68f,0.68f,0.68f };
 };
 

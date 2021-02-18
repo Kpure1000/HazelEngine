@@ -11,10 +11,14 @@ namespace hazel
 	{
 	public:
 		OpenGLVertexBuffer(float* vertices, size_t size);
+		OpenGLVertexBuffer(size_t size);
+
 		virtual ~OpenGLVertexBuffer() override;
 
 		virtual void Bind()const override;
 		virtual void UnBind()const override;
+
+		virtual size_t GetSize()override { return m_Size; }
 
 		virtual void SetData(const void* data, size_t size) override;
 		inline virtual const BufferLayout& GetLayout() const override { return m_Layout; }
@@ -23,6 +27,8 @@ namespace hazel
 		unsigned int m_VBOID;
 
 		BufferLayout m_Layout;
+
+		size_t m_Size;
 
 	};
 
@@ -33,17 +39,22 @@ namespace hazel
 	{
 	public:
 		OpenGLIndexBuffer(unsigned int* indices, size_t count);
+		OpenGLIndexBuffer(size_t count);
+
 		virtual ~OpenGLIndexBuffer();
 
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
-	
+
+		virtual void SetData(unsigned int* indices, size_t count) override;
+
 		inline virtual size_t GetCount() override { return m_Count; }
 
 	private:
 		unsigned int m_EBOID;
 
 		size_t m_Count;
+
 
 	};
 	

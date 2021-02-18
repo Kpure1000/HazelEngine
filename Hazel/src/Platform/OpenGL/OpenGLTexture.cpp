@@ -62,30 +62,32 @@ namespace hazel
 
 	void OpenGLTexture::BindAfterLoad(Ref<Image> image)
 	{
-		if (image->GetBufferSize() != 0)
+#ifdef HZ_DEBUG
+		if (image->GetBufferSize() == 0)
 		{
-			switch (image->GetChannelCount())
-			{
-			case 1: {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, image->GetWidth(), image->GetHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, image->GetData());
-				break;
-			}
-			case 3: {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->GetWidth(), image->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
-				break;
-			}
-			case 4: {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->GetData());
-				break;
-			}
-			default:
-				Log::ErrorCore("Texture image channel numbers error.");
-				return;
-			}
-			glGenerateMipmap(GL_TEXTURE_2D);
+			Log::WarnCore("Texture Loading Warning: Image Buffer is Empty!");
+		}
+#endif
+		switch (image->GetChannelCount())
+		{
+		case 1: {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, image->GetWidth(), image->GetHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, image->GetData());
+			break;
+		}
+		case 3: {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->GetWidth(), image->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
+			break;
+		}
+		case 4: {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->GetData());
+			break;
+		}
+		default:
+			Log::ErrorCore("Texture image channel numbers error.");
 			return;
 		}
-		Log::ErrorCore("Image Buffer is Empty!");
+		glGenerateMipmap(GL_TEXTURE_2D);
+		return;
 	}
 
 }

@@ -3,10 +3,12 @@
 #include "Hazel/Core/Core.h"
 #include "RenderCommand.h"
 
-#include "Hazel/Graphics/Transform.h"
 #include "Hazel/Renderer/Shader.h"
-#include "Hazel/Graphics/Mesh/Mesh.h"
 #include "Hazel/Renderer/Camera/OrthographicCamera.h"
+
+#include "Hazel/Graphics/Transform.h"
+#include "Hazel/Graphics/Mesh/Mesh.h"
+#include "Hazel/Graphics/Text.h"
 
 namespace hazel
 {
@@ -27,7 +29,10 @@ namespace hazel
 			const Ref<Shader>& shader);
 
 		static void Submit(const Ref<Mesh>& mesh,
-			const Ref<Transform> trans, const Ref<Shader>& shader);
+			const Ref<Transform>& trans, const Ref<Shader>& shader);
+
+		static void Submit(const Ref<Text>& text,
+			const Ref<Transform>& trans, const Ref<Shader>& shader);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 		
@@ -35,6 +40,7 @@ namespace hazel
 		struct SceneData
 		{
 			glm::mat4 ViewProjectMat;
+			glm::mat4 ProjectMat;
 		};
 
 		static SceneData* m_SceneData;

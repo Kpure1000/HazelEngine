@@ -57,19 +57,20 @@ namespace hazel
 	}
 	bool Image::CheckBuffer(size_t size) const
 	{
-
+#ifdef HZ_DEBUG
 		if (size == 0)
 		{
 			if (m_LoadMode == LoadMode::LOAD_FILE)
 			{
-				Log::ErrorCore("Load Image Error: from file.");
+				Log::WarnCore("Load Image Warning: from file.");
 			}
 			else
 			{
-				Log::ErrorCore("Load Image Error: from other source.");
+				Log::WarnCore("Load Image Warning: from other source.");
 			}
 			return false;
 		}
+#endif
 		return true;
 	}
 }
