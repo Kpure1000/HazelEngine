@@ -44,6 +44,17 @@ namespace hazel
 		RenderCommand::DrawIndexed(mesh->GetVertexArray());
 	}
 
+	void Renderer::Submit(Mesh* mesh,
+		Transform* trans, const Ref<Shader>& shader)
+	{
+		shader->Use();
+		shader->SetMatrix4("_model", trans->GetTransMat());
+		shader->SetMatrix4("_view_prj", m_SceneData->ViewProjectMat);
+
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawIndexed(mesh->GetVertexArray());
+	}
+
 	void Renderer::Submit(const Ref<Text>& text, const Ref<Transform>& trans, const Ref<Shader>& shader)
 	{
 		shader->Use();
@@ -87,7 +98,7 @@ namespace hazel
 			//  bind texture
 			ch.texture->Bind(textNumbers);
 			shader->SetSampler2D("_textTexture", textNumbers);
-			textNumbers++;
+			//textNumbers++;
 
 			text->GetVertexArray()->Bind();
 

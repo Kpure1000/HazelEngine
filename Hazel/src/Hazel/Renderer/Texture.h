@@ -15,11 +15,15 @@ namespace hazel
 	class Texture
 	{
 	public:
+		Texture() :m_Size(0) {}
+
 		virtual ~Texture() = default;
 
 		virtual void Bind(const int& index)const = 0;
 
 		virtual unsigned int GetID()const = 0;
+
+		inline glm::ivec2 GetSize() { return m_Size; }
 
 		virtual bool operator==(const Texture& other)const = 0;
 
@@ -53,7 +57,7 @@ namespace hazel
 		}
 
 	protected:
-
+		glm::ivec2 m_Size;
 	};
 
 	class Texture2D : public Texture

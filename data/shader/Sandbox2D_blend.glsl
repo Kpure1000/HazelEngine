@@ -34,6 +34,6 @@ uniform sampler2D _tx;
 
 void main()
 {
-    fragOut = _color + texture(_tx, inTexCoord);
-    fragOut *= 0.5;
+    fragOut = _color * texture(_tx, inTexCoord);
+    // fragOut *= 0.5;
 }

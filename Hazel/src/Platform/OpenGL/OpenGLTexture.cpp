@@ -87,6 +87,9 @@ namespace hazel
 			return;
 		}
 		glGenerateMipmap(GL_TEXTURE_2D);
+
+		m_Size = { image->GetWidth(),image->GetHeight() };
+
 		return;
 	}
 

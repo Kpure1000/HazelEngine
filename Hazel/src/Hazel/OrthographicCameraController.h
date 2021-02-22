@@ -21,8 +21,9 @@ namespace hazel
 		inline OrthographicCamera& GetCamera() { return *m_Camera; }
 		inline const OrthographicCamera& GetCamera()const { return *m_Camera; }
 
-		inline bool GetEnableInput()const { return m_EnableInput; }
 		inline void EnableInput(bool enable) { m_EnableInput = enable; }
+		inline void EnableMove(bool enable) { m_EnableMove = enable; }
+		inline void EnableZoom(bool enable) { m_EnableZoom = enable; }
 
 		/// <summary>
 		/// Set zoom immediatly
@@ -53,8 +54,10 @@ namespace hazel
 		float m_ScaleSpeed;
 
 		float vel = 0.0f;
-
+		
 		bool m_EnableInput;
+		bool m_EnableMove;
+		bool m_EnableZoom;
 		bool m_EnableRotate;
 		bool m_MoveFollowZoom;
 

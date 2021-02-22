@@ -38,6 +38,7 @@
 #include "Hazel/Graphics/Mesh/CubeMesh.h"
 #include "Hazel/Graphics/Mesh/SphereMesh.h"
 #include "Hazel/Graphics/Mesh/CircleMesh.h"
+#include "Hazel/Graphics/Mesh/Sprite.h"
 //  --------------------------------------
 
 //  ---Controller-------------------------
@@ -48,3 +49,4 @@
 #include "Hazel/Core/Layer.h"
 //  --------------------------------------
 
+//  ---Platform---------------------------

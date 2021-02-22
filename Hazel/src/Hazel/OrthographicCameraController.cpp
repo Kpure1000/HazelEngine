@@ -15,10 +15,11 @@ namespace hazel
 	OrthographicCameraController::OrthographicCameraController(float aspectRotio, bool rotation,
 		bool moveFollowZoom)
 		: m_AspectRatio(aspectRotio),
-		m_ZoomLevel((float)Application::GetInstance()->GetWindow().GetSize().y * 0.5f), 
+		m_ZoomLevel((float)Application::GetInstance()->GetWindow().GetSize().y * 0.5f),
 		m_NewZoom(m_ZoomLevel),
 		m_MoveSpeed(3.0f), m_RotateSpeed(20.0f), m_ScaleSpeed(5.0f),
-		m_EnableInput(true), m_EnableRotate(rotation), m_MoveFollowZoom(moveFollowZoom),
+		m_EnableInput(true), m_EnableMove(true), m_EnableZoom(true), m_EnableRotate(rotation),
+		m_MoveFollowZoom(moveFollowZoom),
 		m_Camera(std::make_shared< OrthographicCamera>(
 			glm::vec2(-m_AspectRatio * m_ZoomLevel, -m_ZoomLevel),
 			glm::vec2(m_AspectRatio* m_ZoomLevel, m_ZoomLevel)
@@ -39,6 +40,7 @@ namespace hazel
 			}
 		}
 
+		if(m_EnableZoom)
 		//  Smooth zoom
 		m_ZoomLevel = Math::SmoothDamp(m_ZoomLevel, m_NewZoom, vel, 0.2f, 1000.0f, Time::deltaTime() * m_ScaleSpeed);
 
@@ -73,6 +75,7 @@ namespace hazel
 
 	void OrthographicCameraController::GetTranslateInput()
 	{
+		if (!m_EnableMove)return;
 		tmpTranslation.x = tmpTranslation.y = tmpTranslation.x = 0.0f;
 		tmpRotateion = 0.0f;
 		if (Input::IsKeyPressed(Key::A))tmpTranslation.x -= m_MoveSpeed * Time::deltaTime();
@@ -91,8 +94,9 @@ namespace hazel
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& ev)
 	{
-		m_NewZoom = glm::clamp(m_NewZoom - ev.GetYOffset() * Time::deltaTime() * 100.0f,
-			200.0f, 1000.0f);
+		if (m_EnableZoom)
+			m_NewZoom = glm::clamp(m_NewZoom - ev.GetYOffset() * Time::deltaTime() * 100.0f,
+				200.0f, 1000.0f);
 		return false;
 	}
 

@@ -30,6 +30,9 @@ namespace hazel
 
 		static void Submit(const Ref<Mesh>& mesh,
 			const Ref<Transform>& trans, const Ref<Shader>& shader);
+		
+		static void Submit(Mesh* mesh,
+			Transform* trans, const Ref<Shader>& shader);
 
 		static void Submit(const Ref<Text>& text,
 			const Ref<Transform>& trans, const Ref<Shader>& shader);

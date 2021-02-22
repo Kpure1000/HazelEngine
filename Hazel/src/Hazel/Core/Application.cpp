@@ -69,7 +69,7 @@ namespace hazel
 			}
 		}
 
-		Log::DebugCore("Application Event: {0}", ev.ToString());
+		//Log::DebugCore("Application Event: {0}", ev.ToString());
 	}
 
 	void Application::PushLayer(Ref<Layer> layer)

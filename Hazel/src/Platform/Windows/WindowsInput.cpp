@@ -19,7 +19,7 @@ namespace hazel
 	bool WindowsInput::IsMouseButtonPressedImpl(MouseCode mCode)
 	{
 		auto state = glfwGetMouseButton(GetRenderWindow(GLFWwindow), mCode);
-		return false;
+		return state;
 	}
 
 	float WindowsInput::GetMousePosXImpl()

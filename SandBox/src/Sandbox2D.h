@@ -30,6 +30,12 @@ private:
 	/// </summary>
 	void PlatsController();
 
+	void DifficultyController();
+
+	void TextController();
+
+	void CreatePlat(Ref<Plat> plat);
+
 private:
 	hazel::Ref<hazel::ShaderManager> m_ShaderManager;
 	hazel::OrthographicCameraController m_CameraController;
@@ -46,19 +52,26 @@ private:
 	/// <summary>
 	/// Background
 	/// </summary>
-	std::array<Ref<GameObject>, 3> back;
+	std::array<Ref<GameObject>, 5> back;
 
 	/// <summary>
 	/// Jump plats
 	/// </summary>
 	std::vector<Ref<Plat>> plats;
+	std::vector<Ref<Sprite>> sp_normalPlats;
+	std::vector<Ref<Sprite>> sp_weakPlats;
+	std::vector<Ref<Sprite>> sp_back;
+
+	Ref<ParticleSystem<QuadMesh, 128>> particle;
+
+	glm::vec3 m_BackColor = { 1.0f,1.0f,1.0f };
 
 	glm::vec3 p_pos;
 	glm::vec3 p_size;
 
 	float vy = 0.0f;
 	const float gravity = 0.98f;
-	float jump_vy = 19.0f;
+	float jump_vy = 21.0f;
 	bool isJump = false;
 
 	float vx = 0.0f;
@@ -69,12 +82,25 @@ private:
 	const float maxWidth = 284.0f;
 	const float maxHeight = 100.0f;
 	const float deadLine = -525.0f;
+	const float quitLine = -4000.0f;
 
-	const int maxPlatNum = 28;
+	const int maxPlatNum = 24;
+	const int minPlatNum = 8;
 	int curPlatNum = maxPlatNum;
 
+	int curScore = 0;
+	int curRecord = 0;
+	size_t curMaxID = 0;
+	size_t curID = 0;
+	size_t combo = 0;
+	size_t maxCombo = 0;
 
-private:
-	glm::vec3 m_QuadColor = { 0.68f,0.68f,0.68f };
+	int normalPlatRatio = 0;
+
+	bool isGameOver = false;
+	bool isQuit = false;
+
+	bool isRenderBackground = true;
+
 };
 
