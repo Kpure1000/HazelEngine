@@ -9,15 +9,14 @@ namespace hazel
 	class HAZEL_API Time
 	{
 	public:
-
 		inline static float currentTime()
 		{
-			return static_cast<float>(clock() - programStart_time) / 1000.0f; 
+			return static_cast<float>(clock() - programStart_time) * 0.001f;
 		}
 
 		inline static float deltaTime()
 		{
-			return static_cast<float>(delta_time) / 1000.0f;
+			return static_cast<float>(delta_time) * 0.001f;
 		}
 
 		inline static void Begin()
@@ -28,7 +27,7 @@ namespace hazel
 		inline static void Update()
 		{
 			delta_time = clock() - frameStart_time;
-			frameStart_time = clock();
+			frameStart_time += delta_time;
 		}
 
 	private:
@@ -38,6 +37,9 @@ namespace hazel
 		static clock_t frameStart_time;
 
 		static clock_t delta_time;
+
+		bool m_Stopped;
+
 	};
 
 }

@@ -95,7 +95,7 @@ private:
 	size_t combo = 0;
 	size_t maxCombo = 0;
 
-	int normalPlatRatio = 0;
+	int normalPlatRatio = 100;
 
 	bool isGameOver = false;
 	bool isQuit = false;

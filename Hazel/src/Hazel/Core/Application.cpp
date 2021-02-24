@@ -10,6 +10,7 @@
 #include "Platform/Windows/WindowsWindow.h"
 
 #include "Time.h"
+#include "Timer.h"
 
 #include "Hazel/Renderer/Renderer.h"
 

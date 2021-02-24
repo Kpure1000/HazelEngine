@@ -1447,6 +1447,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Mesh\Sprite.h" />
+    <ClInclude Include="src\Hazel\Core\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
