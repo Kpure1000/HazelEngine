@@ -16,11 +16,14 @@
 #include "Hazel/Core/Log.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
 	Shader* Shader::Create(const std::string& filePath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		switch (Renderer::GetAPI()) {
 		case hazel::RendererAPI::API::None: {
 			Log::AssertCore(false, "Create Shader: Renderer API: None is currently not supported.");
@@ -56,6 +59,8 @@ namespace hazel
 
 	const Ref<Shader> ShaderManager::Load(const std::string& filePath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		Ref<Shader>shader;
 		shader.reset((Shader::Create(filePath)));
 		Add(shader);
@@ -64,6 +69,8 @@ namespace hazel
 
 	const Ref<Shader> ShaderManager::Load(const std::string& filePath, const std::string& name)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		Ref<Shader>shader;
 		shader.reset((Shader::Create(filePath)));
 		Add(name, shader);
@@ -72,6 +79,8 @@ namespace hazel
 
 	void ShaderManager::Add(const std::string& name, const Ref<Shader>& shader)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (IsExist(name)) 
 		{
 			Log::WarnCore("Shader '{0}' existed.", name);
@@ -83,6 +92,8 @@ namespace hazel
 
 	void ShaderManager::Add(const Ref<Shader>& shader)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		Add(shader->GetName(), shader);
 	}
 

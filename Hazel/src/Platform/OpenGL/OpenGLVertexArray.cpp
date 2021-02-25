@@ -5,6 +5,7 @@
 #include "OpenGLVertexArray.h"
 
 #include <glad/glad.h>
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
@@ -50,6 +51,8 @@ namespace hazel
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vbo)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		Log::AssertCore(0 != vbo->GetLayout().GetElements().size(), "VertexBuffer Layout is empty.");
 		glBindVertexArray(m_VAO);
 		vbo->Bind();
@@ -106,6 +109,8 @@ namespace hazel
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& ebo)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_VAO);
 		ebo->Bind();
 

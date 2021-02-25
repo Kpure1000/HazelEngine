@@ -1447,7 +1447,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Mesh\Sprite.h" />
-    <ClInclude Include="src\Hazel\Core\Timer.h" />
+    <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1549,5 +1549,6 @@
     <ClCompile Include="src\hzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Debug\Instrumentor.cpp" />
   </ItemGroup>
 </Project>

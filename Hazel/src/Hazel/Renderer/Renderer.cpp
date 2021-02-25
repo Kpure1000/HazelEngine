@@ -1,6 +1,7 @@
 #include "hzpch.h"
 
 #include "Renderer.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
@@ -8,6 +9,7 @@ namespace hazel
 
 	void Renderer::Init()
 	{
+		HZ_PROFILE_FUNCTION();
 		RenderCommand::Init();
 	}
 	

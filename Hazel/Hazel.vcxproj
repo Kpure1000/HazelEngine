@@ -155,8 +155,8 @@
     <ClInclude Include="src\Hazel\Core\Log.h" />
     <ClInclude Include="src\Hazel\Core\MouseCodes.h" />
     <ClInclude Include="src\Hazel\Core\Time.h" />
-    <ClInclude Include="src\Hazel\Core\Timer.h" />
     <ClInclude Include="src\Hazel\Core\Window.h" />
+    <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Hazel\Events\Event.h" />
     <ClInclude Include="src\Hazel\Events\KeyEvent.h" />
@@ -615,6 +615,7 @@
     <ClCompile Include="src\Hazel\Core\Log.cpp" />
     <ClCompile Include="src\Hazel\Core\Time.cpp" />
     <ClCompile Include="src\Hazel\Core\Window.cpp" />
+    <ClCompile Include="src\Hazel\Debug\Instrumentor.cpp" />
     <ClCompile Include="src\Hazel\Graphics\Text.cpp" />
     <ClCompile Include="src\Hazel\Graphics\Transform.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiBuild.cpp" />

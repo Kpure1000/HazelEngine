@@ -11,6 +11,8 @@
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
+#include "Hazel/Debug/Instrumentor.h"
+
 namespace hazel
 {
 
@@ -54,6 +56,8 @@ namespace hazel
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_Data.title = props.title;
 		m_Data.size = props.size;
 		m_Data.isFullScreen = props.isFullScreen;
@@ -61,6 +65,8 @@ namespace hazel
 
 		if (m_GLFWWindowCount == 0)
 		{
+			HZ_PROFILE_SCOPE("Config GLFW Window");
+
 			int success = glfwInit();
 			Log::AssertCore(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback([](int erCode,const char* description) 
@@ -75,27 +81,33 @@ namespace hazel
 			m_GLFWWindowCount++;
 		}
 
-		int monitorCount;
-		auto monitor = glfwGetMonitors(&monitorCount);
-		if (monitorCount > 0)
 		{
-			m_pVideoMode = (GLFWvidmode*)glfwGetVideoMode(monitor[0]);
-			m_monitors.reserve(monitorCount);
-			m_monitors.assign(monitor, monitor + monitorCount);
+			HZ_PROFILE_SCOPE("Get Window Monitors");
+			int monitorCount;
+			auto monitor = glfwGetMonitors(&monitorCount);
+			if (monitorCount > 0)
+			{
+				m_pVideoMode = (GLFWvidmode*)glfwGetVideoMode(monitor[0]);
+				m_monitors.reserve(monitorCount);
+				m_monitors.assign(monitor, monitor + monitorCount);
+			}
 		}
 
-		if (m_Data.isFullScreen)
 		{
-			m_Data.size.x = m_pVideoMode->width;
-			m_Data.size.y = m_pVideoMode->height;
-			//  Use the size of primary monitor
-			m_Window = glfwCreateWindow(m_pVideoMode->width, m_pVideoMode->height, m_Data.title.c_str(),
-				m_monitors[0], NULL);
-		}
-		else
-		{
-			m_Window = glfwCreateWindow((int)m_Data.size.x, (int)m_Data.size.y, m_Data.title.c_str(),
-				NULL, NULL);
+			HZ_PROFILE_SCOPE("Create GLFW Window");
+			if (m_Data.isFullScreen)
+			{
+				m_Data.size.x = m_pVideoMode->width;
+				m_Data.size.y = m_pVideoMode->height;
+				//  Use the size of primary monitor
+				m_Window = glfwCreateWindow(m_pVideoMode->width, m_pVideoMode->height, m_Data.title.c_str(),
+					m_monitors[0], NULL);
+			}
+			else
+			{
+				m_Window = glfwCreateWindow((int)m_Data.size.x, (int)m_Data.size.y, m_Data.title.c_str(),
+					NULL, NULL);
+			}
 		}
 
 		if (nullptr == m_Window)
@@ -105,6 +117,8 @@ namespace hazel
 		}
 		else
 		{
+			HZ_PROFILE_SCOPE("Set Window CallBack");
+
 			m_Context = std::make_shared<OpenGLContext>(m_Window);
 			m_Context->Init();
 			

@@ -4,7 +4,6 @@
 
 #include "Platform/OpenGL/OpenGLTexture.h"
 #include "Renderer.h"
-
 namespace hazel
 {
 	Texture2D* Texture2D::Create()

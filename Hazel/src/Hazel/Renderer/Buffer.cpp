@@ -4,6 +4,7 @@
 #include "Renderer.h"
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
@@ -53,6 +54,7 @@ namespace hazel
 
 	VertexBuffer* VertexBuffer::Create(float* vertices, size_t size)
 	{
+		HZ_PROFILE_FUNCTION();
 		switch (Renderer::GetAPI()) {
 		case hazel::RendererAPI::API::None: {
 			Log::AssertCore(false, "Renderer API: None is currently not supported.");
@@ -75,6 +77,7 @@ namespace hazel
 
 	VertexBuffer* VertexBuffer::Create(size_t size)
 	{
+		HZ_PROFILE_FUNCTION();
 		switch (Renderer::GetAPI()) {
 		case hazel::RendererAPI::API::None: {
 			Log::AssertCore(false, "Renderer API: None is currently not supported.");
@@ -101,6 +104,7 @@ namespace hazel
 
 	IndexBuffer* IndexBuffer::Create(unsigned int* indices, size_t count)
 	{
+		HZ_PROFILE_FUNCTION();
 		switch (Renderer::GetAPI()) {
 		case hazel::RendererAPI::API::None: {
 			Log::AssertCore(false, "Renderer API: None is currently not supported.");
@@ -123,6 +127,7 @@ namespace hazel
 
 	IndexBuffer* IndexBuffer::Create(size_t count)
 	{
+		HZ_PROFILE_FUNCTION();
 		switch (Renderer::GetAPI()) {
 		case hazel::RendererAPI::API::None: {
 			Log::AssertCore(false, "Renderer API: None is currently not supported.");

@@ -4,7 +4,7 @@
 #include "Hazel/Core/Application.h"
 #include "Hazel/Core/Log.h"
 #include "Hazel/Core/Time.h"
-#include "Hazel/Core/Timer.h"
+#include "Hazel/Debug/Instrumentor.h"
 //  --------------------------------------
 
 #ifdef CLIENT_ENTRY

@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 
 #include "Hazel/Core/Log.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
@@ -62,6 +63,8 @@ namespace hazel
 
 	void OpenGLTexture::BindAfterLoad(Ref<Image> image)
 	{
+		HZ_PROFILE_FUNCTION();
+
 #ifdef HZ_DEBUG
 		if (image->GetBufferSize() == 0)
 		{

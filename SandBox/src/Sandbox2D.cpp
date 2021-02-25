@@ -6,11 +6,13 @@ Sandbox2D::Sandbox2D()
 	:m_CameraController((float)Application::GetInstance()->GetWindow().GetSize().x
 		/ (float)Application::GetInstance()->GetWindow().GetSize().y, false, true)
 {
+	HZ_PROFILE_FUNCTION();
+
 	srand((unsigned int)(time(NULL)));
 	Application::GetInstance()->GetWindow().SetResizable(true);
 	m_CameraController.EnableInput(false);
 	m_ShaderManager = std::make_shared<ShaderManager>();
-
+	
 	//  load assets
 	m_ShaderManager->Load("../data/shader/Sandbox2D_tex.glsl");
 	m_ShaderManager->Load("../data/shader/Sandbox2D_color.glsl");
@@ -137,13 +139,7 @@ void Sandbox2D::OnDetch()
 
 void Sandbox2D::OnUpdate()
 {
-	Log::Info("Deltatime: {0}ms", Time::deltaTime());
-
-	//  TODO:
-	//  1. SplitableTexture
-	//  2. Sprite
 	m_CameraController.OnUpdate();
-
 
 	BackgroundContorller();
 	if (!isQuit) {
@@ -156,96 +152,65 @@ void Sandbox2D::OnUpdate()
 
 	particle->Update(gravity,
 		player->m_Trans->GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
+
+	RenderCommand::SetClearColor({ m_BackColor, 1.0f });
+	RenderCommand::Clear();
+	Renderer::BeginScene(m_CameraController.GetCamera());
+
+	//  render background
+	if (isRenderBackground) {
+		for (auto& it : back)
+		{
+			it->m_Shader->Use();
+			it->m_Tex->Bind(0);
+			it->m_Shader->SetSampler2D("_tx", 0);
+			it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
+			Renderer::Submit(it->m_Sprite, it->m_Trans, it->m_Shader);
+		}
+	}
+
+	//  render plats
+	for (auto& plat : plats)
+	{
+		if (plat->m_Color.a > 0.1f && plat->m_Trans->GetPosition().y < 520.0f) {
+			plat->m_Shader->Use();
+			plat->m_Tex->Bind(0);
+			plat->m_Shader->SetSampler2D("_tx", 0);
+			plat->m_Shader->SetVector4("_color", plat->m_Color);
+			Renderer::Submit(plat->m_Sprite, plat->m_Trans, plat->m_Shader);
+		}
+	}
 	
-	{ 
-		RenderCommand::SetClearColor({ m_BackColor, 1.0f });
-		RenderCommand::Clear();
-		Renderer::BeginScene(m_CameraController.GetCamera());
-
-		{
-			Timer timer_background("Background", [](const char* name, float result)
-				{
-					Log::Info("Timer: {0}: \t{1}ms", name, result);
-				});
-			//  render background
-			if (isRenderBackground) {
-				for (auto& it : back)
-				{
-					it->m_Shader->Use();
-					it->m_Tex->Bind(0);
-					it->m_Shader->SetSampler2D("_tx", 0);
-					it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
-					Renderer::Submit(it->m_Sprite, it->m_Trans, it->m_Shader);
-				}
-			}
+	//  render Particle
+	for (auto& ptc : particle->ptc())
+	{
+		if (ptc.lifeTime > 0.0f) {
+			particle->m_Shader->Use();
+			particle->m_Shader->SetVector4("_color", ptc.m_Color);
+			Renderer::Submit(&ptc.m_Mesh, &ptc.m_Trans, particle->m_Shader);
 		}
+	}
 
-		{
-			Timer timer_plats("Plats", [](const char* name, float result)
-				{
-					Log::Info("Timer: {0}: \t{1}ms", name, result);
-				});
-			//  render plats
-			for (auto& plat : plats)
-			{
-				if (plat->m_Color.a > 0.1f) {
-					plat->m_Shader->Use();
-					plat->m_Tex->Bind(0);
-					plat->m_Shader->SetSampler2D("_tx", 0);
-					plat->m_Shader->SetVector4("_color", plat->m_Color);
-					Renderer::Submit(plat->m_Sprite, plat->m_Trans, plat->m_Shader);
-				}
-			}
-		}
+	//  render player
+	player->m_Shader->Use();
+	player->m_Tex->Bind(0);
+	player->m_Shader->SetSampler2D("_tx", 0);
+	Renderer::Submit(player->m_Sprite, player->m_Trans, player->m_Shader);
 
-		{
-			Timer timer_particle("Particle", [](const char* name, float result)
-				{
-					Log::Info("Timer: {0}: \t{1}ms", name, result);
-				});
-			//  render Particle
-			for (auto& ptc : particle->ptc())
-			{
-				if (ptc.lifeTime > 0.0f) {
-					particle->m_Shader->Use();
-					particle->m_Shader->SetVector4("_color", ptc.m_Color);
-					Renderer::Submit(&ptc.m_Mesh, &ptc.m_Trans, particle->m_Shader);
-				}
-			}
-		}
+	//  render text
+	Renderer::Submit(m_Text, m_TextTrans, m_TextShader);
 
-		{
-			Timer timer_player("Player", [](const char* name, float result)
-				{
-					Log::Info("Timer: {0}: \t{1}ms", name, result);
-				});
 
-			//  render player
-			player->m_Shader->Use();
-			player->m_Tex->Bind(0);
-			player->m_Shader->SetSampler2D("_tx", 0);
-			Renderer::Submit(player->m_Sprite, player->m_Trans, player->m_Shader);
-		}
-
-		{
-			Timer timer_text("Text", [](const char* name, float result)
-				{
-					Log::Info("Timer: {0}: \t{1}ms", name, result);
-				});
-
-			//  render text
-			Renderer::Submit(m_Text, m_TextTrans, m_TextShader);
-		}
-
-		Renderer::EndScene();
-	} //  render
+	Renderer::EndScene();
 }
 
 void Sandbox2D::OnImGuiRender()
 {
 	p_pos = m_TextTrans->GetPosition();
 	p_size = m_TextTrans->GetScale();
+	
 	ImGui::Begin("Debugger");
+
 	ImGui::Checkbox("Render Background?", &isRenderBackground);
 	ImGui::Text("Current Plats Numbers: %d", curPlatNum);
 	ImGui::ColorEdit3("Backgrond Color", glm::value_ptr(m_BackColor));
@@ -253,7 +218,9 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::DragFloat("Move velocity", &moveSpeed, 0.1f, 30.0f, 50.0f, "%.2f", 1.0f);
 	ImGui::DragFloat3("Text Position", glm::value_ptr(p_pos), 0.2f, -512.0f, 512.0f, "%.2f", 1.0f);
 	ImGui::DragFloat3("Text Scale", glm::value_ptr(p_size), 0.02f, -3.0f, 3.0f, "%.2f", 1.0f);
+	
 	ImGui::End();
+	
 	m_TextTrans->SetPosition(p_pos);
 	m_TextTrans->SetScale(p_size);
 }
@@ -383,7 +350,7 @@ void Sandbox2D::PlayerController()
 
 			particle->Trigger(
 				glm::clamp(int(-vy * 0.3f), 2, 10),
-				{ player->GetChecker().x, player->GetChecker().y+ minDis, 0.5f },
+				{ player->GetChecker().x, player->GetChecker().y + minDis, 0.5f },
 				{ 0.52f,0.65f,0.16f,1.0f },
 				15.0f,
 				glm::clamp(-vy * 0.4f, 6.0f, 10.0f)

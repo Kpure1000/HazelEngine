@@ -12,11 +12,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Hazel/Core/Log.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
 	OpenGLShader::OpenGLShader(const std::string& filePath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 #pragma region load shader code from file
 
 		std::ifstream shaderIn;

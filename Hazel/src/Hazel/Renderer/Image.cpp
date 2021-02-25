@@ -8,6 +8,7 @@
 #include <stb_image_write.h>
 
 #include "Hazel/Core/Log.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 using std::vector;
 using std::function;
@@ -17,6 +18,8 @@ namespace hazel
 	
 	void Image::LoadFromMemory(const int& w, const int& h, const int& ch, unsigned char* data)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_LoadMode = LoadMode::LOAD_MEMORY;
 		this->m_Width = w;
 		this->m_Height = h;
@@ -28,6 +31,8 @@ namespace hazel
 	}
 	void Image::LoadFromMemory(const int& w, const int& h, const int& ch, const vector<unsigned char>& data)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_LoadMode = LoadMode::LOAD_MEMORY;
 		this->m_Width = w;
 		this->m_Height = h;
@@ -39,16 +44,21 @@ namespace hazel
 	{
 		m_LoadMode = LoadMode::LOAD_FILE;
 		stbi_set_flip_vertically_on_load(isFlip);
+		{
+			HZ_PROFILE_SCOPE(__FUNCSIG__"->stbi_load_and_data_parse");
 
-		auto data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channel, 0);
-		m_Data.reserve((size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
-		m_Data.assign(data, data + (size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
-		stbi_image_free(data);
+			auto data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channel, 0);
+			m_Data.reserve((size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
+			m_Data.assign(data, data + (size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
+			stbi_image_free(data);
+		}
 		CheckBuffer(m_Data.size());
 	}
 
 	void Image::SaveData(const std::string& path)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (stbi_write_png(path.c_str(), m_Width, m_Height, m_Channel, m_Data.data(), 0) == 0)
 		{
 			Log::ErrorCore("Save image data error, in path \'{0}\'", path);

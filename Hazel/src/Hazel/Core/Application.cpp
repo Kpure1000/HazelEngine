@@ -10,7 +10,7 @@
 #include "Platform/Windows/WindowsWindow.h"
 
 #include "Time.h"
-#include "Timer.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 #include "Hazel/Renderer/Renderer.h"
 
@@ -23,6 +23,9 @@ namespace hazel
 	Application::Application()
 		: m_IsRunning(false)
 	{
+		HZ_PROFILE_BEGIN_SESSION("Hazel Application", "profile_results.json");
+
+		HZ_PROFILE_FUNCTION();
 		//  
 		Log::AssertCore(!m_Instance, "Application already exists.");
 		m_Instance = this;
@@ -42,6 +45,7 @@ namespace hazel
 
 	Application::~Application()
 	{
+		HZ_PROFILE_END_SESSION();
 	}
 
 	void Application::OnEvent(Event& ev)

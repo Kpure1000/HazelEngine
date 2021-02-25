@@ -6,6 +6,7 @@
 #include "OpenGLContext.h"
 
 #include "Hazel/Core/Log.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 hazel::OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 	:m_WindowHandle(windowHandle)
@@ -14,6 +15,8 @@ hazel::OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 
 void hazel::OpenGLContext::Init()
 {
+	HZ_PROFILE_FUNCTION();
+
 	glfwMakeContextCurrent(m_WindowHandle);
 	Log::AssertCore((0 != gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)), "Failed to initialize GLAD");
 

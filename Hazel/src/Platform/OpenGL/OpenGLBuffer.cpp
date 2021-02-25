@@ -3,6 +3,7 @@
 #include "OpenGLBuffer.h"
 
 #include <glad/glad.h>
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
@@ -13,6 +14,8 @@ namespace hazel
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, size_t size)
 		:m_VBOID(0), m_Size(size)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glGenBuffers(1, &m_VBOID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBOID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -21,6 +24,8 @@ namespace hazel
 	OpenGLVertexBuffer::OpenGLVertexBuffer(size_t size)
 		:m_Size(size)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glGenBuffers(1, &m_VBOID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBOID);
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
@@ -54,6 +59,8 @@ namespace hazel
 	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, size_t count)
 		: m_EBOID(0), m_Count(count)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glGenBuffers(1, &m_EBOID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBOID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), indices, GL_STATIC_DRAW);
@@ -62,6 +69,8 @@ namespace hazel
 	OpenGLIndexBuffer::OpenGLIndexBuffer(size_t count)
 		:m_EBOID(0), m_Count(count)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glGenBuffers(1, &m_EBOID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBOID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);

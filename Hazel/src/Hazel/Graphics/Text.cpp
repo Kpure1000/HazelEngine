@@ -6,6 +6,7 @@
 #include "Text.h"
 
 #include <glad/glad.h>
+#include "Hazel/Debug/Instrumentor.h"
 
 namespace hazel
 {
@@ -78,6 +79,8 @@ namespace hazel
 
 	void Text::InitMesh()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		BufferLayout layout = {
 			{ShaderDataType::Float3,"aPos"},
 			{ShaderDataType::Float2,"aTexCoord"},
