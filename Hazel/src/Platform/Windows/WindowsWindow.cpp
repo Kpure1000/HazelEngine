@@ -31,8 +31,10 @@ namespace hazel
 	void WindowsWindow::OnUpdate()
 	{
 		HZ_PROFILE_FUNCTION();
-
-		glfwPollEvents();
+		{
+			HZ_PROFILE_SCOPE("glfwPollEvents");
+			glfwPollEvents();
+		}
 		m_Context->SwapBuffers();
 	}
 

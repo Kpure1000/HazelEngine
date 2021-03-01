@@ -243,7 +243,9 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Begin("Debugger");
 
 	ImGui::Checkbox("Render Background?", &isRenderBackground);
+	ImGui::Text("Frame: %f", 1.0f / Time::deltaTime());
 	ImGui::Text("Current Plats Numbers: %d", curPlatNum);
+	ImGui::Text("------------------");
 	ImGui::ColorEdit3("Backgrond Color", glm::value_ptr(m_BackColor));
 	ImGui::DragFloat("Jump velocity", &jump_vy, 0.1f, 10.0f, 60.0f, "%.2f", 1.0f);
 	ImGui::DragFloat("Move velocity", &moveSpeed, 0.1f, 30.0f, 50.0f, "%.2f", 1.0f);

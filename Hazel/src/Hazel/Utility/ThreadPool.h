@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Hazel/Core/Core.h"
+#include "Hazel/Core/Log.h"
 
 #include <vector>
 #include <queue>
@@ -83,9 +84,12 @@ namespace hazel
 				std::unique_lock<std::mutex> lock(_mutex);
 				if (isDestroy)
 				{
+					Log::ErrorCore("Add task on detroyed thread pool");
+
 					throw std::runtime_error("Add task on detroyed thread pool");
 				}
-
+				
+				//  add task
 				m_Tasks.emplace([task]() { (*task)(); });
 			}
 			_condition.notify_one();

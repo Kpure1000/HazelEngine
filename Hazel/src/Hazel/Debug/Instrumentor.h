@@ -251,7 +251,7 @@ namespace hazel
 
 }
 
-#if  defined(HZ_DEBUG) || defined(HZ_RELEASE)
+#if  defined(HZ_DEBUG) //|| defined(HZ_RELEASE)
 #define HZ_PROFILE 1
 #endif // HZ_DEBUG
 
