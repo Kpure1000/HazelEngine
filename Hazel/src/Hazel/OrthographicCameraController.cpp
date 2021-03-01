@@ -9,7 +9,7 @@
 #include "Hazel/Core/Application.h"
 
 #include "Hazel/Utility/Math.h"
-
+#include "Hazel/Debug/Instrumentor.h"
 namespace hazel
 {
 	OrthographicCameraController::OrthographicCameraController(float aspectRotio, bool rotation,

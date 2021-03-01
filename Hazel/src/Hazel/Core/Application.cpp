@@ -33,7 +33,8 @@ namespace hazel
 		//  create window
 		m_Window = Window::Create(WindowProps("Hazel Engine", 568, 1024, true, false));
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
-
+		//m_Window->SetVSync(false);
+		
 		//  create imgui layer
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
 		PushOverLayer(m_ImGuiLayer);
@@ -95,23 +96,36 @@ namespace hazel
 
 		while (m_IsRunning)
 		{
-			//  update all layer
-			for (auto layer : m_LayerStack)
 			{
-				layer->OnUpdate();
-			}
+				HZ_PROFILE_FUNCTION();
 
-			//  update ImGui
-			m_ImGuiLayer->Begin();
-			for (auto layer : m_LayerStack)
-			{
-				layer->OnImGuiRender();
-			}
-			m_ImGuiLayer->End();
+				{
+					HZ_PROFILE_SCOPE("Layer Update");
+					//  update all layer
+					for (auto layer : m_LayerStack)
+					{
+						layer->OnUpdate();
+					}
+				}
 
-			//  update window
-			m_Window->OnUpdate();
-			Time::Update();
+				{
+					HZ_PROFILE_SCOPE("ImGui Update");
+					//  update ImGui
+					m_ImGuiLayer->Begin();
+					for (auto layer : m_LayerStack)
+					{
+						layer->OnImGuiRender();
+					}
+					m_ImGuiLayer->End();
+				}
+
+				{
+					HZ_PROFILE_SCOPE("Window Update");
+					//  update window
+					m_Window->OnUpdate();
+				}
+				Time::Update();
+			}
 		}
 	}
 

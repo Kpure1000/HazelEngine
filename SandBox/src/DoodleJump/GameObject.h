@@ -154,7 +154,7 @@ public:
 		:maxLifeTime(MaxLifeTime)
 	{}
 
-	void Trigger(int number, const glm::vec3& position, const glm::vec4& color , float radius, float velocity)
+	void Trigger(int number, const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, float radius, float velocity)
 	{
 		glm::vec3 tmpVec;
 		auto divRad = 1.0f / 180.0f;
@@ -162,6 +162,10 @@ public:
 		{
 			if (number == 0)break;
 			if (it.lifeTime < 0.0f) {
+				tmpVec.x = scale.x * 0.01f * (float)(75 + rand() % 75);
+				tmpVec.y = tmpVec.x;
+				tmpVec.z = scale.z;
+				it.m_Trans.SetScale(tmpVec);
 				tmpVec.x = position.x + radius * 0.01f * (float)(50 - rand() % 100);
 				tmpVec.y = position.y + radius * 0.01f * (float)(50 - rand() % 100);
 				tmpVec.z = position.z;

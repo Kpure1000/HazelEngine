@@ -47,7 +47,8 @@ namespace hazel
 
 		inline void SetFont(const Font& font) { m_Font = font; }
 
-		inline Ref<VertexBuffer> GetVertexBuffer() { return m_VBO; }
+		inline Ref<VertexBuffer> GetVertexBuffer_Vertex() { return m_VBO_VERT; }
+		inline Ref<VertexBuffer> GetVertexBuffer_TexCoord() { return m_VBO_TEXC; }
 		inline Ref<IndexBuffer> GetIndexBuffer() { return m_EBO; }
 
 		inline const std::map<unsigned char, Character>& GetCharacters()const { return m_Font.m_Characters; }
@@ -62,7 +63,8 @@ namespace hazel
 
 		Font m_Font;
 
-		Ref<VertexBuffer> m_VBO;
+		Ref<VertexBuffer> m_VBO_VERT;
+		Ref<VertexBuffer> m_VBO_TEXC;
 		Ref<IndexBuffer> m_EBO;
 
 	};

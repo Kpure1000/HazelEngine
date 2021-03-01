@@ -5,6 +5,7 @@
 #include "Hazel/Core/Application.h"
 
 #include "Hazel/Core/Log.h"
+#include "Hazel/Debug/Instrumentor.h"
 
 #define IMGUI_IMPL_API
 #include "backends/imgui_impl_glfw.h"
@@ -68,6 +69,8 @@ namespace hazel
 
 	void ImGuiLayer::Begin()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -75,6 +78,8 @@ namespace hazel
 
 	void ImGuiLayer::End()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		auto app = Application::GetInstance();
 		io.DisplaySize = ImVec2((float)app->GetWindow().GetSize().x,

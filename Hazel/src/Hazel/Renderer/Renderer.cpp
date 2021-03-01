@@ -86,15 +86,23 @@ namespace hazel
 			float w = ch.size.x * scale.x;
 			float h = ch.size.y * scale.y;
 
-			// 对每个字符更新VBO
-			float vert[30] = {
-				xpos,     ypos + h, pos.z,  0.0, 0.0 ,
-				xpos,     ypos,     pos.z,  0.0, 1.0 ,
-				xpos + w, ypos,     pos.z,  1.0, 1.0 ,
+			float vert[18] = {
+				xpos,     ypos + h, pos.z,
+				xpos,     ypos,     pos.z,
+				xpos + w, ypos,     pos.z,
 
-				xpos,     ypos + h, pos.z,  0.0, 0.0 ,
-				xpos + w, ypos,     pos.z,  1.0, 1.0 ,
-				xpos + w, ypos + h, pos.z,  1.0, 0.0 
+				xpos,     ypos + h, pos.z,
+				xpos + w, ypos,     pos.z,
+				xpos + w, ypos + h, pos.z
+			};
+			float texC[12] = {
+				0.0, 0.0,
+				0.0, 1.0,
+				1.0, 1.0,
+
+				0.0, 0.0,
+				1.0, 1.0,
+				1.0, 0.0
 			};
 
 			//  bind texture
@@ -105,7 +113,10 @@ namespace hazel
 			text->GetVertexArray()->Bind();
 
 			//  draw sub vertex buffer
-			text->GetVertexBuffer()->SetData(vert, sizeof(float) * 30);
+			text->GetVertexBuffer_Vertex()->SetData(vert, sizeof(float) * 18);
+
+			text->GetVertexBuffer_TexCoord()->SetData(texC, sizeof(float) * 12);
+
 			RenderCommand::DrawBuffered(text->GetVertexArray());
 
 			//  or draw sub index buffer

@@ -27,5 +27,7 @@ void hazel::OpenGLContext::Init()
 
 void hazel::OpenGLContext::SwapBuffers()
 {
+	HZ_PROFILE_FUNCTION();
+
 	glfwSwapBuffers(m_WindowHandle);
 }

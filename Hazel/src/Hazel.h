@@ -5,6 +5,7 @@
 #include "Hazel/Core/Log.h"
 #include "Hazel/Core/Time.h"
 #include "Hazel/Debug/Instrumentor.h"
+#include "Hazel/Utility/ThreadPool.h"
 //  --------------------------------------
 
 #ifdef CLIENT_ENTRY

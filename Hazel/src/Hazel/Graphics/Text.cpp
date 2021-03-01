@@ -81,14 +81,20 @@ namespace hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		BufferLayout layout = {
+		BufferLayout layout_vert = {
 			{ShaderDataType::Float3,"aPos"},
+		};
+		BufferLayout layout_texc = {
 			{ShaderDataType::Float2,"aTexCoord"},
 		};
 
-		m_VBO.reset(VertexBuffer::Create(sizeof(float) * 6 * 5));
-		m_VBO->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(m_VBO);
+		m_VBO_VERT.reset(VertexBuffer::Create(sizeof(float) * 6 * 3));
+		m_VBO_VERT->SetLayout(layout_vert);
+		m_VertexArray->AddVertexBuffer(m_VBO_VERT);
+
+		m_VBO_TEXC.reset(VertexBuffer::Create(sizeof(float) * 6 * 2));
+		m_VBO_TEXC->SetLayout(layout_texc);
+		m_VertexArray->AddVertexBuffer(m_VBO_TEXC);
 
 		m_EBO.reset(IndexBuffer::Create(6));
 		m_VertexArray->SetIndexBuffer(m_EBO);

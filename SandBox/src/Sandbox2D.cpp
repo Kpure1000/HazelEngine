@@ -139,73 +139,104 @@ void Sandbox2D::OnDetch()
 
 void Sandbox2D::OnUpdate()
 {
+	HZ_PROFILE_FUNCTION();
+
 	m_CameraController.OnUpdate();
-
-	BackgroundContorller();
-	if (!isQuit) {
-		DifficultyController();
-		PlayerController();
-		PlatsController();
+	{
+		HZ_PROFILE_SCOPE("Controller");
+		BackgroundContorller();
+		if (!isQuit) {
+			DifficultyController();
+			PlayerController();
+			PlatsController();
+		}
+		TextController();
+	}
+	{
+		HZ_PROFILE_SCOPE("Particle update");
+		particle->Update(gravity,
+			player->m_Trans->GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
+	}
+	{
+		HZ_PROFILE_SCOPE("SetClear");
+		RenderCommand::SetClearColor({ m_BackColor, 1.0f });
+		RenderCommand::Clear();
 	}
 
-	TextController();
+	{
+		HZ_PROFILE_SCOPE("BeginScene");
+		Renderer::BeginScene(m_CameraController.GetCamera());
+	}
 
-	particle->Update(gravity,
-		player->m_Trans->GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
+	{
+		HZ_PROFILE_SCOPE("Rendering");
+		//  render background
+		if (isRenderBackground) {
+			HZ_PROFILE_SCOPE("Rendering Background");
+			for (auto& it : back)
+			{
+				it->m_Shader->Use();
+				it->m_Tex->Bind(0);
+				it->m_Shader->SetSampler2D("_tx", 0);
+				it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
+				Renderer::Submit(it->m_Sprite, it->m_Trans, it->m_Shader);
+			}
+		}
 
-	RenderCommand::SetClearColor({ m_BackColor, 1.0f });
-	RenderCommand::Clear();
-	Renderer::BeginScene(m_CameraController.GetCamera());
-
-	//  render background
-	if (isRenderBackground) {
-		for (auto& it : back)
 		{
-			it->m_Shader->Use();
-			it->m_Tex->Bind(0);
-			it->m_Shader->SetSampler2D("_tx", 0);
-			it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
-			Renderer::Submit(it->m_Sprite, it->m_Trans, it->m_Shader);
+			HZ_PROFILE_SCOPE("Rendering Plats");
+			//  render plats
+			for (auto& plat : plats)
+			{
+				if (plat->m_Color.a > 0.1f && plat->m_Trans->GetPosition().y < 520.0f) {
+					plat->m_Shader->Use();
+					plat->m_Tex->Bind(0);
+					plat->m_Shader->SetSampler2D("_tx", 0);
+					plat->m_Shader->SetVector4("_color", plat->m_Color);
+					Renderer::Submit(plat->m_Sprite, plat->m_Trans, plat->m_Shader);
+				}
+			}
+		}
+		
+		{
+			HZ_PROFILE_SCOPE("Rendering Praticles");
+			//  render Particle
+			for (auto& ptc : particle->ptc())
+			{
+				if (ptc.lifeTime > 0.0f) {
+					particle->m_Shader->Use();
+					particle->m_Shader->SetVector4("_color", ptc.m_Color);
+					Renderer::Submit(&ptc.m_Mesh, &ptc.m_Trans, particle->m_Shader);
+				}
+			}
+		}
+
+		{
+			HZ_PROFILE_SCOPE("Rendering Player");
+			//  render player
+			player->m_Shader->Use();
+			player->m_Tex->Bind(0);
+			player->m_Shader->SetSampler2D("_tx", 0);
+			Renderer::Submit(player->m_Sprite, player->m_Trans, player->m_Shader);
+		}
+
+		{
+			HZ_PROFILE_SCOPE("Rendering Text");
+			//  render text
+			Renderer::Submit(m_Text, m_TextTrans, m_TextShader);
 		}
 	}
 
-	//  render plats
-	for (auto& plat : plats)
 	{
-		if (plat->m_Color.a > 0.1f && plat->m_Trans->GetPosition().y < 520.0f) {
-			plat->m_Shader->Use();
-			plat->m_Tex->Bind(0);
-			plat->m_Shader->SetSampler2D("_tx", 0);
-			plat->m_Shader->SetVector4("_color", plat->m_Color);
-			Renderer::Submit(plat->m_Sprite, plat->m_Trans, plat->m_Shader);
-		}
+		HZ_PROFILE_SCOPE("EndScene");
+		Renderer::EndScene();
 	}
-	
-	//  render Particle
-	for (auto& ptc : particle->ptc())
-	{
-		if (ptc.lifeTime > 0.0f) {
-			particle->m_Shader->Use();
-			particle->m_Shader->SetVector4("_color", ptc.m_Color);
-			Renderer::Submit(&ptc.m_Mesh, &ptc.m_Trans, particle->m_Shader);
-		}
-	}
-
-	//  render player
-	player->m_Shader->Use();
-	player->m_Tex->Bind(0);
-	player->m_Shader->SetSampler2D("_tx", 0);
-	Renderer::Submit(player->m_Sprite, player->m_Trans, player->m_Shader);
-
-	//  render text
-	Renderer::Submit(m_Text, m_TextTrans, m_TextShader);
-
-
-	Renderer::EndScene();
 }
 
 void Sandbox2D::OnImGuiRender()
 {
+	HZ_PROFILE_FUNCTION();
+
 	p_pos = m_TextTrans->GetPosition();
 	p_size = m_TextTrans->GetScale();
 	
@@ -329,6 +360,7 @@ void Sandbox2D::PlayerController()
 				particle->Trigger(10,
 					{ curPlat->m_Trans->GetPosition().x,
 					curPlat->m_Trans->GetPosition().y, 0.5f },
+					{ 10.0f,10.0f,1.0f },
 					{ 0.8f,0.52f,0.0f,1.0f },
 					25.0f,
 					glm::clamp(-vy * 0.6f, 6.0f, 18.0f));
@@ -351,6 +383,7 @@ void Sandbox2D::PlayerController()
 			particle->Trigger(
 				glm::clamp(int(-vy * 0.3f), 2, 10),
 				{ player->GetChecker().x, player->GetChecker().y + minDis, 0.5f },
+				{ 10.0f,10.0f,1.0f } ,
 				{ 0.52f,0.65f,0.16f,1.0f },
 				15.0f,
 				glm::clamp(-vy * 0.4f, 6.0f, 10.0f)
@@ -394,6 +427,7 @@ void Sandbox2D::PlayerController()
 
 void Sandbox2D::BackgroundContorller()
 {
+	HZ_PROFILE_FUNCTION();
 	static int tmpScore;
 	int bkrd = rand() % 10;
 	if (player->m_Trans->GetPosition().y >= maxHeight && !isGameOver)
@@ -523,6 +557,7 @@ void Sandbox2D::DifficultyController()
 
 void Sandbox2D::TextController()
 {
+	HZ_PROFILE_FUNCTION();
 	if (isGameOver) {
 		m_Text->SetText("Game Over\n\n> Score:\n> " + std::to_string(curScore)
 			+ "/" + std::to_string(curRecord) + "\n\n"
