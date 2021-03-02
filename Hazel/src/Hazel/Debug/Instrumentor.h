@@ -25,36 +25,35 @@ namespace hazel
 		std::string name;
 	};
 
-	class HAZEL_API InstrumentContainer
+	class HAZEL_API InstrumentCache
 	{
 	public:
-		InstrumentContainer(const InstrumentContainer&) = delete;
+		InstrumentCache(const InstrumentCache&) = delete;
 
-		InstrumentContainer(InstrumentContainer&&) = delete;
+		InstrumentCache(InstrumentCache&&) = delete;
 
 		bool Begin(const std::string filePath);
 
 		void End();
 		
+		/// <summary>
+		/// Push result into cache
+		/// </summary>
+		/// <param name="result"></param>
+		void operator<<(const ProfileResult& result);
 
-		void WriteFileContent(const ProfileResult& result);
-
-		void WriteFileHeader()
-		{
-			m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
-			m_OutputStream.flush();
-		}
+		void WriteFileHeader();
 
 		void WriteFileFooter();
 
-		static InstrumentContainer& GetInstance()
+		static InstrumentCache& GetInstance()
 		{
-			static InstrumentContainer instance;
+			static InstrumentCache instance;
 			return instance;
 		}
 
 	private:
-		InstrumentContainer()
+		InstrumentCache()
 			:m_ThreadPool(4)
 		{
 		}
@@ -119,18 +118,12 @@ namespace hazel
 
 		void WriteHeader()
 		{
-			/*m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
-			m_OutputStream.flush();*/
-
-			InstrumentContainer::GetInstance().WriteFileHeader();
+			InstrumentCache::GetInstance().WriteFileHeader();
 		}
 
 		void WriteFooter()
 		{
-			/*m_OutputStream << "]}";
-			m_OutputStream.flush();*/
-
-			InstrumentContainer::GetInstance().WriteFileFooter();
+			InstrumentCache::GetInstance().WriteFileFooter();
 		}
 
 		void InternalEndSession();
@@ -143,7 +136,7 @@ namespace hazel
 		//std::ofstream m_OutputStream;
 	};
 
-	class LogTimer
+	class HAZEL_API LogTimer
 	{
 	public:
 		LogTimer(const char* name)

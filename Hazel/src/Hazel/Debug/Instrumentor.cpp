@@ -13,18 +13,18 @@ namespace hazel
 	/// InstrumentContainer
 	///////////////////////////
 
-	bool InstrumentContainer::Begin(const std::string filePath)
+	bool InstrumentCache::Begin(const std::string filePath)
 	{
 		m_OutputStream.open(filePath);
 		return m_OutputStream.is_open();
 	}
 
-	void InstrumentContainer::End()
+	void InstrumentCache::End()
 	{
 		m_OutputStream.close();
 	}
 
-	void InstrumentContainer::WriteFileContent(const ProfileResult& result)
+	void InstrumentCache::operator<<(const ProfileResult& result)
 	{
 		m_Container.at(curContainer).at(curResult) = result;
 		curResult++;
@@ -37,7 +37,13 @@ namespace hazel
 		}
 	}
 
-	void InstrumentContainer::WriteFileFooter()
+	void InstrumentCache::WriteFileHeader()
+	{
+		m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
+		m_OutputStream.flush();
+	}
+
+	void InstrumentCache::WriteFileFooter()
 	{
 		int tmpIndex = 0;
 		savingContainer = curContainer;
@@ -68,7 +74,7 @@ namespace hazel
 		m_OutputStream.flush();
 	}
 
-	void InstrumentContainer::SaveProfile()
+	void InstrumentCache::SaveProfile()
 	{
 		m_ThreadPool.Submit([this]
 			{
@@ -116,7 +122,7 @@ namespace hazel
 			}
 			InternalEndSession();
 		}
-		if (InstrumentContainer::GetInstance().Begin(filePath))
+		if (InstrumentCache::GetInstance().Begin(filePath))
 		{
 			m_CurrentSession = new InstrumentationSession({ name });
 			WriteHeader();
@@ -142,7 +148,7 @@ namespace hazel
 			std::lock_guard lock(m_Mutex);
 			if (m_CurrentSession)
 			{
-				InstrumentContainer::GetInstance().WriteFileContent(result);
+				InstrumentCache::GetInstance() << result;
 			}
 		}
 
@@ -154,7 +160,7 @@ namespace hazel
 		{
 			WriteFooter();
 
-			InstrumentContainer::GetInstance().End();
+			InstrumentCache::GetInstance().End();
 
 			delete m_CurrentSession;
 			m_CurrentSession = nullptr;
