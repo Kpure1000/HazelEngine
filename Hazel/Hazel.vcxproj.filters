@@ -10,6 +10,9 @@
     <Filter Include="src\Hazel\Core">
       <UniqueIdentifier>{48D253A8-34A0-47AE-1D34-B8D409A12313}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\Debug">
+      <UniqueIdentifier>{6676DAB2-D201-4877-DB12-CB6B471DA477}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\Events">
       <UniqueIdentifier>{D495B311-C08E-D263-E9C0-B7E8D518B26F}</UniqueIdentifier>
     </Filter>
@@ -99,6 +102,9 @@
     <ClInclude Include="src\Hazel\Core\Window.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Debug\Instrumentor.h">
+      <Filter>src\Hazel\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Events\ApplicationEvent.h">
       <Filter>src\Hazel\Events</Filter>
     </ClInclude>
@@ -124,6 +130,9 @@
       <Filter>src\Hazel\Graphics\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Mesh\SphereMesh.h">
+      <Filter>src\Hazel\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Graphics\Mesh\Sprite.h">
       <Filter>src\Hazel\Graphics\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Graphics\Text.h">
@@ -175,6 +184,9 @@
       <Filter>src\Hazel\Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Utility\Singleton.h">
+      <Filter>src\Hazel\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Utility\ThreadPool.h">
       <Filter>src\Hazel\Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
@@ -1443,9 +1455,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Graphics\Mesh\Sprite.h" />
-    <ClInclude Include="src\Hazel\Utility\ThreadPool.h" />
-    <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1465,6 +1474,9 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Window.cpp">
       <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Debug\Instrumentor.cpp">
+      <Filter>src\Hazel\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Graphics\Text.cpp">
       <Filter>src\Hazel\Graphics</Filter>
@@ -1544,6 +1556,5 @@
     <ClCompile Include="src\hzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Debug\Instrumentor.cpp" />
   </ItemGroup>
 </Project>
