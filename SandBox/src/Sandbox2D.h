@@ -34,7 +34,7 @@ private:
 
 	void TextController();
 
-	void CreatePlat(Ref<Plat> plat);
+	void CreatePlat(Plat& plat);
 
 private:
 	hazel::Ref<hazel::ShaderManager> m_ShaderManager;
@@ -57,12 +57,12 @@ private:
 	/// <summary>
 	/// Jump plats
 	/// </summary>
-	std::vector<Ref<Plat>> plats;
-	std::vector<Ref<Sprite>> sp_normalPlats;
-	std::vector<Ref<Sprite>> sp_weakPlats;
-	std::vector<Ref<Sprite>> sp_back;
+	std::vector<Plat> plats;
+	std::vector<Sprite> sp_normalPlats;
+	std::vector<Sprite> sp_weakPlats;
+	std::vector<Sprite> sp_back;
 
-	Ref<ParticleSystem<QuadMesh, 128>> particle;
+	Ref<ParticleSystem<Sprite, 128>> particle;
 
 	glm::vec3 m_BackColor = { 1.0f,1.0f,1.0f };
 
@@ -84,7 +84,7 @@ private:
 	const float deadLine = -525.0f;
 	const float quitLine = -4000.0f;
 
-	const int maxPlatNum = 24;
+	const static int maxPlatNum = 24;
 	const int minPlatNum = 8;
 	int curPlatNum = maxPlatNum;
 

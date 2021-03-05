@@ -1456,6 +1456,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Renderer\SpriteRenderer.h" />
+    <ClInclude Include="src\Hazel\Renderer\RenderData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">

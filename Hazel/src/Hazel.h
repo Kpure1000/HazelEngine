@@ -28,6 +28,7 @@
 
 //  ---Render-----------------------------
 #include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/SpriteRenderer.h"
 #include "Hazel/Renderer/Texture.h"
 //  --------------------------------------
 

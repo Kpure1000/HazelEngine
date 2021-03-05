@@ -9,6 +9,8 @@ namespace hazel
 	class Sprite : public Mesh
 	{
 	public:
+		Sprite() :m_Size(0) {}
+
 		/// <summary>
 		/// Sprite create by texture size
 		/// </summary>
@@ -22,10 +24,10 @@ namespace hazel
 			auto top = (float)size.y * 0.5f;
 
 			std::vector<float> vert = {
-			left, buttom, 0.0f,		
-			left, top, 0.0f,		
-			right, top, 0.0f,		
-			right, buttom, 0.0f,	
+			left, buttom, 0.0f,
+			left, top, 0.0f,
+			right, top, 0.0f,
+			right, buttom, 0.0f,
 			};
 			std::vector<float> norm = {
 				0,0,1,

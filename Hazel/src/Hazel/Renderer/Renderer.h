@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Hazel/Core/Core.h"
 #include "RenderCommand.h"
+#include "RenderData.h"
 
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Camera/OrthographicCamera.h"
@@ -40,11 +40,6 @@ namespace hazel
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 		
 	private:
-		struct SceneData
-		{
-			glm::mat4 ViewProjectMat;
-			glm::mat4 ProjectMat;
-		};
 
 		static SceneData* m_SceneData;
 

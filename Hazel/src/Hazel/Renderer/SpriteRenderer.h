@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Hazel/Core/Core.h"
 #include "RenderCommand.h"
+#include "RenderData.h"
+
 
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Camera/OrthographicCamera.h"
@@ -21,20 +22,19 @@ namespace hazel
 		static void EndScene();
 
 		static void Submit(const Sprite& sprite,
-			const Transform& trans, const Shader& shader);
+			Transform& trans, const Shader& shader);
 
 		static void Submit(const Text& text,
-			const Transform& trans, const Shader& shader);
+			Transform& trans, const Shader& shader);
+
+		inline static void EnableBatch(bool enable) { m_isBatch = enable; }
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
 	private:
-		struct SceneData
-		{
-			glm::mat4 ViewProjectMat;
-			glm::mat4 ProjectMat;
-		};
 
 		static SceneData* m_SceneData;
+
+		static bool m_isBatch;
 	};
 }

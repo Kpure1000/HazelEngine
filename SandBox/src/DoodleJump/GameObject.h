@@ -11,16 +11,15 @@ class GameObject
 public:
 
 	GameObject()
-		:m_Sprite(nullptr), m_Trans(std::make_shared<Transform>()),
-		m_Shader(nullptr), m_Tex(nullptr)
+		: m_Shader(nullptr), m_Tex(nullptr)
 	{
 	}
 
 	void SetVisible(bool visible) { m_Visible = visible; }
 	bool IsVisible() { return m_Visible; }
 
-	Ref<Sprite> m_Sprite;
-	Ref<Transform> m_Trans;
+	Sprite m_Sprite;
+	Transform m_Trans;
 
 	Ref<Shader> m_Shader;
 	Ref<Texture2D> m_Tex;
@@ -36,8 +35,8 @@ public:
 	glm::vec2 GetChecker()
 	{
 		//  return temporary variable warning on release
-		return std::move(glm::vec2(m_Trans->GetPosition().x,
-			m_Trans->GetPosition().y - m_Trans->GetScale().y * m_Sprite->GetSize().y * 0.5f));
+		return std::move(glm::vec2(m_Trans.GetPosition().x,
+			m_Trans.GetPosition().y - m_Trans.GetScale().y * m_Sprite.GetSize().y * 0.5f));
 	}
 };
 
@@ -76,10 +75,10 @@ public:
 		case Plat::Type::HORIZONTAL: {
 			if (curAnimateTime < animateTime) {
 				curAnimateTime += 0.02f;
-				m_Trans->SetPosition({
-					m_Trans->GetPosition().x + moveSpeed,
-					m_Trans->GetPosition().y,
-					m_Trans->GetPosition().z
+				m_Trans.SetPosition({
+					m_Trans.GetPosition().x + moveSpeed,
+					m_Trans.GetPosition().y,
+					m_Trans.GetPosition().z
 					});
 			}
 			else {
@@ -94,8 +93,8 @@ public:
 	}
 
 	inline float GetPlatHeight() {
-		return m_Trans->GetPosition().y
-			+ m_Trans->GetScale().y * m_Sprite->GetSize().y * 0.50f;
+		return m_Trans.GetPosition().y
+			+ m_Trans.GetScale().y * m_Sprite.GetSize().y * 0.50f;
 	}
 
 	bool IsCollided(const glm::vec2& checker)
@@ -106,19 +105,19 @@ public:
 	}
 
 	inline bool IsCollidedX(float x) {
-		return m_Trans->GetPosition().x
-			- m_Trans->GetScale().x * m_Sprite->GetSize().x * 0.75f < x
+		return m_Trans.GetPosition().x
+			- m_Trans.GetScale().x * m_Sprite.GetSize().x * 0.75f < x
 			&&
-			m_Trans->GetPosition().x
-			+ m_Trans->GetScale().x * m_Sprite->GetSize().x * 0.75f > x;
+			m_Trans.GetPosition().x
+			+ m_Trans.GetScale().x * m_Sprite.GetSize().x * 0.75f > x;
 	}
 
 	inline bool IsCollidedY(float y) {
-		return m_Trans->GetPosition().y
-			- m_Trans->GetScale().y * m_Sprite->GetSize().x * 0.0f < y // buttom
+		return m_Trans.GetPosition().y
+			- m_Trans.GetScale().y * m_Sprite.GetSize().x * 0.0f < y // buttom
 			&&
-			m_Trans->GetPosition().y
-			+ m_Trans->GetScale().y * m_Sprite->GetSize().x * 0.50f > y; // top
+			m_Trans.GetPosition().y
+			+ m_Trans.GetScale().y * m_Sprite.GetSize().x * 0.50f > y; // top
 	}
 	glm::vec4 m_Color;
 	size_t m_ID;

@@ -29,10 +29,11 @@ Sandbox2D::Sandbox2D()
 	auto socreFont = Font("../data/font/3D Hand Drawns.ttf");
 
 	//  init particle
-	particle = std::make_shared<ParticleSystem<QuadMesh, 128>>(0.8f);
+	particle = std::make_shared<ParticleSystem<Sprite, 128>>(0.8f);
 	particle->m_Shader = m_ShaderManager->Get("Sandbox2D_color");
 	for (auto& it : particle->ptc())
 	{
+		it.m_Mesh = Sprite({ 1.0f,1.0f });
 		it.m_Trans.SetScale({ 10.0f,10.0f,1.0f });
 	}
 
@@ -48,61 +49,61 @@ Sandbox2D::Sandbox2D()
 	//  init player
 	player = std::make_shared<Player>();
 	player->m_Shader = m_ShaderManager->Get("Sandbox2D_tex");
-	player->m_Sprite = std::make_shared<Sprite>(playerTex->GetSize());
-	player->m_Trans->SetScale({ 0.1f,0.1f,1.0f });
-	player->m_Trans->SetPosition({ 0.0f,-300.0f,1.0f });
+	player->m_Sprite = Sprite(playerTex->GetSize());
+	player->m_Trans.SetScale({ 0.1f,0.1f,1.0f });
+	player->m_Trans.SetPosition({ 0.0f,-300.0f,1.0f });
 	vy = jump_vy;
 	player->m_Tex = playerTex;
 
 	//  init background
-	sp_back.push_back(std::make_shared<Sprite>(Sprite(
+	sp_back.push_back(Sprite(
 		{ backTex->GetSize().x,backTex->GetSize().y / 5 },
-		{ 0.0f,0.8f }, { 1.0f,1.0f })));
-	sp_back.push_back(std::make_shared<Sprite>(Sprite(
+		{ 0.0f,0.8f }, { 1.0f,1.0f }));
+	sp_back.push_back(Sprite(
 		{ backTex->GetSize().x,backTex->GetSize().y / 5 },
-		{ 0.0f,0.6f }, { 1.0f,0.8f })));
-	sp_back.push_back(std::make_shared<Sprite>(Sprite(
+		{ 0.0f,0.6f }, { 1.0f,0.8f }));
+	sp_back.push_back(Sprite(
 		{ backTex->GetSize().x,backTex->GetSize().y / 5 },
-		{ 0.0f,0.4f }, { 1.0f,0.6f })));
-	sp_back.push_back(std::make_shared<Sprite>(Sprite(
+		{ 0.0f,0.4f }, { 1.0f,0.6f }));
+	sp_back.push_back(Sprite(
 		{ backTex->GetSize().x,backTex->GetSize().y / 5 },
-		{ 0.0f,0.2f }, { 1.0f,0.4f })));
-	sp_back.push_back(std::make_shared<Sprite>(Sprite(
+		{ 0.0f,0.2f }, { 1.0f,0.4f }));
+	sp_back.push_back(Sprite(
 		{ backTex->GetSize().x,backTex->GetSize().y / 5 },
-		{ 0.0f,0.0f }, { 1.0f,0.2f })));
+		{ 0.0f,0.0f }, { 1.0f,0.2f }));
 	int i = 0;
 	for (auto& it : back)
 	{
 		it = std::make_shared<GameObject>();
 		it->m_Sprite = sp_back[rand() % sp_back.size()];
-		it->m_Trans->SetPosition({ 0.0f,-600.0f + 1200.0f / back.size() * i,-2.0f });
-		it->m_Trans->SetScale({ 0.5859f,0.5859f,1.0f });
+		it->m_Trans.SetPosition({ 0.0f,-600.0f + 1200.0f / back.size() * i,-2.0f });
+		it->m_Trans.SetScale({ 0.5859f,0.5859f,1.0f });
 		it->m_Tex = backTex;
 		it->m_Shader = m_ShaderManager->Get("Sandbox2D_blend");
 		i++;
 	}
 
 	//  init plats
-	sp_normalPlats.push_back(std::make_shared<Sprite>(Sprite(
+	sp_normalPlats.push_back(Sprite(
 		{ platTex->GetSize().x / 2,platTex->GetSize().y / 4 },
 		{ 0.0f,0.75f }, { 0.5f,1.0f }
-	)));
-	sp_normalPlats.push_back(std::make_shared<Sprite>(Sprite(
+	));
+	sp_normalPlats.push_back(Sprite(
 		{ platTex->GetSize().x / 2,platTex->GetSize().y / 4 },
 		{ 0.0f,0.5f }, { 0.5f,0.75f }
-	)));
-	sp_normalPlats.push_back(std::make_shared<Sprite>(Sprite(
+	));
+	sp_normalPlats.push_back(Sprite(
 		{ platTex->GetSize().x / 2,platTex->GetSize().y / 4 },
 		{ 0.0f,0.25f }, { 0.5f,0.5f }
-	)));
-	sp_normalPlats.push_back(std::make_shared<Sprite>(Sprite(
+	));
+	sp_normalPlats.push_back(Sprite(
 		{ platTex->GetSize().x / 2,platTex->GetSize().y / 4 },
 		{ 0.0f,0.0f }, { 0.5f,0.25f }
-	)));
-	sp_weakPlats.push_back(std::make_shared<Sprite>(Sprite(
+	));
+	sp_weakPlats.push_back(Sprite(
 		{ platTex->GetSize().x / 2,platTex->GetSize().y / 4 },
 		{ 0.5f,0.75f }, { 1.0f,1.0f }
-	)));
+	));
 
 	plats.resize(maxPlatNum);
 	auto curMaxHeight = -512.0f;
@@ -110,12 +111,11 @@ Sandbox2D::Sandbox2D()
 	auto bldShader = m_ShaderManager->Get("Sandbox2D_blend");
 	for (int i = 0; i < plats.size(); i++)
 	{
-		plats[i] = std::make_shared<Plat>();
-		plats[i]->m_Shader = bldShader;
-		plats[i]->m_Tex = platTex;
+		plats[i].m_Shader = bldShader;
+		plats[i].m_Tex = platTex;
 
-		plats[i]->m_Trans->SetScale({ 0.06f,0.06f,1.0f });
-		plats[i]->m_Trans->SetPosition({
+		plats[i].m_Trans.SetScale({ 0.06f,0.06f,1.0f });
+		plats[i].m_Trans.SetPosition({
 			-270.0f + (float)(rand() % 540),
 			curMaxHeight + 1024.0f / curPlatNum,
 			-1.0f
@@ -124,9 +124,9 @@ Sandbox2D::Sandbox2D()
 
 		CreatePlat(plats[i]);
 	}
-	plats[0]->m_Trans->SetPosition({ 0.0f,-500.0f,-1.0f });
-	plats[0]->m_Type = Plat::Type::NORMAL;
-	plats[0]->m_Sprite = sp_normalPlats[rand() % sp_normalPlats.size()];
+	plats[0].m_Trans.SetPosition({ 0.0f,-500.0f,-1.0f });
+	plats[0].m_Type = Plat::Type::NORMAL;
+	plats[0].m_Sprite = sp_normalPlats[rand() % sp_normalPlats.size()];
 }
 
 void Sandbox2D::OnAttach()
@@ -155,7 +155,7 @@ void Sandbox2D::OnUpdate()
 	{
 		HZ_PROFILE_SCOPE("Particle update");
 		particle->Update(gravity,
-			player->m_Trans->GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
+			player->m_Trans.GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
 	}
 	{
 		HZ_PROFILE_SCOPE("SetClear");
@@ -165,7 +165,7 @@ void Sandbox2D::OnUpdate()
 
 	{
 		HZ_PROFILE_SCOPE("BeginScene");
-		Renderer::BeginScene(m_CameraController.GetCamera());
+		SpriteRenderer::BeginScene(m_CameraController.GetCamera());
 	}
 
 	{
@@ -179,7 +179,7 @@ void Sandbox2D::OnUpdate()
 				it->m_Tex->Bind(0);
 				it->m_Shader->SetSampler2D("_tx", 0);
 				it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
-				Renderer::Submit(it->m_Sprite, it->m_Trans, it->m_Shader);
+				SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, *it->m_Shader);
 			}
 		}
 
@@ -188,12 +188,12 @@ void Sandbox2D::OnUpdate()
 			//  render plats
 			for (auto& plat : plats)
 			{
-				if (plat->m_Color.a > 0.1f && plat->m_Trans->GetPosition().y < 520.0f) {
-					plat->m_Shader->Use();
-					plat->m_Tex->Bind(0);
-					plat->m_Shader->SetSampler2D("_tx", 0);
-					plat->m_Shader->SetVector4("_color", plat->m_Color);
-					Renderer::Submit(plat->m_Sprite, plat->m_Trans, plat->m_Shader);
+				if (plat.m_Color.a > 0.1f && plat.m_Trans.GetPosition().y < 520.0f) {
+					plat.m_Shader->Use();
+					plat.m_Tex->Bind(0);
+					plat.m_Shader->SetSampler2D("_tx", 0);
+					plat.m_Shader->SetVector4("_color", plat.m_Color);
+					SpriteRenderer::Submit(plat.m_Sprite, plat.m_Trans, *plat.m_Shader);
 				}
 			}
 		}
@@ -206,7 +206,7 @@ void Sandbox2D::OnUpdate()
 				if (ptc.lifeTime > 0.0f) {
 					particle->m_Shader->Use();
 					particle->m_Shader->SetVector4("_color", ptc.m_Color);
-					Renderer::Submit(&ptc.m_Mesh, &ptc.m_Trans, particle->m_Shader);
+					SpriteRenderer::Submit(ptc.m_Mesh, ptc.m_Trans, *particle->m_Shader);
 				}
 			}
 		}
@@ -217,19 +217,19 @@ void Sandbox2D::OnUpdate()
 			player->m_Shader->Use();
 			player->m_Tex->Bind(0);
 			player->m_Shader->SetSampler2D("_tx", 0);
-			Renderer::Submit(player->m_Sprite, player->m_Trans, player->m_Shader);
+			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, *player->m_Shader);
 		}
 
 		{
 			HZ_PROFILE_SCOPE("Rendering Text");
 			//  render text
-			Renderer::Submit(m_Text, m_TextTrans, m_TextShader);
+			SpriteRenderer::Submit(*m_Text, *m_TextTrans, *m_TextShader);
 		}
 	}
 
 	{
 		HZ_PROFILE_SCOPE("EndScene");
-		Renderer::EndScene();
+		SpriteRenderer::EndScene();
 	}
 }
 
@@ -283,8 +283,8 @@ void Sandbox2D::OnEvent(Event& ev)
 
 void Sandbox2D::PlayerController()
 {
-	p_pos = player->m_Trans->GetPosition();
-	p_size = player->m_Trans->GetScale();
+	p_pos = player->m_Trans.GetPosition();
+	p_size = player->m_Trans.GetScale();
 
 	// --input------
 	bool left = Input::IsKeyPressed(Key::A), right = Input::IsKeyPressed(Key::D);
@@ -315,16 +315,16 @@ void Sandbox2D::PlayerController()
 		isJump = false;
 		for (size_t i = 0; i < plats.size(); i++)
 		{
-			if (!plats[i]->IsDestroyed()) {
-				plats[i]->m_Color = { 0.8,0.8f,0.8,1.0 };
-				if (plats[i]->IsCollidedX(player->GetChecker().x))
+			if (!plats[i].IsDestroyed()) {
+				plats[i].m_Color = { 0.8,0.8f,0.8,1.0 };
+				if (plats[i].IsCollidedX(player->GetChecker().x))
 				{
-					plats[i]->m_Color = { 1.0f,1.0f,1.0f,1.0 };
-					platY = plats[i]->GetPlatHeight();
+					plats[i].m_Color = { 1.0f,1.0f,1.0f,1.0 };
+					platY = plats[i].GetPlatHeight();
 					if (0 < playerY - platY)
 					{
 						if (playerY - platY < minDis) {
-							plats[i]->m_Color = { 1.0f,0.5f,0.5f,1.0 };
+							plats[i].m_Color = { 1.0f,0.5f,0.5f,1.0 };
 							isJump = true;
 							minDis = playerY - platY;
 							minIndex = (int)i;
@@ -345,10 +345,10 @@ void Sandbox2D::PlayerController()
 			//  do something
 			p_pos.y += vy;
 		}
-		else if (isJump && !plats[minIndex]->IsDestroyed())
+		else if (isJump && !plats[minIndex].IsDestroyed())
 		{
 			auto& curPlat = plats[minIndex];
-			auto platType = curPlat->m_Type;
+			auto platType = curPlat.m_Type;
 			p_pos.y -= minDis;
 			switch (platType)
 			{
@@ -358,10 +358,10 @@ void Sandbox2D::PlayerController()
 			}
 			case Plat::Type::WEAK: {
 				//p_pos.y -= minDis;
-				curPlat->SetDestroyed(true);
+				curPlat.SetDestroyed(true);
 				particle->Trigger(10,
-					{ curPlat->m_Trans->GetPosition().x,
-					curPlat->m_Trans->GetPosition().y, 0.5f },
+					{ curPlat.m_Trans.GetPosition().x,
+					curPlat.m_Trans.GetPosition().y, 0.5f },
 					{ 10.0f,10.0f,1.0f },
 					{ 0.8f,0.52f,0.0f,1.0f },
 					25.0f,
@@ -373,7 +373,7 @@ void Sandbox2D::PlayerController()
 			default:
 				break;
 			}
-			if (curID >= plats[minIndex]->m_ID)
+			if (curID >= plats[minIndex].m_ID)
 			{
 				combo = 0;
 			}
@@ -391,7 +391,7 @@ void Sandbox2D::PlayerController()
 				glm::clamp(-vy * 0.4f, 6.0f, 10.0f)
 			);
 
-			curID = plats[minIndex]->m_ID;
+			curID = plats[minIndex].m_ID;
 			vy = -minDis;
 		}
 		else
@@ -421,8 +421,8 @@ void Sandbox2D::PlayerController()
 
 #pragma region Apply
 	// --apply------
-	player->m_Trans->SetPosition(p_pos);
-	player->m_Trans->SetScale(p_size);
+	player->m_Trans.SetPosition(p_pos);
+	player->m_Trans.SetScale(p_size);
 #pragma endregion
 
 }
@@ -432,13 +432,13 @@ void Sandbox2D::BackgroundContorller()
 	HZ_PROFILE_FUNCTION();
 	static int tmpScore;
 	int bkrd = rand() % 10;
-	if (player->m_Trans->GetPosition().y >= maxHeight && !isGameOver)
+	if (player->m_Trans.GetPosition().y >= maxHeight && !isGameOver)
 	{
 		tmpScore += std::max(1, (int)(vy * 0.1f));
 		m_BackColor.r = 0.8f + 0.15f * cos(0.02f * (float)tmpScore);
 		for (size_t i = 0; i < back.size(); i++)
 		{
-			p_pos = back[i]->m_Trans->GetPosition();
+			p_pos = back[i]->m_Trans.GetPosition();
 			p_pos.y -= vy * 0.4f;
 			if (p_pos.y < -600.0f) {
 				if (bkrd < 5) {
@@ -449,7 +449,7 @@ void Sandbox2D::BackgroundContorller()
 				}
 				p_pos.y += 1200.0f;
 			}
-			back[i]->m_Trans->SetPosition(p_pos);
+			back[i]->m_Trans.SetPosition(p_pos);
 		}
 	}
 	else if (isGameOver) {
@@ -457,7 +457,7 @@ void Sandbox2D::BackgroundContorller()
 		m_BackColor.r = 0.8f + 0.15f * cos(0.01f * (float)tmpScore);
 		for (size_t i = 0; i < back.size(); i++)
 		{
-			p_pos = back[i]->m_Trans->GetPosition();
+			p_pos = back[i]->m_Trans.GetPosition();
 			p_pos.y -= vy * 0.02f;
 			if (p_pos.y > 600.0f) {
 				if (bkrd < 3) {
@@ -468,24 +468,24 @@ void Sandbox2D::BackgroundContorller()
 				}
 				p_pos.y -= 1200.0f;
 			}
-			back[i]->m_Trans->SetPosition(p_pos);
+			back[i]->m_Trans.SetPosition(p_pos);
 		}
 	}
 }
 
 void Sandbox2D::PlatsController()
 {
-	if (player->m_Trans->GetPosition().y >= maxHeight && !isGameOver)
+	if (player->m_Trans.GetPosition().y >= maxHeight && !isGameOver)
 	{
 		curScore += static_cast<int>(vy * 10) / 100;
-		std::sort(plats.begin(), plats.end(), [](Ref<Plat>a, Ref<Plat>b)
+		std::sort(plats.begin(), plats.end(), [](Plat& a, Plat& b)
 			{
-				return a->GetPlatHeight() > b->GetPlatHeight();
+				return a.GetPlatHeight() > b.GetPlatHeight();
 			});
-		auto curMaxHeight = plats[0]->m_Trans->GetPosition().y;
+		auto curMaxHeight = plats[0].m_Trans.GetPosition().y;
 		for (size_t i = 0; i < plats.size(); i++)
 		{
-			p_pos = plats[i]->m_Trans->GetPosition();
+			p_pos = plats[i].m_Trans.GetPosition();
 			p_pos.y -= vy;
 			if (p_pos.y < -520.0f)
 			{
@@ -495,24 +495,24 @@ void Sandbox2D::PlatsController()
 
 				CreatePlat(plats[i]);
 			}
-			plats[i]->m_Trans->SetPosition(p_pos);
-			plats[i]->Update();
+			plats[i].m_Trans.SetPosition(p_pos);
+			plats[i].Update();
 		}
 	}
 	else if (isGameOver) {
 		for (size_t i = 0; i < plats.size(); i++)
 		{
-			p_pos = plats[i]->m_Trans->GetPosition();
+			p_pos = plats[i].m_Trans.GetPosition();
 			p_pos.y -= vy;
-			plats[i]->m_Trans->SetPosition(p_pos);
-			plats[i]->Update();
+			plats[i].m_Trans.SetPosition(p_pos);
+			plats[i].Update();
 		}
 	}
 	else
 	{
 		for (auto& plat : plats)
 		{
-			plat->Update();
+			plat.Update();
 		}
 	}
 }
@@ -585,27 +585,27 @@ void Sandbox2D::TextController()
 	}
 }
 
-void Sandbox2D::CreatePlat(Ref<Plat> plat)
+void Sandbox2D::CreatePlat(Plat& plat)
 {
 	int rd = rand() % 100;
-	plat->Reset();
+	plat.Reset();
 	int otherRatio = (100 - normalPlatRatio) / 2;
 	if (rd < normalPlatRatio) {
-		plat->m_Type = Plat::Type::NORMAL;
-		plat->m_Sprite = sp_normalPlats[rand() % sp_normalPlats.size()];
+		plat.m_Type = Plat::Type::NORMAL;
+		plat.m_Sprite = sp_normalPlats[rand() % sp_normalPlats.size()];
 	}
 	else if (rd < normalPlatRatio + otherRatio) {
-		plat->m_Type = Plat::Type::WEAK;
-		plat->m_Sprite = sp_weakPlats[0];
+		plat.m_Type = Plat::Type::WEAK;
+		plat.m_Sprite = sp_weakPlats[0];
 	}
 	else {
-		plat->m_Type = Plat::Type::HORIZONTAL;
-		plat->m_Sprite = sp_normalPlats[rand() % sp_normalPlats.size()];
+		plat.m_Type = Plat::Type::HORIZONTAL;
+		plat.m_Sprite = sp_normalPlats[rand() % sp_normalPlats.size()];
 	}
 	/*else {
 
 	}*/
 
-	plat->m_Color = { 0.8,0.8f,0.8,1.0 };
-	plat->m_ID = curMaxID++;
+	plat.m_Color = { 0.8,0.8f,0.8,1.0 };
+	plat.m_ID = curMaxID++;
 }
