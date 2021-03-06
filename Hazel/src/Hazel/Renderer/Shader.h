@@ -41,7 +41,9 @@ namespace hazel
 
 		virtual void SetSampler2D(const std::string& name, const int& index)const = 0;
 
-		virtual void SetArray(const std::string& name, const int& size, const float* data)const = 0;
+		virtual void SetFloatArray(const std::string& name, const int& size, const float* data)const = 0;
+
+		virtual void SetIntArray(const std::string& name, const int& size, const int* data)const = 0;
 
 	public:
 		static Shader* Create(const std::string& filePath);

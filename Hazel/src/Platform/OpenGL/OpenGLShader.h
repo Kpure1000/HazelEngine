@@ -38,7 +38,9 @@ namespace hazel
 
 		virtual void SetSampler2D(const std::string& name, const int& index)const override;
 
-		virtual void SetArray(const std::string& name, const int& size, const float* data)const override;
+		virtual void SetFloatArray(const std::string& name, const int& size, const float* data)const override;
+		
+		virtual void SetIntArray(const std::string& name, const int& size, const int* data)const override;
 
 	private:
 		/// <summary>

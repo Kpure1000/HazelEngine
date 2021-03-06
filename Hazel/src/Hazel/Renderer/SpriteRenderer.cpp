@@ -7,22 +7,87 @@ namespace hazel
 {
 	SceneData* SpriteRenderer::m_SceneData = new SceneData;
 
+	SpriteRenderer::SpriteRendererData SpriteRenderer::m_RenderData = SpriteRenderer::SpriteRendererData();
+
 	void SpriteRenderer::Init()
 	{
 		HZ_PROFILE_FUNCTION();
 		RenderCommand::Init();
+
+		m_RenderData.VAO.reset(VertexArray::Create());
+
+		//  Dynamic VBO
+		m_RenderData.VBO.reset(VertexBuffer::Create(sizeof(SpriteVertex) * m_RenderData.MaxVertices));
+		m_RenderData.VBO->SetLayout({
+			{ShaderDataType::Float3,"aPos"},
+			{ShaderDataType::Float4,"aColor"},
+			{ShaderDataType::Float2,"aTexCoord"},
+			{ShaderDataType::Float,"aTexIndex"},
+			});
+		m_RenderData.VAO->AddVertexBuffer(m_RenderData.VBO);
+
+		m_RenderData.VBBase = new SpriteVertex[m_RenderData.MaxVertices];
+		m_RenderData.VBPtr = m_RenderData.VBBase;
+
+		//  Generate indexBuffer
+		auto spritesIndices = new unsigned int[m_RenderData.MaxIndices];
+		unsigned int offset = 0;
+		for (unsigned int i = 0; i < m_RenderData.MaxIndices; i += 6)
+		{
+			spritesIndices[i + 0] = offset + 0;
+			spritesIndices[i + 1] = offset + 1;
+			spritesIndices[i + 2] = offset + 2;
+
+			spritesIndices[i + 3] = offset + 2;
+			spritesIndices[i + 4] = offset + 3;
+			spritesIndices[i + 5] = offset + 0;
+
+			offset += 4;
+		}
+		Ref<IndexBuffer> quadIB(IndexBuffer::Create(spritesIndices, m_RenderData.MaxIndices));
+		m_RenderData.VAO->SetIndexBuffer(quadIB);
+		delete[] spritesIndices;
+
+		//  White Texture
+		m_RenderData.whiteTexture.reset(Texture2D::Create());
+		unsigned char whiteData[4] = { 0xff,0xff ,0xff ,0xff };
+		m_RenderData.whiteTexture->LoadFromMemory(1, 1, 4, whiteData);
+
+		//  Texture slots
+		int texSamplers[m_RenderData.MaxTextureSlots];
+		for (int i = 0; i < m_RenderData.MaxTextureSlots; i++)
+			texSamplers[i] = i;
+		m_RenderData.textureSlots.at(0) = m_RenderData.whiteTexture;
+
+		//  Texture shader
+		m_RenderData.textureShader.reset(Shader::Create("../data/shader/Default/sprite_ulit.glsl"));
+		m_RenderData.textureShader->Use();
+		m_RenderData.textureShader->SetIntArray("_textures", m_RenderData.MaxTextureSlots, texSamplers);
+
+		//  Set initial position of each vertex
+		m_RenderData.spriteVertexPosition[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+		m_RenderData.spriteVertexPosition[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+		m_RenderData.spriteVertexPosition[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+		m_RenderData.spriteVertexPosition[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 	}
-	
+
+	void SpriteRenderer::Shutdown()
+	{
+		delete[] m_RenderData.VBBase;
+	}
+
 	void SpriteRenderer::BeginScene(OrthographicCamera& camera)
 	{
 		m_SceneData->ProjectMat = camera.GetProjectMat();
-		m_SceneData->ViewProjectMat= camera.GetViewProjectMat();
+		m_SceneData->ViewProjectMat = camera.GetViewProjectMat();
+
+		m_RenderData.textureShader->SetMatrix4("_view_prj", m_SceneData->ViewProjectMat);
 	}
-	
+
 	void SpriteRenderer::EndScene()
 	{
 	}
-	
+
 	void SpriteRenderer::Submit(const Sprite& sprite, Transform& trans, const Shader& shader)
 	{
 		shader.Use();
@@ -32,7 +97,7 @@ namespace hazel
 		sprite.GetVertexArray()->Bind();
 		RenderCommand::DrawIndexed(sprite.GetVertexArray());
 	}
-	
+
 	void SpriteRenderer::Submit(const Text& text, Transform& trans, const Shader& shader)
 	{
 		shader.Use();

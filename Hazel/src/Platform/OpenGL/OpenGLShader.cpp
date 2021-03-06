@@ -253,9 +253,14 @@ namespace hazel
 		glUniform1i(GetPropertyID(name), index);
 	}
 
-	void OpenGLShader::SetArray(const std::string& name, const int& size, const float* data)const
+	void OpenGLShader::SetFloatArray(const std::string& name, const int& size, const float* data)const
 	{
 		glUniform1fv(GetPropertyID(name), size, data);
+	}
+
+	void OpenGLShader::SetIntArray(const std::string& name, const int& size, const int* data) const
+	{
+		glUniform1iv(GetPropertyID(name), size, data);
 	}
 
 	int OpenGLShader::GetPropertyID(const std::string& name) const
