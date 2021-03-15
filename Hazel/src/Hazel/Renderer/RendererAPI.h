@@ -25,7 +25,7 @@ namespace hazel
 
 		virtual void DrawBuffered(const Ref<VertexArray>& vertexArray) = 0;
 
-		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, size_t indexCount) = 0;
 
 		inline static API GetAPI() { return m_API; }
 

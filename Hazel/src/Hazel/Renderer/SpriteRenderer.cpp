@@ -98,6 +98,50 @@ namespace hazel
 		RenderCommand::DrawIndexed(sprite.GetVertexArray());
 	}
 
+	void SpriteRenderer::Submit(Transform& trans, const glm::vec4 color, const Ref<Texture2D> texture)
+	{
+		constexpr size_t quadVertexCount = 4;
+		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+		if (m_RenderData.indexCount >= SpriteRendererData::MaxIndices)
+			NextBatch();
+
+		float textureIndex = 0.0f;
+		for (int i = 1; i < m_RenderData.textureSlotIndex; i++)
+		{
+			if (*m_RenderData.textureSlots[i] == *texture)
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (m_RenderData.textureSlotIndex >= SpriteRendererData::MaxTextureSlots)
+				NextBatch();
+
+			textureIndex = (float)m_RenderData.textureSlotIndex;
+			m_RenderData.textureSlots[m_RenderData.textureSlotIndex] = texture;
+			m_RenderData.textureSlotIndex++;
+		}
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			m_RenderData.VBPtr->position = trans.GetTransMat() * m_RenderData.spriteVertexPosition[i];
+			m_RenderData.VBPtr->color = color;
+			m_RenderData.VBPtr->texCoods = textureCoords[i];
+			m_RenderData.VBPtr->texIndex = textureIndex;
+			//m_RenderData.VBPtr->TilingFactor = tilingFactor;
+			m_RenderData.VBPtr++;
+		}
+
+		//  add 6 vertex indices
+		m_RenderData.indexCount += 6;
+
+		m_RenderData.stats.QuadCount++;
+	}
+
 	void SpriteRenderer::Submit(const Text& text, Transform& trans, const Shader& shader)
 	{
 		shader.Use();
@@ -171,5 +215,34 @@ namespace hazel
 			//  offset 2^6 
 			pos.x += (ch.advance >> 6) * scale.x;
 		}
+	}
+
+	void SpriteRenderer::Flush()
+	{
+		if (m_RenderData.indexCount == 0)
+			return; // Nothing to draw
+
+		size_t dataSize = (size_t)((uint8_t*)m_RenderData.VBPtr - (uint8_t*)m_RenderData.VBBase);
+		m_RenderData.VBO->SetData(m_RenderData.VBBase, dataSize);
+
+		// Bind textures
+		for (int i = 0; i < m_RenderData.textureSlotIndex; i++)
+			m_RenderData.textureSlots[i]->Bind(i);
+
+		RenderCommand::DrawIndexed(m_RenderData.VAO, m_RenderData.indexCount);
+		m_RenderData.stats.DrawCalls++;
+	}
+
+	void SpriteRenderer::StartBatch()
+	{
+		m_RenderData.indexCount = 0;
+		m_RenderData.VBPtr = m_RenderData.VBBase;
+		m_RenderData.textureSlotIndex = 1;
+	}
+
+	void SpriteRenderer::NextBatch()
+	{
+		Flush();
+		StartBatch();
 	}
 }

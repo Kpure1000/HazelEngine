@@ -24,6 +24,8 @@ namespace hazel
 		static void Submit(const Sprite& sprite,
 			Transform& trans, const Shader& shader);
 
+		static void Submit(Transform& trans, const glm::vec4 color, const Ref<Texture2D> texture);
+
 		static void Submit(const Text& text,
 			Transform& trans, const Shader& shader);
 
@@ -34,7 +36,7 @@ namespace hazel
 	private:
 		static void StartBatch();
 
-		static void NewBatch();
+		static void NextBatch();
 
 	private:
 		struct SpriteVertex
@@ -63,13 +65,13 @@ namespace hazel
 
 			size_t textureSlotIndex = 1; // 0 = white texture
 			size_t indexCount = 0;
-			
+
 			glm::vec4 spriteVertexPosition[4];
-			
+
 			SpriteRenderer::Statistics stats;
-			
+
 			std::array<Ref<Texture2D>, MaxTextureSlots> textureSlots;
-			
+
 			SpriteVertex* VBBase = nullptr;
 			SpriteVertex* VBPtr = nullptr;
 

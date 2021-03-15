@@ -12,12 +12,12 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 aColor;
 layout (location = 2) in vec2 aTexCooord;
-layout (location = 3) in float aTexIndex
+layout (location = 3) in float aTexIndex;
 
 out vec3 inFragPos;
 out vec4 inColor;
 out vec2 inTexCoord;
-out int inTexIndex;
+flat out int inTexIndex;
 
 uniform mat4 _view_prj; 
 
@@ -41,11 +41,11 @@ void main()
 in vec3 inFragPos;
 in vec4 inColor;
 in vec2 inTexCoord;
-in int inTexIndex;
+flat in int inTexIndex;
 
 out vec4 fragOut;
 
-uniform sampler2D _textures;
+uniform sampler2D _textures[32];
 
 void main()
 {

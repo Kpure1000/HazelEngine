@@ -35,9 +35,9 @@ namespace hazel
 			m_RendererAPI->DrawBuffered(vertexArray);
 		}
 
-		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
+		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, size_t indexCount=0)
 		{
-			m_RendererAPI->DrawIndexed(vertexArray);
+			m_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 	private:
 		static RendererAPI* m_RendererAPI;

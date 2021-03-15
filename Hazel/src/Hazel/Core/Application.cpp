@@ -13,6 +13,7 @@
 #include "Hazel/Debug/Instrumentor.h"
 
 #include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/SpriteRenderer.h"
 
 using std::unique_ptr;
 
@@ -41,7 +42,7 @@ namespace hazel
 
 		m_IsRunning = true;
 
-		Renderer::Init();
+		SpriteRenderer::Init();
 	}
 
 	Application::~Application()
