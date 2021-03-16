@@ -6,6 +6,8 @@
 
 namespace hazel
 {
+	const float Math::Pi = glm::pi<float>();
+
 	float Math::SmoothDamp(float current, float target,
 		float& velocity, float smoothTime,
 		float maxSpeed = FLT_MAX, float deltaTime = Time::deltaTime())

@@ -19,4 +19,9 @@ public:
 
 private:
 	OrthographicCameraController m_CameraController;
+
+	Sprite m_Sprite;
+	Transform m_Trans;
+	Ref<Texture2D> m_Tex;
+
 };

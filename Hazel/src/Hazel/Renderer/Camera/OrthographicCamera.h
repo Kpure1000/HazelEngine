@@ -61,7 +61,7 @@ namespace hazel
 		{
 			m_Projection = {
 				glm::ortho(left_bottom.x, right_top.x, left_bottom.y, right_top.y,
-				-10.0f, 100.0f)
+				-2000.0f, 2000.0f)
 			};
 			m_IsUpdated = true;
 		}

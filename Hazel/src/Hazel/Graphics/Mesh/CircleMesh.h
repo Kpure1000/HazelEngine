@@ -4,12 +4,6 @@
 
 #include <cmath>
 
-#ifndef Pi
-#define Pi 3.1415927f
-
-#endif // !Pi
-
-
 namespace hazel
 {
 	class CircleMesh : public Mesh
@@ -35,16 +29,16 @@ namespace hazel
 			for (size_t i = 8; i < vertexNum; i += 8)
 			{
 				//  position
-				vert[i] = R * (float)cos(Pi * 2.0f / (float)m_SideCount * sideCount); //  x
-				vert[i + 1] = R * (float)sin(Pi * 2.0f / (float)m_SideCount * sideCount); //  y
+				vert[i] = R * (float)cos(Math::Pi * 2.0f / (float)m_SideCount * sideCount); //  x
+				vert[i + 1] = R * (float)sin(Math::Pi * 2.0f / (float)m_SideCount * sideCount); //  y
 				vert[i + 2] = 0.0f; //  z
 				//  normal
 				vert[i + 3] = 0.0f; //  x
 				vert[i + 4] = 0.0f; //  y
 				vert[i + 5] = 1.0f; //  z
 				//  texCoords
-				vert[i + 6] = 0.5f + R * (float)cos(Pi * 2.0f / (float)m_SideCount * sideCount); //  u
-				vert[i + 7] = 0.0f + R * (float)sin(Pi * 2.0f / (float)m_SideCount * sideCount); //  v
+				vert[i + 6] = 0.5f + R * (float)cos(Math::Pi * 2.0f / (float)m_SideCount * sideCount); //  u
+				vert[i + 7] = 0.0f + R * (float)sin(Math::Pi * 2.0f / (float)m_SideCount * sideCount); //  v
 				sideCount++;
 			}
 

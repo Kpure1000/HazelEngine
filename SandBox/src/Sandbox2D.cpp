@@ -12,7 +12,7 @@ Sandbox2D::Sandbox2D()
 	Application::GetInstance()->GetWindow().SetResizable(true);
 	m_CameraController.EnableInput(false);
 	m_ShaderManager = std::make_shared<ShaderManager>();
-	
+
 	//  load assets
 	m_ShaderManager->Load("../data/shader/Sandbox2D_tex.glsl");
 	m_ShaderManager->Load("../data/shader/Sandbox2D_color.glsl");
@@ -163,6 +163,7 @@ void Sandbox2D::OnUpdate()
 		RenderCommand::Clear();
 	}
 
+	SpriteRenderer::ResetState();
 	{
 		HZ_PROFILE_SCOPE("BeginScene");
 		SpriteRenderer::BeginScene(m_CameraController.GetCamera());
@@ -175,11 +176,12 @@ void Sandbox2D::OnUpdate()
 			HZ_PROFILE_SCOPE("Rendering Background");
 			for (auto& it : back)
 			{
-				it->m_Shader->Use();
+				/*it->m_Shader->Use();
 				it->m_Tex->Bind(0);
 				it->m_Shader->SetSampler2D("_tx", 0);
 				it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
-				SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, *it->m_Shader);
+				SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, *it->m_Shader);*/
+				SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, it->m_Tex);
 			}
 		}
 
@@ -189,24 +191,26 @@ void Sandbox2D::OnUpdate()
 			for (auto& plat : plats)
 			{
 				if (plat.m_Color.a > 0.1f && plat.m_Trans.GetPosition().y < 520.0f) {
-					plat.m_Shader->Use();
+					/*plat.m_Shader->Use();
 					plat.m_Tex->Bind(0);
 					plat.m_Shader->SetSampler2D("_tx", 0);
 					plat.m_Shader->SetVector4("_color", plat.m_Color);
-					SpriteRenderer::Submit(plat.m_Sprite, plat.m_Trans, *plat.m_Shader);
+					SpriteRenderer::Submit(plat.m_Sprite, plat.m_Trans, *plat.m_Shader);*/
+					SpriteRenderer::Submit(plat.m_Sprite, plat.m_Trans, plat.m_Tex, plat.m_Color);
 				}
 			}
 		}
-		
+
 		{
 			HZ_PROFILE_SCOPE("Rendering Praticles");
 			//  render Particle
 			for (auto& ptc : particle->ptc())
 			{
 				if (ptc.lifeTime > 0.0f) {
-					particle->m_Shader->Use();
-					particle->m_Shader->SetVector4("_color", ptc.m_Color);
-					SpriteRenderer::Submit(ptc.m_Mesh, ptc.m_Trans, *particle->m_Shader);
+					/*particle->m_Shader->Use();
+					particle->m_Shader->SetVector4("_color", ptc.m_Color);*/
+					//SpriteRenderer::Submit(ptc.m_Mesh, ptc.m_Trans, *particle->m_Shader);
+					SpriteRenderer::Submit(ptc.m_Mesh, ptc.m_Trans, particle->m_Tex, ptc.m_Color);
 				}
 			}
 		}
@@ -214,16 +218,18 @@ void Sandbox2D::OnUpdate()
 		{
 			HZ_PROFILE_SCOPE("Rendering Player");
 			//  render player
-			player->m_Shader->Use();
+			/*player->m_Shader->Use();
 			player->m_Tex->Bind(0);
 			player->m_Shader->SetSampler2D("_tx", 0);
-			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, *player->m_Shader);
+			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, *player->m_Shader);*/
+			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, player->m_Tex);
 		}
 
 		{
 			HZ_PROFILE_SCOPE("Rendering Text");
 			//  render text
-			SpriteRenderer::Submit(*m_Text, *m_TextTrans, *m_TextShader);
+			//SpriteRenderer::Submit(*m_Text, *m_TextTrans, *m_TextShader);
+			//SpriteRenderer::Submit(*m_Text, *m_TextTrans);
 		}
 	}
 
@@ -239,10 +245,11 @@ void Sandbox2D::OnImGuiRender()
 
 	p_pos = m_TextTrans->GetPosition();
 	p_size = m_TextTrans->GetScale();
-	
+
 	ImGui::Begin("Debugger");
 
 	ImGui::Checkbox("Render Background?", &isRenderBackground);
+	ImGui::Text("DrawCalls: %lld", SpriteRenderer::GetState().DrawCalls);
 	ImGui::Text("Frame: %f", 1.0f / Time::deltaTime());
 	ImGui::Text("Current Plats Numbers: %d", curPlatNum);
 	ImGui::Text("------------------");
@@ -251,9 +258,9 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::DragFloat("Move velocity", &moveSpeed, 0.1f, 30.0f, 50.0f, "%.2f", 1.0f);
 	ImGui::DragFloat3("Text Position", glm::value_ptr(p_pos), 0.2f, -512.0f, 512.0f, "%.2f", 1.0f);
 	ImGui::DragFloat3("Text Scale", glm::value_ptr(p_size), 0.02f, -3.0f, 3.0f, "%.2f", 1.0f);
-	
+
 	ImGui::End();
-	
+
 	m_TextTrans->SetPosition(p_pos);
 	m_TextTrans->SetScale(p_size);
 }
@@ -385,7 +392,7 @@ void Sandbox2D::PlayerController()
 			particle->Trigger(
 				glm::clamp(int(-vy * 0.3f), 2, 10),
 				{ player->GetChecker().x, player->GetChecker().y + minDis, 0.5f },
-				{ 10.0f,10.0f,1.0f } ,
+				{ 10.0f,10.0f,1.0f },
 				{ 0.52f,0.65f,0.16f,1.0f },
 				15.0f,
 				glm::clamp(-vy * 0.4f, 6.0f, 10.0f)

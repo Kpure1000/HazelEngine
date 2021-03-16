@@ -48,6 +48,8 @@ namespace hazel
 	Application::~Application()
 	{
 		HZ_PROFILE_END_SESSION();
+
+		SpriteRenderer::Shutdown();
 	}
 
 	void Application::OnEvent(Event& ev)

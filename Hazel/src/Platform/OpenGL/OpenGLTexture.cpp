@@ -9,7 +9,7 @@
 
 namespace hazel
 {
-	const int OpenGLTexture::MaxTextureIndices = GL_TEXTURE30 - GL_TEXTURE0;
+	const int OpenGLTexture::MaxTextureIndices = GL_TEXTURE31 - GL_TEXTURE0;
 
 	void OpenGLTexture::Bind(const int& index)const
 	{

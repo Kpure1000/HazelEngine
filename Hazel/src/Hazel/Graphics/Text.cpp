@@ -81,7 +81,7 @@ namespace hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		BufferLayout layout_vert = {
+		/*BufferLayout layout_vert = {
 			{ShaderDataType::Float3,"aPos"},
 		};
 		BufferLayout layout_texc = {
@@ -97,7 +97,7 @@ namespace hazel
 		m_VertexArray->AddVertexBuffer(m_VBO_TEXC);
 
 		m_EBO.reset(IndexBuffer::Create(6));
-		m_VertexArray->SetIndexBuffer(m_EBO);
+		m_VertexArray->SetIndexBuffer(m_EBO);*/
 	}
 
 

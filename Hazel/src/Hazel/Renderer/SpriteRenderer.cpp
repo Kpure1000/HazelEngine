@@ -66,9 +66,9 @@ namespace hazel
 
 		//  Set initial position of each vertex
 		m_RenderData.spriteVertexPosition[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-		m_RenderData.spriteVertexPosition[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+		m_RenderData.spriteVertexPosition[1] = { -0.5f, 0.5f, 0.0f, 1.0f };
 		m_RenderData.spriteVertexPosition[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
-		m_RenderData.spriteVertexPosition[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+		m_RenderData.spriteVertexPosition[3] = { 0.5f, -0.5f, 0.0f, 1.0f };
 	}
 
 	void SpriteRenderer::Shutdown()
@@ -81,11 +81,13 @@ namespace hazel
 		m_SceneData->ProjectMat = camera.GetProjectMat();
 		m_SceneData->ViewProjectMat = camera.GetViewProjectMat();
 
+		m_RenderData.textureShader->Use();
 		m_RenderData.textureShader->SetMatrix4("_view_prj", m_SceneData->ViewProjectMat);
 	}
 
 	void SpriteRenderer::EndScene()
 	{
+		NewBatch();
 	}
 
 	void SpriteRenderer::Submit(const Sprite& sprite, Transform& trans, const Shader& shader)
@@ -98,39 +100,63 @@ namespace hazel
 		RenderCommand::DrawIndexed(sprite.GetVertexArray());
 	}
 
-	void SpriteRenderer::Submit(Transform& trans, const glm::vec4 color, const Ref<Texture2D> texture)
+	void SpriteRenderer::Submit(const Sprite& sprite, Transform& trans, const Ref<Texture2D> texture, const glm::vec4 color)
 	{
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+		auto texSize = sprite.GetSize();
+		auto left = (float)-texSize.x * 0.5f;
+		auto buttom = (float)-texSize.y * 0.5f;
+		auto right = (float)texSize.x * 0.5f;
+		auto top = (float)texSize.y * 0.5f;
+		m_RenderData.spriteVertexPosition[0].x = left;
+		m_RenderData.spriteVertexPosition[0].y = buttom;
+		m_RenderData.spriteVertexPosition[1].x = left;
+		m_RenderData.spriteVertexPosition[1].y = top;
+		m_RenderData.spriteVertexPosition[2].x = right;
+		m_RenderData.spriteVertexPosition[2].y = top;
+		m_RenderData.spriteVertexPosition[3].x = right;
+		m_RenderData.spriteVertexPosition[3].y = buttom;
+
+		auto uv = sprite.GetUV();
+		m_RenderData.textureCoords[0] = { uv.x, uv.y };
+		m_RenderData.textureCoords[1] = { uv.x, uv.w };
+		m_RenderData.textureCoords[2] = { uv.z, uv.w };
+		m_RenderData.textureCoords[3] = { uv.z, uv.y };
 
 		if (m_RenderData.indexCount >= SpriteRendererData::MaxIndices)
-			NextBatch();
+			NewBatch();
 
 		float textureIndex = 0.0f;
 		for (int i = 1; i < m_RenderData.textureSlotIndex; i++)
 		{
-			if (*m_RenderData.textureSlots[i] == *texture)
+			if (nullptr != texture && *m_RenderData.textureSlots[i] == *texture)
 			{
 				textureIndex = (float)i;
 				break;
 			}
+			else
+			{
+				break;
+			}
 		}
 
-		if (textureIndex == 0.0f)
+		if (textureIndex == 0.0f && nullptr != texture)
 		{
 			if (m_RenderData.textureSlotIndex >= SpriteRendererData::MaxTextureSlots)
-				NextBatch();
+				NewBatch();
 
 			textureIndex = (float)m_RenderData.textureSlotIndex;
 			m_RenderData.textureSlots[m_RenderData.textureSlotIndex] = texture;
 			m_RenderData.textureSlotIndex++;
 		}
 
+
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			m_RenderData.VBPtr->position = trans.GetTransMat() * m_RenderData.spriteVertexPosition[i];
 			m_RenderData.VBPtr->color = color;
-			m_RenderData.VBPtr->texCoods = textureCoords[i];
+			m_RenderData.VBPtr->texCoods = m_RenderData.textureCoords[i];
 			m_RenderData.VBPtr->texIndex = textureIndex;
 			//m_RenderData.VBPtr->TilingFactor = tilingFactor;
 			m_RenderData.VBPtr++;
@@ -217,6 +243,92 @@ namespace hazel
 		}
 	}
 
+	void SpriteRenderer::Submit(const Text& text, Transform& trans)
+	{
+		m_RenderData.textureShader->Use();
+		m_RenderData.textureShader->SetMatrix4("_view_prj", m_SceneData->ProjectMat);
+
+		constexpr size_t quadVertexCount = 4;
+
+		auto& content = text.GetText();
+		auto characters = text.GetCharacters();
+		auto scale = trans.GetScale();
+
+		auto pos = trans.GetPosition();
+		for (auto chStr : content)
+		{
+			Character ch = characters[chStr];
+
+			if (chStr == '\n')
+			{
+				pos.y -= (ch.size.y << 1) * scale.y;
+				pos.x = trans.GetPosition().x;
+				continue;
+			}
+
+			float xpos = pos.x + ch.bearing.x * scale.x;
+			float ypos = pos.y - (ch.size.y - ch.bearing.y) * scale.y;
+
+			float w = ch.size.x * scale.x;
+			float h = ch.size.y * scale.y;
+
+			m_RenderData.spriteVertexPosition[0] = { xpos,     ypos + h, pos.z, 1.0f };
+			m_RenderData.spriteVertexPosition[1] = { xpos,     ypos,     pos.z, 1.0f };
+			m_RenderData.spriteVertexPosition[2] = { xpos + w, ypos,     pos.z, 1.0f };
+			m_RenderData.spriteVertexPosition[3] = { xpos + w, ypos + h, pos.z, 1.0f };
+
+			m_RenderData.textureCoords[0] = { 0.0, 0.0 };
+			m_RenderData.textureCoords[1] = { 0.0, 1.0 };
+			m_RenderData.textureCoords[2] = { 1.0, 1.0 };
+			m_RenderData.textureCoords[3] = { 1.0, 0.0 };
+
+			if (m_RenderData.indexCount >= SpriteRendererData::MaxIndices)
+				NewBatch();
+
+			float textureIndex = 0.0f;
+			for (int i = 1; i < m_RenderData.textureSlotIndex; i++)
+			{
+				if (nullptr != ch.texture && *m_RenderData.textureSlots[i] == *ch.texture)
+				{
+					textureIndex = (float)i;
+					break;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			if (textureIndex == 0.0f && nullptr != ch.texture)
+			{
+				if (m_RenderData.textureSlotIndex >= SpriteRendererData::MaxTextureSlots)
+					NewBatch();
+
+				textureIndex = (float)m_RenderData.textureSlotIndex;
+				m_RenderData.textureSlots[m_RenderData.textureSlotIndex] = ch.texture;
+				m_RenderData.textureSlotIndex++;
+			}
+
+			for (size_t i = 0; i < quadVertexCount; i++)
+			{
+				m_RenderData.VBPtr->position = trans.GetTransMat() * m_RenderData.spriteVertexPosition[i];
+				m_RenderData.VBPtr->color = text.GetColor();
+				m_RenderData.VBPtr->texCoods = m_RenderData.textureCoords[i];
+				m_RenderData.VBPtr->texIndex = textureIndex;
+				//m_RenderData.VBPtr->TilingFactor = tilingFactor;
+				m_RenderData.VBPtr++;
+			}
+
+			//  add 6 vertex indices
+			m_RenderData.indexCount += 6;
+
+			m_RenderData.stats.QuadCount++;
+			
+			//  offset 2^6 
+			pos.x += (ch.advance >> 6) * scale.x;
+		}
+	}
+
 	void SpriteRenderer::Flush()
 	{
 		if (m_RenderData.indexCount == 0)
@@ -240,7 +352,7 @@ namespace hazel
 		m_RenderData.textureSlotIndex = 1;
 	}
 
-	void SpriteRenderer::NextBatch()
+	void SpriteRenderer::NewBatch()
 	{
 		Flush();
 		StartBatch();

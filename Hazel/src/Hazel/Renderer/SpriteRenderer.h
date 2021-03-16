@@ -14,6 +14,8 @@ namespace hazel
 {
 	class HAZEL_API SpriteRenderer
 	{
+		struct Statistics;
+
 	public:
 		static void Init();
 		static void Shutdown();
@@ -24,25 +26,30 @@ namespace hazel
 		static void Submit(const Sprite& sprite,
 			Transform& trans, const Shader& shader);
 
-		static void Submit(Transform& trans, const glm::vec4 color, const Ref<Texture2D> texture);
+		static void Submit(const Sprite& sprite, Transform& trans, const Ref<Texture2D> texture, const glm::vec4 color = glm::vec4(1.0f));
 
-		static void Submit(const Text& text,
-			Transform& trans, const Shader& shader);
+		static void Submit(const Text& text, Transform& trans, const Shader& shader);
+		
+		static void Submit(const Text& text, Transform& trans);
 
 		static void Flush();
 
+		static void NewBatch();
+
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+
+		inline static void ResetState() { memset(&m_RenderData.stats, 0, sizeof(Statistics)); }
+
+		inline static Statistics GetState() { return m_RenderData.stats; }
 
 	private:
 		static void StartBatch();
-
-		static void NextBatch();
 
 	private:
 		struct SpriteVertex
 		{
 			glm::vec3 position;
-			glm::vec3 color;
+			glm::vec4 color;
 			glm::vec2 texCoods;
 			float texIndex;
 		};
@@ -58,15 +65,16 @@ namespace hazel
 
 		struct SpriteRendererData
 		{
-			static const size_t MaxSprites = 20000;
+			static const size_t MaxSprites = 30;
 			static const size_t MaxVertices = MaxSprites * 4;
 			static const size_t MaxIndices = MaxSprites * 6;
-			static const size_t MaxTextureSlots = 32; // TODO: RenderCaps
+			static const size_t MaxTextureSlots = 31; // TODO: RenderCaps
 
 			size_t textureSlotIndex = 1; // 0 = white texture
 			size_t indexCount = 0;
 
 			glm::vec4 spriteVertexPosition[4];
+			glm::vec2 textureCoords[4];
 
 			SpriteRenderer::Statistics stats;
 

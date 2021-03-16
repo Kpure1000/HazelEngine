@@ -4,6 +4,8 @@
 
 #include "Hazel/Renderer/VertexArray.h"
 
+#include "Hazel/Utility/Math.h"
+
 #include <vector>
 
 namespace hazel
