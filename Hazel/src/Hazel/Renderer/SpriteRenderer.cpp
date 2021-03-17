@@ -63,6 +63,10 @@ namespace hazel
 		m_RenderData.textureShader.reset(Shader::Create("../data/shader/Default/sprite_ulit.glsl"));
 		m_RenderData.textureShader->Use();
 		m_RenderData.textureShader->SetIntArray("_textures", m_RenderData.MaxTextureSlots, texSamplers);
+		//  Text shader
+		m_RenderData.textShader.reset(Shader::Create("../data/shader/Default/text_freetype.glsl"));
+		m_RenderData.textShader->Use();
+		m_RenderData.textShader->SetIntArray("_textures", m_RenderData.MaxTextureSlots, texSamplers);
 
 		//  Set initial position of each vertex
 		m_RenderData.spriteVertexPosition[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
@@ -128,15 +132,11 @@ namespace hazel
 			NewBatch();
 
 		float textureIndex = 0.0f;
-		for (int i = 1; i < m_RenderData.textureSlotIndex; i++)
+		for (int i = 1; nullptr != texture && i < m_RenderData.textureSlotIndex; i++)
 		{
-			if (nullptr != texture && *m_RenderData.textureSlots[i] == *texture)
+			if (*m_RenderData.textureSlots[i] == *texture)
 			{
 				textureIndex = (float)i;
-				break;
-			}
-			else
-			{
 				break;
 			}
 		}
@@ -245,8 +245,8 @@ namespace hazel
 
 	void SpriteRenderer::Submit(const Text& text, Transform& trans)
 	{
-		m_RenderData.textureShader->Use();
-		m_RenderData.textureShader->SetMatrix4("_view_prj", m_SceneData->ProjectMat);
+		m_RenderData.textShader->Use();
+		m_RenderData.textShader->SetMatrix4("_projection", m_SceneData->ProjectMat);
 
 		constexpr size_t quadVertexCount = 4;
 
@@ -254,23 +254,23 @@ namespace hazel
 		auto characters = text.GetCharacters();
 		auto scale = trans.GetScale();
 
-		auto pos = trans.GetPosition();
+		glm::vec3 pos = { 0.0f,0.0f,0.0f };
 		for (auto chStr : content)
 		{
 			Character ch = characters[chStr];
 
 			if (chStr == '\n')
 			{
-				pos.y -= (ch.size.y << 1) * scale.y;
-				pos.x = trans.GetPosition().x;
+				pos.y -= (ch.size.y << 1);
+				pos.x = 0.0f;
 				continue;
 			}
 
-			float xpos = pos.x + ch.bearing.x * scale.x;
-			float ypos = pos.y - (ch.size.y - ch.bearing.y) * scale.y;
+			float xpos = pos.x + ch.bearing.x;
+			float ypos = pos.y - (ch.size.y - ch.bearing.y);
 
-			float w = ch.size.x * scale.x;
-			float h = ch.size.y * scale.y;
+			float w = ch.size.x;
+			float h = ch.size.y;
 
 			m_RenderData.spriteVertexPosition[0] = { xpos,     ypos + h, pos.z, 1.0f };
 			m_RenderData.spriteVertexPosition[1] = { xpos,     ypos,     pos.z, 1.0f };
@@ -286,15 +286,11 @@ namespace hazel
 				NewBatch();
 
 			float textureIndex = 0.0f;
-			for (int i = 1; i < m_RenderData.textureSlotIndex; i++)
+			for (int i = 1; nullptr != ch.texture && i < m_RenderData.textureSlotIndex; i++)
 			{
-				if (nullptr != ch.texture && *m_RenderData.textureSlots[i] == *ch.texture)
+				if (*m_RenderData.textureSlots[i] == *ch.texture)
 				{
 					textureIndex = (float)i;
-					break;
-				}
-				else
-				{
 					break;
 				}
 			}
@@ -325,7 +321,7 @@ namespace hazel
 			m_RenderData.stats.QuadCount++;
 			
 			//  offset 2^6 
-			pos.x += (ch.advance >> 6) * scale.x;
+			pos.x += (ch.advance >> 6);
 		}
 	}
 

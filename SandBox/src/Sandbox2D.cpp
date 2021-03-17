@@ -11,9 +11,9 @@ Sandbox2D::Sandbox2D()
 	srand((unsigned int)(time(NULL)));
 	Application::GetInstance()->GetWindow().SetResizable(true);
 	m_CameraController.EnableInput(false);
-	m_ShaderManager = std::make_shared<ShaderManager>();
-
+	
 	//  load assets
+	m_ShaderManager = std::make_shared<ShaderManager>();
 	m_ShaderManager->Load("../data/shader/Sandbox2D_tex.glsl");
 	m_ShaderManager->Load("../data/shader/Sandbox2D_color.glsl");
 	m_ShaderManager->Load("../data/shader/Sandbox2D_blend.glsl");
@@ -43,7 +43,7 @@ Sandbox2D::Sandbox2D()
 	m_Text = text;
 	m_Text->SetColor({ 1.0f,0.3f,0.3f,1.0f });
 	m_TextTrans = std::make_shared<Transform>();
-	m_TextTrans->SetPosition({ -240.0f,420.0f,2.0f });
+	m_TextTrans->SetPosition({ -263.0f,393.0f,2.0f });
 	m_TextTrans->SetScale({ 0.4f,0.4f,1.0f });
 
 	//  init player
@@ -141,9 +141,13 @@ void Sandbox2D::OnUpdate()
 {
 	HZ_PROFILE_FUNCTION();
 
-	m_CameraController.OnUpdate();
 	{
-		HZ_PROFILE_SCOPE("Controller");
+		HZ_PROFILE_SCOPE("Update CameraController");
+		m_CameraController.OnUpdate();
+	}
+
+	{
+		HZ_PROFILE_SCOPE("Update GamePlay Controller");
 		BackgroundContorller();
 		if (!isQuit) {
 			DifficultyController();
@@ -152,11 +156,13 @@ void Sandbox2D::OnUpdate()
 		}
 		TextController();
 	}
+
 	{
 		HZ_PROFILE_SCOPE("Particle update");
 		particle->Update(gravity,
 			player->m_Trans.GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
 	}
+
 	{
 		HZ_PROFILE_SCOPE("SetClear");
 		RenderCommand::SetClearColor({ m_BackColor, 1.0f });
@@ -165,37 +171,28 @@ void Sandbox2D::OnUpdate()
 
 	SpriteRenderer::ResetState();
 	{
-		HZ_PROFILE_SCOPE("BeginScene");
+		HZ_PROFILE_FUNCTION();
 		SpriteRenderer::BeginScene(m_CameraController.GetCamera());
 	}
 
 	{
 		HZ_PROFILE_SCOPE("Rendering");
-		//  render background
-		if (isRenderBackground) {
+
+		{
 			HZ_PROFILE_SCOPE("Rendering Background");
-			for (auto& it : back)
-			{
-				/*it->m_Shader->Use();
-				it->m_Tex->Bind(0);
-				it->m_Shader->SetSampler2D("_tx", 0);
-				it->m_Shader->SetVector4("_color", { 1.0f,1.0f,1.0f,1.0f });
-				SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, *it->m_Shader);*/
-				SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, it->m_Tex);
+			if (isRenderBackground) {
+				for (auto& it : back)
+				{
+					SpriteRenderer::Submit(it->m_Sprite, it->m_Trans, it->m_Tex);
+				}
 			}
 		}
 
 		{
 			HZ_PROFILE_SCOPE("Rendering Plats");
-			//  render plats
 			for (auto& plat : plats)
 			{
 				if (plat.m_Color.a > 0.1f && plat.m_Trans.GetPosition().y < 520.0f) {
-					/*plat.m_Shader->Use();
-					plat.m_Tex->Bind(0);
-					plat.m_Shader->SetSampler2D("_tx", 0);
-					plat.m_Shader->SetVector4("_color", plat.m_Color);
-					SpriteRenderer::Submit(plat.m_Sprite, plat.m_Trans, *plat.m_Shader);*/
 					SpriteRenderer::Submit(plat.m_Sprite, plat.m_Trans, plat.m_Tex, plat.m_Color);
 				}
 			}
@@ -203,13 +200,9 @@ void Sandbox2D::OnUpdate()
 
 		{
 			HZ_PROFILE_SCOPE("Rendering Praticles");
-			//  render Particle
 			for (auto& ptc : particle->ptc())
 			{
 				if (ptc.lifeTime > 0.0f) {
-					/*particle->m_Shader->Use();
-					particle->m_Shader->SetVector4("_color", ptc.m_Color);*/
-					//SpriteRenderer::Submit(ptc.m_Mesh, ptc.m_Trans, *particle->m_Shader);
 					SpriteRenderer::Submit(ptc.m_Mesh, ptc.m_Trans, particle->m_Tex, ptc.m_Color);
 				}
 			}
@@ -217,19 +210,14 @@ void Sandbox2D::OnUpdate()
 
 		{
 			HZ_PROFILE_SCOPE("Rendering Player");
-			//  render player
-			/*player->m_Shader->Use();
-			player->m_Tex->Bind(0);
-			player->m_Shader->SetSampler2D("_tx", 0);
-			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, *player->m_Shader);*/
 			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, player->m_Tex);
 		}
 
+		SpriteRenderer::NewBatch();
+
 		{
 			HZ_PROFILE_SCOPE("Rendering Text");
-			//  render text
-			//SpriteRenderer::Submit(*m_Text, *m_TextTrans, *m_TextShader);
-			//SpriteRenderer::Submit(*m_Text, *m_TextTrans);
+			SpriteRenderer::Submit(*m_Text, *m_TextTrans);
 		}
 	}
 

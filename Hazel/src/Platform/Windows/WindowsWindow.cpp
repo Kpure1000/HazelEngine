@@ -232,6 +232,8 @@ namespace hazel
 					data.EventCallback(event);
 				});
 
+			glfwGetWindowSize(m_Window, &m_Data.size.x, &m_Data.size.y);
+
 			glfwSetWindowUserPointer(m_Window, &m_Data);
 
 			glViewport(0, 0, (int)m_Data.size.x, (int)m_Data.size.y);

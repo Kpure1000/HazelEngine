@@ -23,17 +23,34 @@ namespace hazel
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
+		[[deprecated("Old Submit Method: Sprite")]]
 		static void Submit(const Sprite& sprite,
 			Transform& trans, const Shader& shader);
 
+		/// <summary>
+		/// Submit a sprite
+		/// </summary>
+		/// <param name="sprite"></param>
+		/// <param name="trans"></param>
+		/// <param name="texture"></param>
+		/// <param name="color"></param>
 		static void Submit(const Sprite& sprite, Transform& trans, const Ref<Texture2D> texture, const glm::vec4 color = glm::vec4(1.0f));
 
+		[[deprecated("Old Submit Method: Text")]]
 		static void Submit(const Text& text, Transform& trans, const Shader& shader);
 		
+		/// <summary>
+		/// Submit a text (shoud call NewBatch between sprite and text submiting)
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="trans"></param>
 		static void Submit(const Text& text, Transform& trans);
 
 		static void Flush();
 
+		/// <summary>
+		/// Start a new batch
+		/// </summary>
 		static void NewBatch();
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
@@ -65,7 +82,7 @@ namespace hazel
 
 		struct SpriteRendererData
 		{
-			static const size_t MaxSprites = 30;
+			static const size_t MaxSprites = 3000;
 			static const size_t MaxVertices = MaxSprites * 4;
 			static const size_t MaxIndices = MaxSprites * 6;
 			static const size_t MaxTextureSlots = 31; // TODO: RenderCaps
@@ -86,6 +103,7 @@ namespace hazel
 			Ref<VertexArray> VAO;
 			Ref<VertexBuffer> VBO;
 			Ref<Shader> textureShader;
+			Ref<Shader> textShader;
 			Ref<Texture2D> whiteTexture;
 
 		};
