@@ -264,14 +264,6 @@ void Sandbox2D::OnEvent(Event& ev)
 				Application::GetInstance()->Close();
 				return true;
 			}
-			if (ev.GetKeyCode() == Key::Minus)
-			{
-				curPlatNum = glm::clamp(curPlatNum - 1, minPlatNum, maxPlatNum);
-			}
-			if (ev.GetKeyCode() == Key::Equal)
-			{
-				curPlatNum = glm::clamp(curPlatNum + 1, minPlatNum, maxPlatNum);
-			}
 			return false;
 		});
 }
