@@ -4,7 +4,7 @@
 workspace "Hazel"
 	architecture "x64"
 
-	startproject "AsteroidBelt"
+	startproject "BCTest"
 	
 	configurations
 	{
@@ -208,6 +208,64 @@ project "AsteroidBelt"
 		"Hazel",
 		"ImGui",
 		-- "Hazel/vendor/freetype/libs/freetype.lib",
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"HZ_PLATFORM_WINDOWS",
+			staticdef
+		}
+
+	filter "configurations:Debug"
+		defines "HZ_DEBUG"
+		runtime "Debug"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "HZ_RELEASE"
+		runtime "Release"
+		optimize "On"
+		
+	filter "configurations:Dist"
+		defines "HZ_DIST"
+		runtime "Release"
+		optimize "On"
+
+-- BCTest --------------------------------------------
+
+project "BCTest"
+	location "BCTest"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Hazel/vendor/spdlog/include",
+		"Hazel/src",
+		-- "%{IncludeDir.GLAD}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}",
+		-- "%{IncludeDir.freetype}",
+	}
+	
+	links
+	{
+		"Hazel",
+		"ImGui",
 	}
 
 	filter "system:windows"
