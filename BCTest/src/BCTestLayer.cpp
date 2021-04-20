@@ -122,6 +122,8 @@ void BCTestLayer::OnEvent(Event& e)
 				default:
 					break;
 				}
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 200+50));
 			}
 			return false;
 		});
