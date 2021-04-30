@@ -24,12 +24,12 @@ namespace hazel
 		this->m_Width = w;
 		this->m_Height = h;
 		this->m_Channel = ch;
-
-		m_Data.reserve((size_t)w * (size_t)h * (size_t)ch);
-		m_Data.assign(data, data + (size_t)w * (size_t)h * (size_t)ch);
-		CheckBuffer(m_Data.size());
+		m_Size = 2 * h * ch;
+		m_Data = data;
+		CheckBuffer(m_Size);
 	}
-	void Image::LoadFromMemory(const int& w, const int& h, const int& ch, const vector<unsigned char>& data)
+
+	void Image::LoadFromMemory(const int& w, const int& h, const int& ch, vector<unsigned char>& data)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -37,9 +37,12 @@ namespace hazel
 		this->m_Width = w;
 		this->m_Height = h;
 		this->m_Channel = ch;
-		m_Data = data;
-		CheckBuffer(m_Data.size());
+		m_Size = data.size();
+
+		m_Data = data.data();
+		CheckBuffer(m_Size);
 	}
+
 	void Image::LoadFromFile(const std::string& path, bool isFlip)
 	{
 		m_LoadMode = LoadMode::LOAD_FILE;
@@ -48,18 +51,18 @@ namespace hazel
 			HZ_PROFILE_SCOPE(__FUNCSIG__"->stbi_load_and_data_parse");
 
 			auto data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Channel, 0);
-			m_Data.reserve((size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
-			m_Data.assign(data, data + (size_t)m_Width * (size_t)m_Height * (size_t)m_Channel);
-			stbi_image_free(data);
+			m_Size = m_Width * m_Height * m_Channel;
+			m_Data = data;
+			//stbi_image_free(data);
 		}
-		CheckBuffer(m_Data.size());
+		CheckBuffer(m_Size);
 	}
 
 	void Image::SaveData(const std::string& path)
 	{
 		HZ_PROFILE_FUNCTION();
 
-		if (stbi_write_png(path.c_str(), m_Width, m_Height, m_Channel, m_Data.data(), 0) == 0)
+		if (stbi_write_png(path.c_str(), m_Width, m_Height, m_Channel, m_Data, 0) == 0)
 		{
 			Log::ErrorCore("Save image data error, in path \'{0}\'", path);
 		}

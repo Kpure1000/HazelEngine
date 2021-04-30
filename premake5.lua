@@ -234,3 +234,142 @@ project "AsteroidBelt"
 		runtime "Release"
 		optimize "On"
 
+-- KRayTracing --------------------------------------
+
+project "KRayTracing"
+	location "KRayTracing"
+	kind "SharedLib"
+	language "C++"
+	cppdialect "C++17"
+	-- staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "krtpch.h"
+	pchsource "KRayTracing/src/krtpch.cpp"
+
+	files {
+		"%{prj.name}/include/**.h",
+		"%{prj.name}/src/**.cpp",
+
+		"Hazel/vendor/glm/glm/**.hpp",
+		"Hazel/vendor/glm/glm/**.inl",
+	}
+
+	defines {
+		"_CRT_SECURE_NO_WARNINGS",
+	}
+
+	includedirs {
+		"%{prj.name}/include",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}",
+	}
+
+	links {
+		"stb",
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines {
+			"KRT_DYNAMIC_LIB",
+			"KRT_BUILD_DLL",
+			"KRT_PLATFORM_WINDOWS",
+
+			"STB_IMAGE_IMPLEMENTATION",
+			"STB_IMAGE_WRITE_IMPLEMENTATION",
+		}
+		
+		postbuildcommands {
+			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Offline"
+		}
+
+	filter "configurations:Debug"
+		defines "KRT_DEBUG"
+		runtime "Debug"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "KRT_RELEASE"
+		runtime "Release"
+		optimize "On"
+		
+	filter "configurations:Dist"
+		defines "KRT_RELEASE"
+		runtime "Release"
+		optimize "On"
+
+-- Offline --------------------------------------
+
+project "Offline"
+	location "Offline"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Hazel/vendor/spdlog/include",
+		"Hazel/src",
+
+		"KRayTracing/include",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}",
+	}
+
+	links
+	{
+		"Hazel",
+		"ImGui",
+		"KRayTracing"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"HZ_PLATFORM_WINDOWS",
+			staticdef,
+
+			"KRT_PLATFORM_WINDOWS",
+			"KRT_DYNAMIC_LIB"
+		}
+
+	filter "configurations:Debug"
+		defines {
+			"HZ_DEBUG",
+			"KRT_DEBUG"
+		}
+		runtime "Debug"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines {
+			"HZ_RELEASE",
+			"KRT_RELEASE"
+		}
+		runtime "Release"
+		optimize "On"
+		
+	filter "configurations:Dist"
+		defines {
+			"HZ_DIST",
+			"KRT_RELEASE"
+		}
+		runtime "Release"
+		optimize "On"
+

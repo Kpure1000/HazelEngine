@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="AsteroidBelt">
+      <UniqueIdentifier>{078CEB0A-F3EE-7AAF-9C74-B36588B64632}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\AsteroidBelt\Asteroid2D.h">
+      <Filter>AsteroidBelt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AsteroidBelt\RenderLayer.h">
+      <Filter>AsteroidBelt</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AsteroidBelt\RenderLayer.cpp">
+      <Filter>AsteroidBelt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AsteroidBeltApp.cpp" />
+  </ItemGroup>
+</Project>

@@ -18,14 +18,14 @@ namespace hazel
 			m_LoadMode(LoadMode::NONE)
 		{}
 
-		inline size_t GetBufferSize()const { return m_Data.size(); }
+		inline size_t GetBufferSize()const { return m_Size; }
 
 		inline int GetWidth()const { return m_Width; }
 		inline int GetHeight()const { return m_Height; }
 
 		inline unsigned int GetChannelCount()const { return m_Channel; }
 
-		const unsigned char* GetData()const { return m_Data.data(); }
+		const unsigned char* GetData()const { return m_Data; }
 
 	public:
 		/// <summary>
@@ -44,7 +44,7 @@ namespace hazel
 		/// <param name="h">Heigt</param>
 		/// <param name="ch">Channel</param>
 		/// <param name="data">Image data(in vector)</param>
-		void LoadFromMemory(const int& w, const int& h, const int& ch, const std::vector<unsigned char>& data);
+		void LoadFromMemory(const int& w, const int& h, const int& ch, std::vector<unsigned char>& data);
 
 		/// <summary>
 		/// Load image from file and set weather flip y-axis or not
@@ -66,7 +66,7 @@ namespace hazel
 		/// Deal image data with imageDealCallBack
 		/// </summary>
 		/// <param name="imageDealCallBack">The dealing method defined by user</param>
-		void DealImage(std::function<void(int, int, int, std::vector<unsigned char>&)>&& imageDealCallBack)
+		void DealImage(std::function<void(int, int, int, unsigned char* data)>&& imageDealCallBack)
 		{
 			imageDealCallBack(m_Width, m_Height, m_Channel, m_Data);
 		}
@@ -88,7 +88,9 @@ namespace hazel
 
 		int m_Width, m_Height, m_Channel;
 
-		std::vector<unsigned char> m_Data;
+		size_t m_Size;
+
+		unsigned char* m_Data;
 
 		/// <summary>
 		/// Load from where

@@ -15,10 +15,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{078CEB0A-F3EE-7AAF-9C74-B36588B64632}</ProjectGuid>
+    <ProjectGuid>{A85659BA-1436-D855-1D4E-632C89AC3EB7}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>AsteroidBelt</RootNamespace>
+    <RootNamespace>Offline</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -55,31 +55,31 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug-windows-x86_64\AsteroidBelt\</OutDir>
-    <IntDir>..\bin-int\Debug-windows-x86_64\AsteroidBelt\</IntDir>
-    <TargetName>AsteroidBelt</TargetName>
+    <OutDir>..\bin\Debug-windows-x86_64\Offline\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Offline\</IntDir>
+    <TargetName>Offline</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release-windows-x86_64\AsteroidBelt\</OutDir>
-    <IntDir>..\bin-int\Release-windows-x86_64\AsteroidBelt\</IntDir>
-    <TargetName>AsteroidBelt</TargetName>
+    <OutDir>..\bin\Release-windows-x86_64\Offline\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Offline\</IntDir>
+    <TargetName>Offline</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Dist-windows-x86_64\AsteroidBelt\</OutDir>
-    <IntDir>..\bin-int\Dist-windows-x86_64\AsteroidBelt\</IntDir>
-    <TargetName>AsteroidBelt</TargetName>
+    <OutDir>..\bin\Dist-windows-x86_64\Offline\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\Offline\</IntDir>
+    <TargetName>Offline</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_STATIC_LIB;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor\glm;..\Hazel\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_STATIC_LIB;KRT_PLATFORM_WINDOWS;KRT_DYNAMIC_LIB;HZ_DEBUG;KRT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\KRayTracing\include;..\Hazel\vendor\glm;..\Hazel\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -96,8 +96,8 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_STATIC_LIB;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor\glm;..\Hazel\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_STATIC_LIB;KRT_PLATFORM_WINDOWS;KRT_DYNAMIC_LIB;HZ_RELEASE;KRT_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\KRayTracing\include;..\Hazel\vendor\glm;..\Hazel\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -117,8 +117,8 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_STATIC_LIB;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\Hazel\vendor\glm;..\Hazel\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_STATIC_LIB;KRT_PLATFORM_WINDOWS;KRT_DYNAMIC_LIB;HZ_DIST;KRT_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\Hazel\vendor\spdlog\include;..\Hazel\src;..\KRayTracing\include;..\Hazel\vendor\glm;..\Hazel\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -135,12 +135,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\AsteroidBelt\Asteroid2D.h" />
-    <ClInclude Include="src\AsteroidBelt\RenderLayer.h" />
+    <ClInclude Include="src\OfflineLayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AsteroidBelt\RenderLayer.cpp" />
-    <ClCompile Include="src\AsteroidBeltApp.cpp" />
+    <ClCompile Include="src\OfflineApp.cpp" />
+    <ClCompile Include="src\OfflineLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hazel\Hazel.vcxproj">
@@ -148,6 +147,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Hazel\vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\KRayTracing\KRayTracing.vcxproj">
+      <Project>{E434556A-50EA-CD5F-D9DE-C7364593C463}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

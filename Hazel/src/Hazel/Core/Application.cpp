@@ -58,7 +58,7 @@ namespace hazel
 		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& ev)
 			{
 				m_IsRunning = false;
-				return true;
+				return false;
 			});
 		dispatcher.Dispatch<WindowResizeEvent>([](WindowResizeEvent& ev)
 			{

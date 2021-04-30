@@ -28,6 +28,8 @@ namespace hazel
 
 		virtual void LoadFromImage(Ref<Image>image) override;
 
+		virtual void UpdateFromMemory(int w, int h, int ch, unsigned char* data) override;
+
 	private:
 
 		void InitBeforeLoad();

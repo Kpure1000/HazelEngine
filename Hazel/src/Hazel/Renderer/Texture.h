@@ -45,11 +45,13 @@ namespace hazel
 		/// <param name="image">Image</param>
 		virtual void LoadFromImage(Ref<Image>image) = 0;
 
+		virtual void UpdateFromMemory(int w, int h, int ch, unsigned char* data) = 0;
+
 		/// <summary>
 		/// Deal with image data using method defined in callback
 		/// </summary>
 		/// <param name="imageDealCallback">Method defined how to deal with image</param>
-		void DealImage(std::function<void(int, int, int, std::vector<unsigned char>&)>&& imageDealCallback)
+		void DealImage(std::function<void(int, int, int, unsigned char* data)>&& imageDealCallback)
 		{
 			Ref<Image> image = std::make_shared<Image>();
 			image->DealImage(std::move(imageDealCallback));

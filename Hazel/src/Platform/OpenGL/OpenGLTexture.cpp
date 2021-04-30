@@ -48,6 +48,13 @@ namespace hazel
 		BindAfterLoad(image);
 	}
 
+	void OpenGLTexture::UpdateFromMemory(int w, int h, int ch, unsigned char* data)
+	{
+		Ref<Image> image = std::make_shared<Image>();
+		image->LoadFromMemory(w, h, ch, data);
+		BindAfterLoad(image);
+	}
+
 	void OpenGLTexture::InitBeforeLoad()
 	{
 		glGenTextures(1, &m_ID);
