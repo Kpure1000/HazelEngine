@@ -71,11 +71,11 @@ private:
 
 	float vy = 0.0f;
 	const float gravity = 0.98f;
-	float jump_vy = 21.0f;
+	float jump_vy = 23.0f;
 	bool isJump = false;
 
 	float vx = 0.0f;
-	float moveSpeed = 35.0f;
+	float moveSpeed = 30.0f;
 	const float maxVX = 30.0f;
 	const float dragRatio = 0.85f;
 

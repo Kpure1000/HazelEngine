@@ -159,7 +159,7 @@ void Sandbox2D::OnUpdate()
 
 	{
 		HZ_PROFILE_SCOPE("Particle update");
-		particle->Update(gravity,
+		particle->Update(gravity * Time::deltaTime() * 70.0f,
 			player->m_Trans.GetPosition().y >= maxHeight || isGameOver ? -vy : 0.0f);
 	}
 
@@ -210,7 +210,9 @@ void Sandbox2D::OnUpdate()
 
 		{
 			HZ_PROFILE_SCOPE("Rendering Player");
-			SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, player->m_Tex);
+			p_pos = player->m_Trans.GetPosition();
+			if (!isGameOver && p_pos.y < 5 * maxHeight)
+				SpriteRenderer::Submit(player->m_Sprite, player->m_Trans, player->m_Tex);
 		}
 
 		SpriteRenderer::NewBatch();

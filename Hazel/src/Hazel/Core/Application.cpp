@@ -34,7 +34,7 @@ namespace hazel
 		//  create window
 		m_Window = Window::Create(WindowProps("Hazel Engine", 568, 1024, true, false));
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(OnEvent));
-		//m_Window->SetVSync(false);
+		m_Window->SetVSync(true);
 		
 		//  create imgui layer
 		m_ImGuiLayer = std::make_shared<ImGuiLayer>();
@@ -99,6 +99,8 @@ namespace hazel
 
 		while (m_IsRunning)
 		{
+			float start_time = Time::currentTime();
+
 			{
 				HZ_PROFILE_FUNCTION();
 
@@ -127,8 +129,10 @@ namespace hazel
 					//  update window
 					m_Window->OnUpdate();
 				}
-				Time::Update();
 			}
+			while (Time::currentTime() - start_time < 1.58e-2f)
+				;
+			Time::Update();
 		}
 	}
 
